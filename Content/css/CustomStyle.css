@@ -1,0 +1,25 @@
+﻿.form-section {
+    color: #404E67;
+    line-height: 3rem;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #404E67;
+}
+
+    .form-section i {
+        font-size: 15px;
+        margin-left: 0px;
+        margin-right: 2px;
+    }
+.bs-callout-info {
+    border-left-color: #1b809e;
+}
+.bs-callout-Secundary {
+    border-left-color: #6c757d;
+}
+.bs-callout {
+    padding: 5px;
+    margin: 5px 0;
+    border: 1px solid #eee;
+    border-left-width: 5px;
+    border-radius: 3px;
+}

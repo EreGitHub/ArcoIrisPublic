@@ -1,0 +1,354 @@
+﻿@using ArcoIris.Models
+@using System.Security.Claims;
+@using System.Threading;
+@{
+
+    if (!User.Identity.IsAuthenticated)
+    {
+        Response.Redirect("~/Home/Login");
+    }
+    else
+    {
+        using (var dbContext = new ArcoIrisEntities())
+        {
+            var UsuarioLogin = dbContext.Usuario.Single(q => q.Login == User.Identity.Name);
+            var NombreLogeado = dbContext.Persona.Single(q => q.IdPersona == UsuarioLogin.IdPersona);
+
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+                <meta charset="utf-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>@ViewBag.Title</title>
+                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+                <link href="~/Content/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+                @*<link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />*@
+                <link href="~/Content/css/loader.css" rel="stylesheet" />
+                <link href="~/Content/css/CustomStyle.css" rel="stylesheet" />
+                <link href="~/Content/css/toastr.css" rel="stylesheet" />
+                <link href="~/Content/css/CardCuston.css" rel="stylesheet" />
+
+                <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+                <script src="~/Scripts/jquery-3.4.1.js"></script>
+                @*<script src="~/Content/js/jquery-3.3.1.min.js"></script>*@
+                @*<script src="~/js/jquery.dataTables.min.js"></script>*@
+                @*<script src="https://code.jquery.com/jquery-3.3.1.js"></script>*@
+                <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+                <script src="~/Content/js/dataTables.bootstrap4.min.js"></script>
+                <script src="~/Content/js/popper.min.js"></script>
+                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+                <script src="~/Content/js/jquery.toaster.js"></script>
+
+                <link href="~/Content/css/Style.css" rel="stylesheet" />
+                <script src="~/Content/js/calendario.js"></script>
+                <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i" rel="stylesheet">
+
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+                <script src="~/Content/js/toastr.js"></script>
+
+                <script src="~/Scripts/jquery.signalR-2.4.1.js"></script>
+                @*<script src="http://localhost/ArcoIris/signalr/hubs"></script>*@
+                <script src="/signalr/hubs"></script>
+                <script src="~/Content/js/push.js"></script>
+
+                <style>
+                    * {
+                        font-size: 12px;
+                    }
+
+                    nav.navbar {
+                        background-color: #004686;
+                        font-size: 14px;
+                    }
+
+                        nav.navbar ul.nav li {
+                            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                            color: #ffffff;
+                        }
+
+                    td.details-control {
+                        background: url('../img/Add.png') no-repeat center center;
+                        cursor: pointer;
+                    }
+
+                    tr.shown td.details-control {
+                        background: url('../img/Less.png') no-repeat center center;
+                    }
+                </style>
+                @*@Styles.Render("~/Content/css")*@
+                @Scripts.Render("~/bundles/modernizr")
+            </head>
+            <body>
+                <div>
+                    <nav class="navbar navbar-expand-lg navbar-dark">
+                        <a class="navbar-brand blanco" href="@Url.Action("Logo", "Inicio")">Arco Iris</a>
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav mr-auto">
+                                <li class="nav-item active">
+                                    <a href="@Url.Action("Inicio","Home")" class="nav-link"><i class="fa fa-home" aria-hidden="true"></i> Inicio</a>
+                                </li>
+                                @{
+                                    var identity = (ClaimsPrincipal)Thread.CurrentPrincipal;
+                                    var _IdRol = identity.Claims.Where(c => c.Type == ClaimTypes.Sid).Select(c => c.Value).SingleOrDefault();
+                                    var Rol = identity.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).SingleOrDefault();
+                                    int idRol = Convert.ToInt32(_IdRol);
+                                    var IdRol = dbContext.PerfilUsuario.Single(q => q.IdPersona == UsuarioLogin.IdPersona && q.IdRol == idRol).IdRol;
+                                    switch (IdRol)
+                                    {
+                                        case 1:
+                                            <li class="nav-item active">
+                                                <a href="@Url.Action("InicioPersona","Persona")" class="nav-link"><i class="fa fa-users" aria-hidden="true"></i> Personas</a>
+                                            </li>
+                                            <li class="nav-item active">
+                                                <a href="@Url.Action("Index","Ambiente")" class="nav-link"><i class="fa fa-university" aria-hidden="true"></i> Ambiente</a>
+                                            </li>
+                                            <li class="nav-item active">
+                                                <a href="@Url.Action("InicioApertura","Apertura")" class="nav-link"><i class="fa fa-tasks" aria-hidden="true"></i> Apertura</a>
+                                            </li>
+                                            <li class="nav-item active">
+                                                <a href="@Url.Action("InicioAulaAmbiente","AsigAulaAmbiente")" class="nav-link"><i class="fa fa-cogs" aria-hidden="true"></i> Asignar Aulas</a>
+                                            </li>
+                                            <li class="nav-item active">
+                                                <a href="@Url.Action("Index","AsignaDocente")" class="nav-link"><i class="fa fa-sitemap" aria-hidden="true"></i> Asignar Docente</a>
+                                            </li>
+                                            <li class="nav-item active">
+                                                <a href="@Url.Action("Inicio","Criterios")" class="nav-link"><i class="fa fa-graduation-cap" aria-hidden="true"></i> Criterios Verifcación</a>
+                                            </li>
+                                            <li class="nav-item active">
+                                                <a href="@Url.Action("Inicio","HabilitarNotas")" class="nav-link"><i class="fa fa-graduation-cap" aria-hidden="true"></i> Habilitación Nota</a>
+                                            </li>
+                                            break;
+                                        case 2:
+                                            <li class="nav-item dropdown active">
+                                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa fa-graduation-cap" aria-hidden="true"></i> Tarea
+                                                </a>
+                                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                                    <a href="@Url.Action("Inicio","Evaluacion")" class="dropdown-item">Evaluacion Estudiante</a>
+                                                    <a href="@Url.Action("Inicio","Asistencia")" class="dropdown-item">Asistencia</a>
+                                                </div>
+                                            </li>
+                                            break;
+                                        case 3:
+                                            <li class="nav-item active">
+                                                <a href="@Url.Action("InicioPersona","Persona")" class="nav-link"><i class="fa fa-users" aria-hidden="true"></i> Personas</a>
+                                            </li>
+                                            <li class="nav-item active">
+                                                <a href="@Url.Action("Index","Ambiente")" class="nav-link"><i class="fa fa-university" aria-hidden="true"></i> Ambiente</a>
+                                            </li>
+                                            <li class="nav-item active">
+                                                <a href="@Url.Action("InicioApertura","Apertura")" class="nav-link"><i class="fa fa-tasks" aria-hidden="true"></i> Apertura</a>
+                                            </li>
+                                            <li class="nav-item dropdown active">
+                                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa fa-graduation-cap" aria-hidden="true"></i> Inscripción
+                                                </a>
+                                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                                    @*<a href="@Url.Action("Index","Docente")" class="dropdown-item"> Docentes</a>*@
+                                                    <a href="@Url.Action("Inicio","Rude")" class="dropdown-item">Rude</a>
+                                                    <a href="@Url.Action("Index","Inscripcion")" class="dropdown-item">Inscripcion</a>
+                                                </div>
+                                            </li>
+                                            <li class="nav-item dropdown active">
+                                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa fa-cog" aria-hidden="true"></i> Adm Notificaciones
+                                                </a>
+                                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                                    <a href="@Url.Action("Inicio","NotificaionesAdmGrupos")" class="dropdown-item">Adm Grupos</a>
+                                                    <a href="@Url.Action("Inicio","NotificacionesAdmEnvio")" class="dropdown-item">Enviar Notificaciones</a>
+                                                </div>
+                                            </li>
+                                            break;
+                                        case 4:
+                                            <li class="nav-item dropdown active">
+                                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa fa-bell" aria-hidden="true"></i> Notificaciones
+                                                    <i id="numnoti"></i>
+                                                </a>
+                                                <div class="dropdown-menu" aria-labelledby="navbarDropdown" id="NotificacionesNoLeidas">
+                                                    <a href='#' class='dropdown-item'><span class='badge badge-primary'>4</span> Prueb....</a>
+                                                </div>
+                                            </li>
+                                            break;
+                                        default:
+                                            break;
+                                    }
+
+
+                                }
+
+                                @*<li class="nav-item active">
+                                        <a href="@Url.Action("InicioPersona","Persona")" class="nav-link"><i class="fa fa-users" aria-hidden="true"></i> Personas</a>
+                                    </li>
+                                    <li class="nav-item active">
+                                        <a href="@Url.Action("Index","Ambiente")" class="nav-link"><i class="fa fa-university" aria-hidden="true"></i> Ambiente</a>
+                                    </li>
+                                    <li class="nav-item active">
+                                        <a href="@Url.Action("InicioApertura","Apertura")" class="nav-link"><i class="fa fa-tasks" aria-hidden="true"></i> Apertura</a>
+                                    </li>
+                                    <li class="nav-item active">
+                                        <a href="@Url.Action("InicioAulaAmbiente","AsigAulaAmbiente")" class="nav-link"><i class="fa fa-cogs" aria-hidden="true"></i> Asignar Aulas</a>
+                                    </li>
+                                    <li class="nav-item active">
+                                        <a href="@Url.Action("Index","AsignaDocente")" class="nav-link"><i class="fa fa-sitemap" aria-hidden="true"></i> Asignar Docente</a>
+                                    </li>
+                                    <li class="nav-item active">
+                                        <a href="@Url.Action("Inicio","Criterios")" class="nav-link"><i class="fa fa-graduation-cap" aria-hidden="true"></i> Criterios Verifcación</a>
+                                    </li>
+                                    <li class="nav-item dropdown active">
+                                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fa fa-graduation-cap" aria-hidden="true"></i> Tarea
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                            <a href="@Url.Action("Inicio","Evaluacion")" class="dropdown-item">Evaluacion Estudiante</a>
+                                            <a href="@Url.Action("Inicio","Asistencia")" class="dropdown-item">Asistencia</a>
+                                        </div>
+                                    </li>
+
+                                    <li class="nav-item dropdown active">
+                                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fa fa-graduation-cap" aria-hidden="true"></i> Inscripción
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                            <a href="@Url.Action("Inicio","Rude")" class="dropdown-item">Rude</a>
+                                            <a href="@Url.Action("Index","Inscripcion")" class="dropdown-item">Inscripcion</a>
+                                        </div>
+                                    </li>
+                                    <li class="nav-item dropdown active">
+                                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fa fa-cog" aria-hidden="true"></i> Adm Notificaciones
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                            <a href="@Url.Action("Inicio","NotificaionesAdmGrupos")" class="dropdown-item">Adm Grupos</a>
+                                            <a href="@Url.Action("Inicio","NotificacionesAdmEnvio")" class="dropdown-item">Enviar Notificaciones</a>
+                                        </div>
+                                    </li>
+                                    <li class="nav-item dropdown active">
+                                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fa fa-bell" aria-hidden="true"></i> Notificaciones
+                                            <i id="numnoti"></i>
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="navbarDropdown" id="NotificacionesNoLeidas">
+                                            <a href='#' class='dropdown-item'><span class='badge badge-primary'>4</span> Evaluacion Estudiante</a>
+                                        </div>
+                                    </li>*@
+
+
+                            </ul>
+                            <ul class="nav navbar-nav navbar-right">
+                                <li class="nav-item" active>
+                                    <a class="nav-link" href="#" id="navbarDropdown" data-toggle="modal" data-target="#ModalUsuario" role="button">
+                                        <i class="fa fa-user-circle-o" aria-hidden="true"></i> @NombreLogeado.Nombres @NombreLogeado.ApPaterno @NombreLogeado.ApMaterno (@Rol)
+                                    </a>
+                                </li>
+                                <li>
+                                </li>
+                            </ul>
+                            <form class="form-inline my-2 my-lg-0" method="post" action="@Url.Action("Logout", "Home")">
+                                <button class="btn btn-outline-light my-2 my-sm-0" type="submit"><i class="fa fa-sign-out" aria-hidden="true"></i> Salir</button>
+                            </form>
+                        </div>
+                    </nav>
+
+                    @RenderBody()
+
+                </div>
+
+
+                @*@Scripts.Render("~/bundles/jquery")
+                    @Scripts.Render("~/bundles/bootstrap")*@
+
+
+                <script>
+                var notificacion;
+                $(function () {
+                    notificacion = $.connection.NotificacionHubs;
+                    var username;
+                    notificacion.client.MsgNoLeidos = function (LstMsgPendientes) {
+                        var Sum = 0;
+                        $('#NotificacionesNoLeidas').empty();
+                        LstMsgPendientes.NotificationPendientesGrupo.forEach(value => {
+                            Sum += value.CantMsgNoLeidos;
+                            $('#NotificacionesNoLeidas').append("<a href='#' class='dropdown-item'><span class='badge badge-primary'>" + value.CantMsgNoLeidos + "</span> " + value.Nombre + "</a>");
+                            var IdHtmlGrupoLista = $('#CantMsgNoLeidoGrupo' + value.Id).html();
+                            if (IdHtmlGrupoLista!=undefined) {
+                                $('#CantMsgNoLeidoGrupo' + value.Id).html(value.CantMsgNoLeidos);
+                            }
+                        });
+                        //$('#numnoti').html(Sum)
+                        $('#numnoti').html("<i class='badge'>" + Sum + "</i>");
+                    }
+
+                    notificacion.client.NuevaNotificacionPadreMensaje = function (value) {
+                        $('#InicioHtml').hide();
+                        $('#NotificacionesPadreHtml').show();
+                        $('#NotificacionesPadreHtml').append("<div class='col-xl-6 col-sm-6 col-lg-6 col-12'><div class='cardCarCustom card border-primary mb-3'><div class='card-body' style='padding:0px'><h4 class='card-title' style='text-align:center;margin-bottom: 4px;color:#007bff'>" + value.NombreGrupo + "</h4></div><ul class='list-group list-group-flush'><li class='list-group-item' style='padding:0.2rem;font-size:12px'><span style='padding:3px;font-size:11px' class='badge badge-pill bg-blue float-right'>" + value.Fecha + "</span><i class='fa fa-calendar'></i> Fecha</li></ul><label class='text-center' style='margin:0 0 0 0'><div class='col-md-12'><div class='login-or' style='margin:3px 0 0 0'><hr class='hr-or'><span class='span-or'>Titulo</span></div></div></label><div class='alert alert-primary text-center' style='margin:0px 0 0px 0;padding:0 0 0 0'>" + value.TituloNotificacion + "</div><label class='text-center' style='margin:0px 0 0 0'><div class='col-md-12'><div class='login-or' style='margin:5px 0 0 0'><hr class='hr-or'><span class='span-or'>Mensaje</span></div></div></label><textarea class='form-control' disabled style='height:70px;margin:0px 0 5px 0'>" + value.Mensaje + "</textarea><hr style='margin:0px 0 0 0'><div style='margin-top:5px' class='footer'><button type='button' onclick='MarcarLeido(" + value.IdMensajesNotificacion + ")' class='btn mb-1 btn-block btn-outline-danger btn-sm'><i class='fa fa-check'></i> Marcar Como Leido</button></div></div></div>");
+                    };
+
+                    notificacion.client.NotificacionPush = function (O) {
+                        var Body = 'Nombre Grupo: ' + O.NombreGrupo + "\n " + O.Mensaje;
+                        if ('@User.Identity.Name' != O.Username) {
+                            CreateNotifications(O.TituloNotificacion, Body);
+                        }
+                    };
+
+                    notificacion.client.MeDesconecte = function (value) {
+                        console.log('Me desconecte :(');
+                        notificacion.server.estoyActivo('@User.Identity.Name');
+                    }
+                    conectar();
+                    function conectar() {
+                        var username = "@UsuarioLogin.Login";
+                        $.connection.hub.start().done(function () {
+                            notificacion.server.connect(username);
+                        });
+                    }
+                });
+                function CreateNotifications(title, body) {
+                    //document.getElementById("AudioNotification").play();
+                    console.log('Permision notifi: ' + Push.Permission.has());
+                    Push.create(title, {
+                        body: body,
+                        icon: '../Content/img/campana.png',//'/Logo_small.png',
+                        timeout: 10000,
+                        onClick: function () {
+                            window.focus();
+                            this.close();
+                        }
+                    });
+                }
+                </script>
+                <script type="text/javascript">
+                    function MostarInfSave(Data) {
+                        Data.forEach(value => {
+                            switch (value.Tipo) {
+                                case 'Success':
+                                    toastr.success(value.Nombre);
+                                    break;
+                                case 'warning':
+                                    toastr.warning(value.Nombre);
+                                    break;
+                                case 'info':
+                                    toastr.info(value.Nombre);
+                                    break;
+                                case 'error':
+                                    toastr.error(value.Nombre);
+                                    break;
+                                default:
+                            }
+                        });
+                    }
+                </script>
+                @RenderSection("scripts", required: false)
+            </body>
+        </html>
+    }
+}
+}

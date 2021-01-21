@@ -1,0 +1,314 @@
+﻿
+@{
+    ViewBag.Title = "InicioApertura";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-2">
+    <h4>Módulo Apertura gestión<span style="font-size:12px;color:#808080"> Arco iris Tarija</span></h4>
+    <div class="card mb-3 m-1">        
+        <div id="contenido" class="row">
+            <div class="col-sm-12 col-lg-6 col-md-12">
+                <div class="col-sm">
+                    <h4 class="form-section"><i class="fa fa-tasks"></i> Apertura</h4>
+                    <button type="button" onclick="Nuevo()" class="btn btn-outline-primary btn-block" style="margin-bottom:3px"><i class="fa fa-plus"></i><span style="margin-left:5px">Nuevo Registro</span> </button>
+                    <input type="hidden" id="IdApertura" value="0" />
+                    <div class="row">
+                        <div class="col-6">
+                            <label>Gestion</label>
+                            <select id="Gestion" class="form-control" disabled>
+                                <option value="0">Select Opcion</option>
+                                <option value="2020">2020</option>
+                                <option value="2021">2021</option>
+                                <option value="2022">2022</option>
+                                <option value="2023">2023</option>
+                                <option value="2024">2024</option>
+                                <option value="2025">2025</option>
+                                <option value="2026">2026</option>
+                                <option value="2027">2027</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label>Turno</label>
+                            <select id="Turno" class="form-control" disabled>
+                                <option value="0">Select Opcion</option>
+                                <option value="Mañana">Mañana</option>
+                                <option value="Tarde">Tarde</option>
+                            </select>
+                        </div>
+                    </div>
+                    <label>Estado Apertura</label>
+                    <button type="button" id="BtnOnOffView" disabled value="false" class="btn btn-outline-danger btn-block" style="margin-bottom:3px"><i id="IconsApertura" class="fa fa-close"></i><span style="margin-left:5px" id="NombreEstadoIco">Inactivo</span> </button>
+                    <h4 class="form-section"><i class="fa fa-tasks"></i> Nivel Grado</h4>
+                    <input type="hidden" id="IdNivelGrado" value="0" />
+                    <div class="form-group">
+                        <label>Descripcion</label>
+                        <input type="text" disabled class="form-control" placeholder="Descripcion" id="DescripcionPadre" />
+                    </div>
+                    <button type="button" id="BtnSubNivel" disabled class="btn btn-primary btn-block" style="margin-bottom:10px" data-toggle="modal" data-target="#Modal_NivelGrado"> Agregar Sub-Nivel</button>
+                    <div>
+                        <table class='table table-hover table-sm' style='font-size:12px;'>
+                            <thead>
+                                <tr style="background-color:#17a2b8;border-color:#17a2b8;color:white">
+                                    <th>Descripción</th>
+                                    <th width='1px'></th>
+                                    <th width='1px'></th>
+                                </tr>
+                            </thead>
+                            <tbody id="TableNivelGradoHijoHtml"></tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <button type="button" class="btn btn-secondary btn-block" style="margin-bottom:10px" onclick="Cancelar()">Cancelar</button>
+                        </div>
+                        <div class="col-6">
+                            <button type="button" id="BtnGuardar" disabled class="btn btn-success btn-block" style="margin-bottom:10px" onclick="Guardar()">Guardar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-lg-6 col-md-12">
+                <div class="col-sm">
+                    <h4 class="form-section"><i class="fa fa-tasks"></i> Aperturas Historico</h4>
+                    <div class="contendor-Loading">
+                        <div style="width: 3rem; height: 3rem;" class="Loading spinner-grow text-secondary" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                    <div class="containerCustom table-responsive">
+                        <table class='table table-hover table-sm' style='font-size:12px;'>
+                            <thead>
+                                <tr style="background-color:#17a2b8;border-color:#17a2b8;color:white">
+                                    <th width='1px'>Nº</th>
+                                    <th>Gestion</th>
+                                    <th>Turno</th>
+                                    <th>Estado</th>
+                                    <th width='1px'></th>
+                                    <th width='1px'></th>
+                                </tr>
+                            </thead>
+                            <tbody id="TableAperturas"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Modal_NivelGrado" tabindex="-1" role="dialog" style="overflow-y:scroll">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nivel - Grado</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="IdnivelGradoHijo" value="0" hidden="hidden">
+                <input type="text" id="i" value="0" hidden="hidden">
+                <div class="form-group">
+                    <label for="TextoSueldo">Descripcion</label>
+                    <input type="text" class="form-control" id="DescripcionNivelGradoHijo" placeholder="Descripcion">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="AgregarNivelGrado()">Agregar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        var ArrayNivelGrado = [];
+        var EstadoModificar = false;
+        var EstadoModificarNivelGradoHijo = false;
+        $(document).ready(function () {
+            ListarAperturas();
+            $("#BtnOnOffView").click(function () { BtnOnOffDisanble() });
+        });
+        function BtnOnOffDisanble() {
+            $("#BtnOnOffView").val(JSON.parse($("#BtnOnOffView").val()) ? false : true);
+            $("#BtnOnOffView").removeClass($("#BtnOnOffView").attr("class"));
+            if (JSON.parse($("#BtnOnOffView").val())) {
+                $("#BtnOnOffView").addClass("btn btn-block btn-primary");
+                $('#IconsApertura').removeClass("fa fa-close");
+                $('#IconsApertura').addClass("fa fa-check");
+                $('#NombreEstadoIco').html("Activo");
+            } else {
+                $("#BtnOnOffView").addClass("btn btn-danger btn-block");
+                $('#IconsApertura').removeClass("fa fa-check");
+                $('#IconsApertura').addClass("fa fa-close");
+                $('#NombreEstadoIco').html("Inactivo")
+            }
+        }
+        function AllAmbiente() {
+            $('#IdAmbiente').empty();
+            $('#IdAmbiente').append("<option value='0'>Select Opcion</option>");
+            $.getJSON('@Url.Action("ListarAmbientes", "Ambiente")', null, function (O) {
+                O.forEach((value, i) => {
+                    $('#IdAmbiente').append("<option value='" + value.IdAmbiente + "'>" + value.Nombre + "</option>");
+                });
+            });
+        }
+        function ListarAperturas() {
+            $("#TableAperturas").empty();
+            $.getJSON('@Url.Action("ListarAperturas","Apertura")', null, function (O) {                
+                O.forEach((value, i) => {
+                    if (value.Activo) {
+                        $("#TableAperturas").append("<tr style='background-color:#f9f9f9'><td>" + (i + 1) + "</td><td>" + value.Gestion + "</td><td>" + value.Turno + "</td><td>" + ((value.Activo) ? "Activo" : "Inactivo") + "</td><td><button class='btn btn-outline-info btn-sm' onclick='VerDetallesApertura(" + value.IdApertura + ",false)'><i class='fa fa-eye'></i></button></td><td><button class='btn btn-outline-secondary btn-sm' onclick='VerDetallesApertura(" + value.IdApertura + ",true)'><i class='fa fa-pencil'></i></button></td></tr>");
+                    }
+                    else {
+                        $("#TableAperturas").append("<tr><td>" + (i + 1) + "</td><td>" + value.Gestion + "</td><td>" + value.Turno + "</td><td>" + ((value.Activo) ? "Activo" : "Inactivo") + "</td><td><button class='btn btn-outline-info btn-sm' onclick='VerDetallesApertura(" + value.IdApertura + ",false)'><i class='fa fa-eye'></i></button></td><td><button class='btn btn-outline-secondary btn-sm' onclick='VerDetallesApertura(" + value.IdApertura + ",true)'><i class='fa fa-pencil'></i></button></td></tr>");
+                    }
+                });
+                setTimeout(function () {
+                    $(".Loading").hide();
+                    $(".containerCustom").show();
+                }, 100);
+            });
+        };
+        function VerDetallesApertura(IdApertura, _EstadoModificar) {
+            EstadoModificar = _EstadoModificar;
+            disabledHtml();
+            $.getJSON('@Url.Action("GetDetalleApertura","Apertura")', { IdApertura: IdApertura }, function (O) {
+                $('#IdApertura').val(O._oApertura.IdApertura);
+                $('#Turno').val(O._oApertura.Turno);
+                $('#Gestion').val(O._oApertura.Gestion);
+                $('#BtnOnOffView').val(!O._oApertura.Activo);
+
+                $('#IdNivelGrado').val(O._oNivelGradoPadre.IdNivelGrado);
+                $('#DescripcionPadre').val(O._oNivelGradoPadre.Descripcion);
+                BtnOnOffDisanble();
+                ArrayNivelGrado = O.HijosNivelGrado;
+                ListarNivelGradoHijo();
+            });
+        }
+        function Nuevo() {
+            EstadoModificar = true;
+            disabledHtml();
+            LimpiarDatos();
+        }
+        function Cancelar() {
+            EstadoModificar = false;
+            disabledHtml();
+            LimpiarDatos();
+            //el metodo lo convierte en false
+            $("#BtnOnOffView").val(true);
+            BtnOnOffDisanble();
+        }
+        function disabledHtml() {
+            $("#Gestion").prop("disabled", !EstadoModificar);
+            $("#Turno").prop("disabled", !EstadoModificar);
+            $("#BtnOnOffView").prop("disabled", !EstadoModificar);
+            $("#DescripcionPadre").prop("disabled", !EstadoModificar);
+            $("#BtnSubNivel").prop("disabled", !EstadoModificar);
+            $("#BtnGuardar").prop("disabled", !EstadoModificar);
+            $('#IdAmbiente').prop("disabled", !EstadoModificar);
+        }
+        function LimpiarDatos() {
+            $('#IdApertura').val(0);
+            $('#Turno').val(0);
+            $('#Gestion').val(0);
+            $('#IdAmbiente').val(0);
+
+            $('#IdNivelGrado').val(0);
+            $('#DescripcionPadre').val("");
+            ArrayNivelGrado.length = 0;
+            ListarNivelGradoHijo();
+            EstadoModificarNivelGradoHijo = false;
+        }
+        function AgregarNivelGrado() {
+            if ($('#DescripcionNivelGradoHijo').val() != "") {
+                if (!EstadoModificarNivelGradoHijo) {
+                    var Obj = { IdNG: 0, Descripcion: $('#DescripcionNivelGradoHijo').val(), Estado: true };
+                    if (!VerificarSiExisteObjNivelGradoHijo(Obj.Descripcion)) {
+                        ArrayNivelGrado.push(Obj);
+                    } else {
+                        toastr.warning('Existe un registro con el mismo nombre');
+                    }
+                } else {
+                    ArrayNivelGrado[$('#i').val()].Descripcion = $('#DescripcionNivelGradoHijo').val();
+                }
+                ListarNivelGradoHijo();
+                $('#Modal_NivelGrado').modal('hide');
+                LimpiarNivelgradoHijo();
+            } else {
+                toastr.warning("El campo Descripcion no debe estar vacio");
+            }
+        }
+        function VerificarSiExisteObjNivelGradoHijo(Descripcion) {
+            var Estado = false;
+            for (var i = 0; i < ArrayNivelGrado.length; i++) {
+                if (ArrayNivelGrado[i].Descripcion == Descripcion && ArrayNivelGrado[i].Estado == true) {
+                    Estado = true;
+                    break;
+                }
+            }
+            return Estado;
+        }
+        function ListarNivelGradoHijo() {
+            $('#TableNivelGradoHijoHtml').empty();
+            ArrayNivelGrado.forEach((value, I) => {
+                if (value.Estado)
+                    $('#TableNivelGradoHijoHtml').append("<tr><td>" + value.Descripcion + "</td><td>" + (EstadoModificar ? "<button class='btn btn-outline-primary btn-sm' onclick='ModificarNivelGradoHijo(" + I + ",\"" + value.Descripcion + "\"," + value.IdNG + ")' data-toggle='modal' data-target='#Modal_NivelGrado'><i class='fa fa-pencil'></i></button>" : "") + "</td><td>" + (EstadoModificar ? "<button class='btn btn-outline-danger btn-sm' onclick='EliminarNivelGradoHijo(" + I + "," + value.IdNG + ")'><i class='fa fa-close'></i></button>" : "") + "</td></tr>");
+            });
+        }
+        function ModificarNivelGradoHijo(i, Descripcion, IdNG) {
+            $('#Modal_NivelGrado').modal('show');
+            $('#DescripcionNivelGradoHijo').val(Descripcion);
+            $('#IdnivelGradoHijo').val(IdNG);
+            $('#i').val(i);
+            EstadoModificarNivelGradoHijo = true;
+        }
+        function EliminarNivelGradoHijo(i, id) {
+            if (id == 0) {
+                ArrayNivelGrado.splice(i, 1);
+            } else {
+                ArrayNivelGrado[i].Estado = false;
+            }
+            ListarNivelGradoHijo();
+        }
+        function LimpiarNivelgradoHijo() {
+            $('#DescripcionNivelGradoHijo').val("");
+            $('#IdnivelGradoHijo').val(0);
+            EstadoModificarNivelGradoHijo = false;
+        }
+        function Guardar() {
+            if ($('#Gestion').val() != 0 && $('#Turno').val() != 0) {
+                var Obj = {
+                    ItemHijosNivelGrado: ArrayNivelGrado,
+
+                    IdNivelGrado: $('#IdNivelGrado').val(),
+                    Descripcion: $('#DescripcionPadre').val(),
+
+                    IdApertura: $('#IdApertura').val(),
+                    Turno: $('#Turno').val(),
+                    Gestion: $('#Gestion').val(),
+                    Activo: JSON.parse($('#BtnOnOffView').val())
+                };
+                $.ajax({
+                    url: '@Url.Action("Guardar","apertura")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify(Obj),
+                    success: function (O) {
+                        if (O.responce) {
+                            Cancelar();                            
+                            ListarAperturas();
+                        }
+                        MostarInfSave(O.StatusSave);
+                    }
+                });
+            }
+            else {
+                toastr.warning("Gestion y Turno no son datos válidos")
+            }
+        }
+    </script>
+}

@@ -1,0 +1,294 @@
+﻿
+@{
+    ViewBag.Title = "Inicio";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-2">
+    <h4>Módulo Evaluación Estudiantil<span style="font-size:12px;color:#808080"> Arco iris Tarija</span></h4>
+    <div class="card mb-3 m-1">
+        <div id="contenido" class="row">
+            <div class="col-sm-12 col-lg-6 col-md-12">
+                <div class="col-sm">
+                    <h4 class="form-section"><i class="fa fa-tasks"></i> Asignadas</h4>
+                    <select id="Gestion" style="margin-bottom:5px" onchange="AllAsignaciones()" class="form-control"></select>
+                    <div id="Inicio" style="width:100%;padding:40% 0 40% 0">
+                        <h1 class="text-muted text-center"><i class="fa fa-frown-o"></i> SIN SELECCION GESTIÓN</h1>
+                    </div>
+                    <div id="AsigSiNo" style="width:100%;padding:40% 0 40% 0">
+                        <h1 class="text-muted text-center"><i class="fa fa-frown-o"></i> SIN ASIGANCIÓN</h1>
+                    </div>
+                    <div class="row" style="margin-top:8px" id="ListaAsignacionesHtml">
+
+                        @*<div class='col-xl-6 col-sm-6 col-lg-6 col-12'>
+                                <div class='cardCarCustom card border-primary mb-3'>
+                                    <div class='card-body' style='padding:0.1rem'>
+
+                                        <h4 class='card-title' style='text-align:center;margin-bottom: 5px'><i class='fa fa-university'></i> A-10 (Mañana)</h4>
+
+                                    </div>
+                                    <hr style='margin:0px 0px 2px 0px'>
+                                    <h5 class='text-primary' style='text-align:left;margin:0px 0 1px 0'><i class='fa fa-signal'></i> Nivel Grado: Nivel 1</h5>
+                                    <ul class='list-group list-group-flush'>
+
+                                        <li class='list-group-item' style='padding:0.1rem;font-size:12px'><i class='fa fa-angle-right'></i> wee</li>
+
+                                    </ul><hr style='margin:0px 0px 2px 0px'><h5 class='text-primary' style='text-align:left;margin:10px 0 1px 0'><i class='fa fa-paperclip'></i> Avatar</h5><ul class='list-group list-group-flush'>
+
+                                        <li class='list-group-item' style='padding:0.1rem;font-size:12px'>
+                                            <i class='fa fa-github-alt'></i> sd
+                                        </li>
+
+                                    </ul>
+                                    <hr style='margin:0px 0px 2px 0px'>
+                                    <div class='row'>
+                                        <div class='col-sm-12 col-lg-12 col-md-12'>
+                                            <h5 class='text-primary' style='text-align:left;margin:10px 0 1px 0'>
+                                                <i class='fa fa-tasks'></i> Aprobados, Reprobados
+                                            </h5>
+                                            <ul class='list-group list-group-flush'>
+                                                <li class='list-group-item' style='padding:0.1rem;font-size:12px'>
+                                                    <span style='padding:0px;font-size:11px' class='float-right'> 80%</span>
+                                                    <i class='fa fa-smile-o'></i> Aprobados
+                                                </li>
+                                                <li class='list-group-item' style='padding:0.1rem;font-size:12px'>
+                                                    <span style='padding:0px;font-size:11px' class='float-right'> 20%</span>
+                                                    <i class='fa fa-frown-o'></i> Reprobados
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <hr style='margin:3px 0px 3px 0px'>
+                                    <div class='footer'>
+                                        <span class='float-left text-info'><b style='font-size: 15px'>/1/</b></span>
+                                        <span class='tags float-right'>
+                                            <button type='button' style='margin-right:3px' onclick='ViewModificarInscripcion(2)' class='btn mb-1 btn-outline-primary btn-sm'><i class='fa fa-clipboard'></i></button>
+                                        </span>
+                                    </div>
+                                    <hr style='margin:0px 0px 2px 0px'>
+                                </div>
+                            </div>*@
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-lg-6 col-md-12">
+                <div class="col-sm">
+                    <h4 class="form-section"><i class="fa fa-tasks"></i> Opciones</h4>
+                    <input type="hidden" id="IdDetApertura" value="0" />
+                    <label>Periodo</label>
+                    <select class="form-control" onchange="Desbloquear()" disabled id="IdPeriodo">
+                        <option value="0">Select Periodo</option>
+                    </select>
+                    <div class="row">
+                        <div class="col-6">
+                            <label>Criterios</label>
+                            <select id="IdCriterioVerificar" disabled style="margin-bottom:5px" onchange="ListarActiviades()" class="form-control">
+                                <option value="0">Select Criterio</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label>Actividades</label>
+                            <select class="form-control" onchange="ListaEstudianteEvaluar()" disabled id="IdActividad">
+                                <option value="0">Select Actividad</option>
+                            </select>
+                        </div>
+                    </div>
+                    <h4 class="form-section"><i class="fa fa-tasks"></i> Lista Estudiantes</h4>
+                    <div class="containerCustom table-responsive">
+                        <table class='table table-hover table-sm' style='font-size:12px;'>
+                            <thead>
+                                <tr style="background-color:#17a2b8;border-color:#17a2b8;color:white">
+                                    <th width='1px'>Nº</th>
+                                    <th>Nombre</th>
+                                    <th>Ap Paterno</th>
+                                    <th>Ap Materno</th>
+                                    <th>Ci</th>
+                                    <th width='63px'>Nota</th>
+                                </tr>
+                            </thead>
+                            <tbody id="TableEstudiantesEvaluar"></tbody>
+                        </table>
+                    </div>
+                    <div id="OpGuardado">
+                        <div class="custom-control custom-checkbox" style="margin-bottom:10px">
+                            <input type="checkbox" class="custom-control-input" id="Check_GuardadoDefinitivo" name="CheckDefinitoGuardado">
+                            <label class="custom-control-label" for="Check_GuardadoDefinitivo">Habilitar para gurdado definitivo</label>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <button type="button" class="btn btn-outline-secondary btn-block" style="margin-bottom:10px" onclick="Cancelar()"><i class="fa fa-times"></i> Cancelar</button>
+                            </div>
+                            <div class="col-6">
+                                <button type="button" id="BtnGuardar" class="btn btn-outline-success btn-block" style="margin-bottom:10px" onclick="Guardar()"><i class="fa fa-check"></i> Guardar</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" id="BtnGuardarImprimirReporte" class="btn btn-outline-primary btn-block" style="margin-bottom:10px;display:none" onclick="Imprimir()"><i class="fa fa-print"></i> Imprimir Reporte</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        var ArrayEstudiantesEvaluar = [];
+        $('#AsigSiNo').hide();
+        ListarGetiones();
+        ListarPeriodos();
+        function Desbloquear() {
+            if ($('#IdPeriodo').val() != 0) {
+                $('#IdCriterioVerificar').val(0);
+                $('#IdCriterioVerificar').prop('disabled', false);
+            } else {
+                $('#IdCriterioVerificar').val(0);
+                $('#IdCriterioVerificar').prop('disabled', true);
+            }
+            $('#IdActividad').val(0);
+            $('#IdActividad').prop('disabled', true);
+            $('#TableEstudiantesEvaluar').empty();
+        }
+        //function Limpiar() {
+        //    $('#IdPeriodo').val(0);
+        //    $('#ListaAsignacionesHtml').empty();
+        //}
+        function ListarGetiones() {
+            $.getJSON('@Url.Action("GetGetiones","AsignaDocente")', null, function (O) {
+                $('#Gestion').empty();
+                $('#Gestion').append("<option value='0'>Select Gestion</option>");
+                O.forEach((value, i) => {
+                    $('#Gestion').append("<option value='" + value + "'>" + value + "</option>");
+                });
+            });
+        }
+        function ListarPeriodos() {
+            $.getJSON('@Url.Action("GetPeriodos","Evaluacion")', null, function (O) {
+                $('#IdPeriodo').empty();
+                $('#IdPeriodo').append("<option value='0'>Select Periodo</option>");
+                O.forEach((value, i) => {
+                    $('#IdPeriodo').append("<option value='" + value.IdPeriodo + "'>" + value.Descripcion + "</option>");
+                });
+            });
+        }
+        function AllAsignaciones() {
+            $('#ListaAsignacionesHtml').empty();
+            if ($('#Gestion').val() == 0) {
+                $('#Inicio').show();
+                $('#AsigSiNo').hide();
+                //Limpiar();
+            } else {
+                $('#Inicio').hide();
+                $('#AsigSiNo').hide();
+                $.getJSON('@Url.Action("AllAsignacionDocente", "Evaluacion")', { Gestion: $('#Gestion').val() }, function (O) {
+                    var Html = "";
+                    console.log(O)
+                    if (O.length != 0) {
+                        O.forEach((valuePadre, i) => {
+                            Html += "<div class='col-xl-6 col-sm-6 col-lg-6 col-12'><div class='cardCarCustom card border-primary mb-3'><div class='card-body' style='padding:0.1rem'><h4 class='card-title' style='text-align:center;margin-bottom: 5px'><i class='fa fa-university'></i> " + valuePadre.Ambiente + " (" + valuePadre.Turno + ")</h4></div><hr style='margin:0px 0px 2px 0px'><h5 class='text-primary' style='text-align:left;margin:0px 0 1px 0'><i class='fa fa-signal'></i> Nivel Grado: " + valuePadre.NivelgradoPadre + "</h5><ul class='list-group list-group-flush'>";
+                            valuePadre.NivelGrdoHijos.forEach((valueNivelGradoHijo, i) => {
+                                Html += "<li class='list-group-item' style='padding:0.1rem;font-size:12px'><i class='fa fa-angle-right'></i> " + valueNivelGradoHijo.Descripcion + "</li>";
+                            });
+                            Html += "</ul><hr style='margin:0px 0px 2px 0px'><h5 class='text-primary' style='text-align:left;margin:10px 0 1px 0'><i class='fa fa-paperclip'></i> Avatar</h5><ul class='list-group list-group-flush'>";
+                            valuePadre.Avatar.forEach((valueAvatar, i) => {
+                                Html += "<li class='list-group-item' style='padding:0.1rem;font-size:12px'><i class='fa fa-angle-right'></i> " + valueAvatar.Descripcion + "</li>";
+                            });
+                            Html += "</ul>";
+                            Html += "<hr style='margin:0px 0px 2px 0px'><h5 class='text-primary' style='text-align:left;margin:10px 0 1px 0'><i class='fa fa-paperclip'></i> Cantidad Estudiantes</h5><ul class='list-group list-group-flush'>";
+                            Html += "<li class='list-group-item' style='padding:0.1rem;font-size:12px'><i class='fa fa-angle-right'></i>  " + valuePadre.Estudiante + "</li>";
+
+                            Html += "</ul><hr style='margin:0px 0px 3px 0px'><div class='footer'><span class='float-left text-info'><b style='font-size: 15px'>/" + (i + 1) + "/</b></span><span class='tags float-right'><button type='button' style='margin-right:3px' onclick='ListarCriterioVerificar(" + valuePadre.IdDetApertura + "," + valuePadre.IdNivelGradoPadre + ")' class='btn mb-1 btn-outline-primary btn-sm'><i class='fa fa-arrow-right'></i></button></span></div><hr style='margin:0px 0px 2px 0px'></div></div>";
+                        });
+                        $('#ListaAsignacionesHtml').append(Html);
+                    } else {
+                        $('#AsigSiNo').show();
+                    }
+                });
+            }
+        }
+        function ListarCriterioVerificar(IdDetApertura, IdNivelGradoPadre) {
+            $('#IdPeriodo').prop('disabled', false);
+            $('#IdDetApertura').val(IdDetApertura);
+            $.getJSON('@Url.Action("ListarCriterioVerificar","Evaluacion")', { IdNivelGradoPadre: IdNivelGradoPadre }, function (O) {
+                $('#IdCriterioVerificar').empty();
+                $('#IdCriterioVerificar').append("<option value='0'>Select Criterio</option>");
+                O.forEach((value, i) => {
+                    $('#IdCriterioVerificar').append("<option value='" + value.IdCriterio + "'>" + value.Descripcion + "</option>");
+                });
+            });
+        }
+        function ListarActiviades() {
+            if ($('#IdCriterioVerificar').val() != 0) {
+                $('#IdActividad').prop('disabled', false);
+            } else {
+                $('#IdActividad').prop('disabled', true);
+                $('#TableEstudiantesEvaluar').empty();
+            }
+            $.getJSON('@Url.Action("GetActividades","Evaluacion")', { IdCriterioVerificar: $('#IdCriterioVerificar').val() }, function (O) {
+                $('#IdActividad').empty();
+                $('#IdActividad').append("<option value='0'>Select Actividad</option>");
+                O.forEach((value, i) => {
+                    $('#IdActividad').append("<option value='" + value.IdActividad + "'>" + value.Descripcion + "</option>");
+                });
+            });
+        }
+        function ListaEstudianteEvaluar() {
+            $("#TableEstudiantesEvaluar").empty();
+            if ($('#IdActividad').val() != 0) {
+                var Obj = { IdDetApertura: $('#IdDetApertura').val(), IdActividad: $('#IdActividad').val(), IdPeriodo: $('#IdPeriodo').val() }
+                $.getJSON('@Url.Action("ListarEstudiantes","Evaluacion")', Obj, function (O) {
+                    ArrayEstudiantesEvaluar = O.Lst;
+
+                    //$('#Check_GuardadoDefinitivo').prop('checked', true);
+                    console.log(O)
+                    //Check_GuardadoDefinitivo
+                    //CheckDefinitoGuardado name
+                    //EstadoGuardado
+                    $('#OpGuardado').show();
+                    $('#BtnGuardarImprimirReporte').hide();
+                    if (O.EstadoGuardado =="GuardadoDefinitivo") {
+                        $('#OpGuardado').hide();
+                        $('#BtnGuardarImprimirReporte').show();
+                    }
+                    ArrayEstudiantesEvaluar.forEach((value, i) => {
+                        $("#TableEstudiantesEvaluar").append("<tr><td>" + (i + 1) + "</td><td>" + value.Nombres + "</td><td>" + value.ApPaterno + "</td><td>" + value.ApMaterno + "</td><td>" + value.Ci + "</td><td><input type='number' " + ((O.EstadoGuardado == "GuardadoDefinitivo") ? "disabled" : "") + " class='form-control' id='Nota" + value.IdInscripcion + "' value='" + value.Valor + "' /></td></tr>");
+                    });
+                });
+            }
+        }
+        function Guardar() {
+            ArrayEstudiantesEvaluar.forEach((value, i) => {
+                ArrayEstudiantesEvaluar[i].Valor = $('#Nota' + value.IdInscripcion).val();
+            });
+            var Obj = {
+                LstEstudiantesEvaluar: ArrayEstudiantesEvaluar,
+                IdPeriodo: $('#IdPeriodo').val(),
+                IdActividad: $('#IdActividad').val(),
+                EstadoGuardadoDefinitivo: $('input[name="CheckDefinitoGuardado"]').is(':checked')
+                //$('input:radio[name=CheckDefinitoGuardado]:checked').val()
+            };
+            console.log(Obj);
+            $.ajax({
+                url: '@Url.Action("Guardar","Evaluacion")',
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify(Obj),
+                success: function (O) {
+                    if (O.responce) {
+                        $('#IdPeriodo').val(0);
+                        Desbloquear();
+                        $('#Check_GuardadoDefinitivo').prop('checked', false);
+                    }
+                    MostarInfSave(O.StatusSave);
+                }
+            });
+        }
+        function Imprimir() {            
+            window.setTimeout(function () {
+                var url = '@Url.Action("ImprimirReporteGurdadoDefinitivo", "Reportes")' + '?Tipo=PDF&IdDetApertura=' + $('#IdDetApertura').val() + '&IdActividad=' + $('#IdActividad').val() + '&IdPeriodo=' + $('#IdPeriodo').val();
+                window.open(url);
+            }, 1000);
+        }
+    </script>
+}

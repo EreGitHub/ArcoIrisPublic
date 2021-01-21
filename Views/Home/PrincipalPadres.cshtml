@@ -1,0 +1,103 @@
+﻿
+@{
+    ViewBag.Title = "PrincipalPadres";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-2">
+    <h4>Inicio...</h4>
+    <div class="card mb-3 m-1">
+        <div class="row">
+            <div class="col-sm-12 col-lg-6 col-md-12">
+                <div class="col-sm">
+                    <h4 class="form-section"><i class="fa fa-bell"></i> Notificaciones</h4>
+                    <div class="row" id="NotificacionesPadreHtml">
+
+                    </div>
+                    <div id="InicioHtml" style="width:100%;padding:25% 0 25% 0">
+                        <h1 class="text-muted text-center"><i class="fa fa-bell-o"></i> SIN NOTIFICACIONES</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-lg-6 col-md-12">
+                <div class="col-sm">
+                    <h4 class="form-section"><i class="fa fa-users"></i> Detalle Avance</h4>
+                    <div class="row" style="display:none" id="ListaInscriptosHtml">
+                    </div>
+                    <div id="InicioHijosHtml" style="width:100%;padding:25% 0 25% 0">
+                        <h1 class="text-muted text-center"><i class="fa fa-users"></i> Lista Hijos Inscritos</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            AllNotificaciones();
+            AllHijos();
+            setTimeout(function () {
+                notificacion.server.notificacionesPendiantes('@User.Identity.Name');
+            }, 1000);
+        });
+        $('#NotificacionesPadreHtml').hide();
+        function AllNotificaciones() {
+            $('#NotificacionesPadreHtml').html("");
+            $.getJSON('@Url.Action("NotificacionesPendientes", "Home")', null, function (O) {
+                if (O.length > 0) {
+                    $('#InicioHtml').hide();
+                    $('#NotificacionesPadreHtml').show();
+                    O.forEach(value => {
+                        $('#NotificacionesPadreHtml').append("<div class='col-xl-6 col-sm-6 col-lg-6 col-12'><div class='cardCarCustom card border-primary mb-3'><div class='card-body' style='padding:0px'><h4 class='card-title' style='text-align:center;margin-bottom: 4px;color:#007bff'>" + value.NombreGrupo + "</h4></div><ul class='list-group list-group-flush'><li class='list-group-item' style='padding:0.2rem;font-size:12px'><span style='padding:3px;font-size:11px' class='badge badge-pill bg-blue float-right'>" + value.Fecha + "</span><i class='fa fa-calendar'></i> Fecha</li></ul><label class='text-center' style='margin:0 0 0 0'><div class='col-md-12'><div class='login-or' style='margin:3px 0 0 0'><hr class='hr-or'><span class='span-or'>Titulo</span></div></div></label><div class='alert alert-primary text-center' style='margin:0px 0 0px 0;padding:0 0 0 0'>" + value.TituloNotificacion + "</div><label class='text-center' style='margin:0px 0 0 0'><div class='col-md-12'><div class='login-or' style='margin:5px 0 0 0'><hr class='hr-or'><span class='span-or'>Mensaje</span></div></div></label><textarea class='form-control' disabled style='height:70px;margin:0px 0 5px 0'>" + value.Mensaje + "</textarea><hr style='margin:0px 0 0 0'><div style='margin-top:5px' class='footer'><button type='button' onclick='MarcarLeido(" + value.IdMensajesNotificacion + ")' class='btn mb-1 btn-block btn-outline-danger btn-sm'><i class='fa fa-check'></i> Marcar Como Leido</button></div></div></div>");
+                    });
+                } else {
+                    $('#InicioHtml').show();
+                    $('#NotificacionesPadreHtml').hide();
+                }
+            });
+        }
+        function MarcarLeido(IdMensage) {
+            $.getJSON('@Url.Action("MensajeLeido", "NotificacionesAdmEnvio")', { IdMensage }, function (O) {
+                if (O) {
+                    AllNotificaciones();
+                } else {
+                    toastr.error('Error');
+                }
+            });
+        }
+        function AllHijos() {
+            $('#ListaInscriptosHtml').empty();
+            $.getJSON('@Url.Action("AllHijos", "Home")', null, function (O) {
+                if (O.length>0) {
+                    $('#InicioHijosHtml').hide();
+                    $('#ListaInscriptosHtml').show();
+                }
+                var html = "";
+                O.forEach((valuePadre, i) => {
+                    html += "<div class='col-xl-12 col-sm-12 col-lg-12 col-12'><div class='cardCarCustom card border-primary mb-3' style='border-radius:5px'><div class='card-body' style='padding:0.1rem'><h4 class='card-title' style='text-align:center;margin-bottom: 5px'><i class='fa fa-user'></i> " + valuePadre.Nombres + " " + valuePadre.ApPaterno + " " + valuePadre.ApMaterno + "</h4></div><hr style='margin:0px 0px 2px 0px' /><div class='row'><div class='col-sm-6 col-lg-6 col-md-6'><h5 class='text-primary' style='text-align:left;margin:0px 0 1px 0;'><i class='fa fa-signal'></i> Nivel Grado: " + valuePadre.NivelGrdoPadre + "</h5><ul class='list-group list-group-flush'>";
+                    valuePadre.NivelGrdoHijo.forEach(valueNivelGradoHijos => {
+                        html += "<li class='list-group-item' style='padding:0.1rem;font-size:12px'><i class='fa fa-angle-right'></i> " + valueNivelGradoHijos + "</li>";
+                    });
+                    html += "</ul><hr style='margin:0px 0px 2px 0px' /></div><div class='col-sm-6 col-lg-6 col-md-6'><ul class='list-group list-group-flush'>";
+                    html += "<li class='list-group-item' style='padding:0.1rem;font-size:12px'><span style='padding:0px;font-size:11px' class='float-right'><button type='button' onclick='RptAvanceAcademico(" + valuePadre.IdPersona + ")' class='btn mb-1 btn-outline-primary btn-sm'><i class='fa fa-print'></i></button></span><i class='fa fa-sun-o'></i> Avance Academico</li><li class='list-group-item' style='padding:0.1rem;font-size:12px'><span style='padding:0px;font-size:11px' class='float-right'><button type='button' onclick='RptAsistencia(" + valuePadre.IdPersona + ")' class='btn mb-1 btn-outline-primary btn-sm'><i class='fa fa-print'></i></button></span><i class='fa fa-home'></i> Asistencia</li>";
+                    html += "</ul><hr style='margin:0px 0px 2px 0px' /></div></div><div class='row'><div class='col-sm-6 col-lg-6 col-md-6'><h5 class='text-primary' style='text-align:left;margin:10px 0 1px 0'><i class='fa fa-tasks'></i> Apertura</h5><ul class='list-group list-group-flush'><li class='list-group-item' style='padding:0.1rem;font-size:12px'><span style='padding:0px;font-size:11px' class='float-right'> " + valuePadre.Apertura.Turno + "</span><i class='fa fa-sun-o'></i> Turno</li><li class='list-group-item' style='padding:0.1rem;font-size:12px'><span style='padding:0px;font-size:11px' class='float-right'> " + valuePadre.Apertura.Ambiente + "</span><i class='fa fa-home'></i> Aula</li></ul></div><div class='col-sm-6 col-lg-6 col-md-6'><h5 class='text-primary' style='text-align:left;margin:10px 0 1px 0'><i class='fa fa-graduation-cap'></i> DOCENTES</h5><ul class='list-group list-group-flush'>";
+                    valuePadre.Docentes.forEach(valueDocentes => {
+                        html += "<li class='list-group-item' style='padding:0.1rem;font-size:12px'><span style='padding:0px;font-size:11px' class='float-right'> " + valueDocentes.Tipo + "</span><i class='fa fa-user'></i> " + valueDocentes.Nombres + " " + valueDocentes.ApPaterno + " " + valueDocentes.ApMaterno + "</li>";
+                    });
+                    html += "</ul></div></div><hr style='margin:3px 0px 3px 0px' /><div  class='footer'><span class='float-left text-info'><b style='font-size: 15px'>Estado Inscripcion: " + valuePadre.EstadoInscripcion + "</b></span><span class='tags float-right'>    </span></div><hr style='margin:0px 0px 2px 0px' /></div></div>";
+                });
+                $('#ListaInscriptosHtml').append(html);
+            });
+        }
+        function RptAvanceAcademico(IdEstudiante) {
+            var url = '@Url.Action("ImprimirReporteAvanceAcademico", "Reportes")' + '?Tipo=PDF&IdEstudiante=' + IdEstudiante;
+            window.open(url);
+        }
+        function RptAsistencia(IdEstudiante) {
+            var url = '@Url.Action("ImprimirReporteAsistencia", "Reportes")' + '?Tipo=PDF&IdEstudiante=' + IdEstudiante;
+            window.open(url);
+        }
+    </script>
+}

@@ -1,0 +1,121 @@
+﻿
+@{
+    ViewBag.Title = "Inicio";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-2">
+    <h4>Módulo Habilitación de Notas<span style="font-size:12px;color:#808080"> Arco iris Tarija</span></h4>
+    <div class="card  mb-3 m-1">
+        <div class="card-body">
+            <select id="Gestion" style="margin-bottom:5px" onchange="AllHabilitarNotas()" class="form-control"></select>
+            <h4 class="form-section" style="margin-bottom:10px"><i class="fa fa-user"></i> Lista</h4>
+            <div id="Inicio" style="width:100%;padding:19% 0 19% 0">
+                <h1 class="text-muted text-center" id="Mensaje">SELECCIONE UNA GESTIÓN</h1>
+            </div>
+            <div class="row" style="display:none" id="DocentesHtml">
+                <div class='col-xl-3 col-sm-6 col-lg-6 col-12'>
+                    <div class='cardCarCustom card border-primary mb-3'>
+                        <div class='card-body' style='padding:0.1rem'>
+                            <h4 class='card-title text-primary' style='text-align:center;margin-bottom: 5px'>
+                                DATOS
+                            </h4>
+                        </div>
+                        <ul class='list-group list-group-flush'>
+                            <li class='list-group-item' style='padding:0.3rem;font-size:12px'>
+                                <span style='padding:3px;font-size:11px' class='badge badge-pill bg-blue float-right'>
+                                    A-10
+                                </span>
+                                <i class='fa fa-university'></i> Ambiente
+                            </li>
+                            <li class='list-group-item' style='padding:0.3rem;font-size:12px'>
+                                <span style='padding:3px;font-size:11px' class='badge badge-pill bg-blue float-right'>
+                                    Mañana
+                                </span>
+                                <i class='fa fa-certificate'></i>
+                                Turno
+                            </li>
+                            <li class='list-group-item' style='padding:0.3rem;font-size:12px'>
+                                <span style='padding:3px;font-size:11px' class='badge badge-pill bg-blue float-right'>
+                                    PrimerPeriodo
+                                </span>
+                                <i class='fa fa-hashtag'></i> Periodo
+                            </li>
+                        </ul>
+                        <label class='text-center' style='margin:5px 0 0 0'>Criterio</label>
+                        <div class='alert alert-primary text-center' style='margin:0px 0 0px 0;padding:0 0 0 0'>Criterio 1</div>
+                        <label class='text-center' style='margin:3px 0 0 0'>Actividad</label>
+                        <div class='alert alert-primary text-center' style='margin:0px 0 0px 0;padding:0 0 0 0'>Actividad 1</div>
+
+                        <h5 class='text-primary' style='text-align:left;margin:8px 0 5px 0'>
+                            <i class='fa fa-chevron-right'></i> Docentes
+                        </h5>
+                        <ul class='list-group list-group-flush'>
+                            <li class='list-group-item' style='padding:0.3rem;font-size:12px'>
+                                <span style='padding:3px;font-size:11px' class='badge badge-pill bg-blue float-right'>
+                                    Titular
+                                </span><i class='fa fa-user'></i> Oscar Rios Acte
+                            </li>
+                            <li class='list-group-item' style='padding:0.3rem;font-size:12px'>
+                                <span style='padding:3px;font-size:11px' class='badge badge-pill bg-blue float-right'>
+                                    Asistente
+                                </span><i class='fa fa-user'></i> Oscar Rios Acte
+                            </li>
+                        </ul>
+                        <div style='margin-top:8px' class='footer'>
+                            <button type='button' onclick='ModificarAsignacion(1)' style='margin-right:3px' class='btn btn-block btn-outline-primary btn-sm'><i class='fa fa-check'></i> Habilitar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            AllGesstionAperturadas();            
+        });
+        function AllGesstionAperturadas() {
+            $.getJSON('@Url.Action("AllGestionAperturadas", "Criterios")', null, function (O) {
+                $('#Gestion').append("<option value='0'>Select Gestion</option>");
+                O.forEach((value, i) => {
+                    $('#Gestion').append("<option value='" + value + "'>" + value + "</option>");
+                });
+            });
+        }
+        function AllHabilitarNotas() {
+            $('#DocentesHtml').empty();
+            $.getJSON('@Url.Action("AllHabilitarNotas", "HabilitarNotas")', { Gestion: parseInt($('#Gestion').val()) }, function (O) {
+                if (O.DatosGenerales.length > 0) {
+                    $('#Inicio').hide();
+                    $('#DocentesHtml').show();
+                } else {
+                    $('#Mensaje').html("SIN REGISTROS")
+                }
+                var Html = "";
+                O.DatosGenerales.forEach((valuePadre, i) => {
+                    Html += "<div class='col-xl-3 col-sm-6 col-lg-6 col-12'><div class='cardCarCustom card border-primary mb-3'><div class='card-body' style='padding:0.1rem'><h4 class='card-title text-primary' style='text-align:center;margin-bottom: 5px'>DATOS</h4></div><ul class='list-group list-group-flush'><li class='list-group-item' style='padding:0.3rem;font-size:12px'><span style='padding:3px;font-size:11px' class='badge badge-pill bg-blue float-right'>" + valuePadre.Ambiente + "</span><i class='fa fa-university'></i> Ambiente</li><li class='list-group-item' style='padding:0.3rem;font-size:12px'><span style='padding:3px;font-size:11px' class='badge badge-pill bg-blue float-right'>" + valuePadre.Turno + "</span><i class='fa fa-certificate'></i>Turno</li><li class='list-group-item' style='padding:0.3rem;font-size:12px'><span style='padding:3px;font-size:11px' class='badge badge-pill bg-blue float-right'>" + valuePadre.Periodo + "</span><i class='fa fa-hashtag'></i> Periodo</li></ul><label class='text-center' style='margin:5px 0 0 0'>Criterio</label><div class='alert alert-primary text-center' style='margin:0px 0 0px 0;padding:0 0 0 0'>" + valuePadre.Criterio + "</div><label class='text-center' style='margin:3px 0 0 0'>Actividad</label><div class='alert alert-primary text-center' style='margin:0px 0 0px 0;padding:0 0 0 0'>" + valuePadre.Actividades + "</div><h5 class='text-primary' style='text-align:left;margin:8px 0 5px 0'><i class='fa fa-chevron-right'></i> Docentes</h5><ul class='list-group list-group-flush'>";
+                    O.Docentes.forEach((valueDocentes, i) => {
+                        if (valueDocentes.IdActividadesPeriodo == valuePadre.IdActividadesPeriodo) {
+                            Html += "<li class='list-group-item' style='padding:0.3rem;font-size:12px'><span style='padding:3px;font-size:11px' class='badge badge-pill bg-blue float-right'>" + valueDocentes.Tipo + "</span><i class='fa fa-user'></i> " + valueDocentes.Nombres + " " + valueDocentes.ApPaterno + " " + valueDocentes.ApMaterno + "</li>";
+                        }
+                    });
+                    Html += "</ul><div style='margin-top:8px' class='footer'><button type='button' onclick='HabilitarNotas(" + valuePadre.IdActividadesPeriodo + ")' style='margin-right:3px' class='btn btn-block btn-outline-primary btn-sm'><i class='fa fa-check'></i> Habilitar</button></div></div></div>";
+                });
+                $('#DocentesHtml').append(Html);
+            });
+        }
+        function HabilitarNotas(IdActividadesPeriodo) {
+            $.getJSON('@Url.Action("HabilitarNotas", "HabilitarNotas")', { IdActividadesPeriodo }, function (O) {
+                if (O) {
+                    toastr.success('Habilitado');
+                    AllHabilitarNotas();
+                } else {
+                    toastr.error('Error');
+                }
+            });
+        }
+    </script>
+}

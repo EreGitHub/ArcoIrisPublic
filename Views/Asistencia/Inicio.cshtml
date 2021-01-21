@@ -1,0 +1,129 @@
+﻿
+@{
+    ViewBag.Title = "Inicio";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-2">    
+    <h4>Módulo Asistencia Estudiantil<span style="font-size:12px;color:#808080"> Arco iris Tarija</span></h4>
+    <div class="card mb-3 m-1">
+        <div id="contenido" class="row">
+            <div class="col-sm-12 col-lg-6 col-md-12">
+                <div class="col-sm">
+                    <h4 class="form-section"><i class="fa fa-tasks"></i> Asignadas</h4>
+                    <select id="Gestion" style="margin-bottom:5px" onchange="AllAsignaciones()" class="form-control"></select>
+                    <div id="Inicio" style="width:100%;padding:40% 0 40% 0">
+                        <h1 class="text-muted text-center"><i class="fa fa-frown-o"></i> SIN SELECCION GESTIÓN</h1>
+                    </div>
+                    <div class="row" style="margin-top:8px" id="ListaAsignacionesHtml"></div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-lg-6 col-md-12">
+                <div class="col-sm">
+                    <input type="hidden" id="IdDetApertura" value="0" />
+                    <h4 class="form-section"><i class="fa fa-tasks"></i> Lista Estudiantes</h4>
+                    <div class="row" style="margin-bottom:5px">
+                        <div class="col-lg-10 col-md-10 col-sm-10">
+                            <input type="date" disabled style="margin-bottom:8px" class="form-control" id="Fecha" placeholder="Fecha" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <button type="button" disabled onclick='AllEstudiantesAsistencia()' id="BtnBuscar" class="btn mb-1 btn-block btn-outline-primary"><i class="fa fa-search"></i> </button>
+                        </div>
+                    </div>
+                    <div class="containerCustom table-responsive">
+                        <table class='table table-hover table-sm' style='font-size:12px;'>
+                            <thead>
+                                <tr style="background-color:#17a2b8;border-color:#17a2b8;color:white">
+                                    <th width='1px'>Nº</th>
+                                    <th>Estudiante</th>
+                                    <th>Ci</th>
+                                    <th>Sexo</th>
+                                    <th>Faltas</th>
+                                    <th width='70px'></th>
+                                </tr>
+                            </thead>
+                            <tbody id="TableAsistencia"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        ListarGetiones();
+        function ListarGetiones() {
+            $.getJSON('@Url.Action("GetGetiones","AsignaDocente")', null, function (O) {
+                $('#Gestion').empty();
+                $('#Gestion').append("<option value='0'>Select Gestion</option>");
+                O.forEach((value, i) => {
+                    $('#Gestion').append("<option value='" + value + "'>" + value + "</option>");
+                });
+            });
+        }
+        function AllAsignaciones() {
+            $('#ListaAsignacionesHtml').empty();
+            if ($('#Gestion').val() == 0) {
+                $('#Inicio').show();
+            } else {
+                $('#Inicio').hide();
+                $.getJSON('@Url.Action("AllAsignacionDocente", "Evaluacion")', { Gestion: $('#Gestion').val() }, function (O) {
+                    var Html = "";
+                    O.forEach((valuePadre, i) => {
+                        Html += "<div class='col-xl-6 col-sm-6 col-lg-6 col-12'><div class='cardCarCustom card border-primary mb-3'><div class='card-body' style='padding:0.1rem'><h4 class='card-title' style='text-align:center;margin-bottom: 5px'><i class='fa fa-university'></i> " + valuePadre.Ambiente + " (" + valuePadre.Turno + ")</h4></div><hr style='margin:0px 0px 2px 0px'><h5 class='text-primary' style='text-align:left;margin:0px 0 1px 0'><i class='fa fa-signal'></i> Nivel Grado: " + valuePadre.NivelgradoPadre + "</h5><ul class='list-group list-group-flush'>";
+                        valuePadre.NivelGrdoHijos.forEach((valueNivelGradoHijo, i) => {
+                            Html += "<li class='list-group-item' style='padding:0.1rem;font-size:12px'><i class='fa fa-angle-right'></i> " + valueNivelGradoHijo.Descripcion + "</li>";
+                        });
+                        Html += "</ul><hr style='margin:0px 0px 2px 0px'><h5 class='text-primary' style='text-align:left;margin:10px 0 1px 0'><i class='fa fa-paperclip'></i> Avatar</h5><ul class='list-group list-group-flush'>";
+                        valuePadre.Avatar.forEach((valueAvatar, i) => {
+                            Html += "<li class='list-group-item' style='padding:0.1rem;font-size:12px'><i class='fa fa-angle-right'></i> " + valueAvatar.Descripcion + "</li>";
+                        });
+                        Html += "</ul><hr style='margin:0px 0px 3px 0px'><div class='footer'><span class='float-left text-info'><b style='font-size: 15px'>/" + (i + 1) + "/</b></span><span class='tags float-right'><button type='button' style='margin-right:3px' onclick='ShowFecha(" + valuePadre.IdDetApertura + ")' class='btn mb-1 btn-outline-primary btn-sm'><i class='fa fa-share'></i></button></span></div><hr style='margin:0px 0px 2px 0px'></div></div>";
+                    });
+                    $('#ListaAsignacionesHtml').append(Html);
+                });
+            }
+        }
+        function ShowFecha(IdDetApertura) {
+            $('#IdDetApertura').val(IdDetApertura);
+            $('#Fecha').prop('disabled', false);
+            $('#BtnBuscar').prop('disabled', false);            
+        }
+        function AllEstudiantesAsistencia() {
+            $('#TableAsistencia').empty();
+            $.getJSON('@Url.Action("AllEstudiantesAsistencia","Asistencia")', { IdDetApertura: $('#IdDetApertura').val(), Fecha: $('#Fecha').val() }, function (O) {                
+                if (O.responce) {
+                    O.Lst.forEach((value, i) => {
+                        $('#TableAsistencia').append("<tr><td>" + (i + 1) + "</td><td>" + value.Nombres + " " + value.ApPaterno + " " + value.ApMaterno + "</td><td>" + value.Ci + "</td><td>" + ((value.Sexo == 'M') ? "Masculino" : "Femenino") + "</td><td>" + value.Faltas + "</td><td><button onclick='Guardar(" + value.IdAsistencia + ",\"" + 'P' + "\"," + value.IdInscripcion + ")' class='" + ((value.ValorAsistencia == 'P') ? "btn btn-sm btn-primary" : "btn btn-sm btn-dark") + "' style='margin-right:2px'>P</button><button onclick='Guardar(" + value.IdAsistencia + ",\"" + 'F' + "\"," + value.IdInscripcion + ")' class='" + ((value.ValorAsistencia == 'F') ? "btn btn-sm btn-primary" : "btn btn-sm btn-dark") + "' style='margin-right:2px'>F</button><button onclick='Guardar(" + value.IdAsistencia + ",\"" + 'L' + "\"," + value.IdInscripcion + ")' class='" + ((value.ValorAsistencia == 'L') ? "btn btn-sm btn-primary" : "btn btn-sm btn-dark") + "'>L</button></td></tr>");
+                    });
+                }
+                MostarInfSave(O.StatusSave);
+            });
+        }
+        function Guardar(IdAsistencia, ValorAsistencia, IdInscripcion) {
+            var Obj = {
+                IdAsistencia: IdAsistencia,
+                Fecha: $('#Fecha').val(),
+                ValorAsistencia: ValorAsistencia,
+                IdInscripcion: IdInscripcion
+            };
+            console.log(Obj)
+            $.ajax({
+                url: '@Url.Action("Guardar","Asistencia")',
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify(Obj),
+                success: function (O) {
+                    if (O.responce) {
+                        AllEstudiantesAsistencia();
+                    }
+                    MostarInfSave(O.StatusSave);
+                }
+            });
+        }
+    </script>
+}
+

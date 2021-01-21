@@ -1,0 +1,231 @@
+﻿
+@{
+    ViewBag.Title = "Inicio";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@{
+    ViewBag.Title = "Inicio";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-2">
+    <h4>Módulo Notificación<span style="font-size:12px;color:#808080"> Arco iris Tarija</span></h4>
+    <div class="card  mb-3 m-1">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-11 col-md-10 col-sm-10">
+                    <select id="IdGrupo" style="margin-bottom:5px" onchange="AllNotificaiones(1,1)" class="form-control"></select>
+                </div>
+                <div class="col-lg-1 col-md-2 col-sm-2">
+                    <button type="button" onclick="NuevoMensajeNotificaion()" style="margin-right:3px" class="btn mb-1 btn-block btn-outline-primary"><i class="fa fa-plus"></i> </button>
+                </div>
+            </div>
+            <h4 class="form-section" style="margin-bottom:10px"><i class="fa fa-bell"></i> Lista Notificaciones</h4>
+            <div id="Inicio" style="width:100%;padding:19% 0 19% 0">
+                <h1 class="text-muted text-center"><i class="fa fa-frown-o"></i> SELECCIONE UN GRUPO</h1>
+            </div>
+            <div class="row" style="display:none" id="AllMensagesGrupoHtml">
+            </div>
+            <div class="text-center">
+                <ul class='pagination justify-content-end' id="PageNotificaciones"></ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Modal_Mensaje" tabindex="-1" role="dialog" style="overflow-y:scroll">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fa fa-bell"></i> Notificación</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="IdMensajesNotificacion" value="0" />
+                <label>Titulo Notificacion</label>
+                <input type="text" id="TituloNotificacion" class="form-control" />
+                <label><i class="fa fa-comments"></i> Mensaje</label>
+                <textarea style="height:100px" type="text" class="form-control" placeholder="Mensaje" id="Mensaje"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info btn-block" onclick="GuardarNotificacion()"><i class="fa fa-paper-plane-o"></i> Enviar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Modal_PersonaVieronNotificacion" tabindex="-1" role="dialog" style="overflow-y:scroll">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fa fa-eye"></i> Visto por:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="containerCustom table-responsive">
+                    <table class='table table-hover table-sm' style='font-size:12px;'>
+                        <tbody id="PersonaTableHtml">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"><i class="fa fa-times"></i> Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        AllGrupos();
+        function AllGrupos() {
+            $.getJSON('@Url.Action("AllGrupo","NotificacionesAdmEnvio")', null, function (O) {
+                $('#IdGrupo').empty();
+                $('#IdGrupo').append("<option value='0'>Select Grupo</option>");
+                O.forEach((value, i) => {
+                    $('#IdGrupo').append("<option value='" + value.IdGrupoNotificacion + "'>" + value.Nombre + "</option>");
+                });
+            });
+        }
+        @*function AllNotificaiones() {
+            $('#Inicio').hide();
+            $('#AllMensagesGrupoHtml').show();
+            $('#AllMensagesGrupoHtml').empty();
+            $.getJSON('@Url.Action("AllNotificaiones", "NotificacionesAdmEnvio")', { IdGrupo: $('#IdGrupo').val() }, function (O) {
+                var Html = "";
+                O.forEach(value => {
+                    Html += "<div class='col-xl-3 col-sm-6 col-lg-4 col-12'><div class='cardCarCustom card border-primary mb-3' style='border-radius:2px'><div class='card-body' style='padding:0px'><h4 class='card-title' style='text-align:center;margin-bottom: 4px;color:#007bff'>" + value.TituloNotificacion + "</h4></div><ul class='list-group list-group-flush'><li class='list-group-item' style='padding:0.2rem;font-size:12px'><span style='padding:3px;font-size:11px' class='badge badge-pill bg-blue float-right'>#" + value.IdMensajesNotificacion + "</span><i class='fa fa-bell'></i> Nº Notificaión</li></ul><label class='text-center' style='margin:0 0 0 0'>Mensaje:</label><textarea style='height:70px;margin:0px 0 5px 0;padding:0 0 0 0' disabled class='form-control alert-primary'>" + value.Mensaje + "</textarea><ul class='list-group list-group-flush'><li class='list-group-item' style='padding:0.2rem;font-size:12px'><span style='padding:3px;font-size:11px' class='badge badge-pill bg-blue float-right'>" + value.NombreUsuarioEnviaMsg + "</span><i class='fa fa-user'></i> Usuario</li><li class='list-group-item' style='padding:0.2rem;font-size:12px'><span style='padding:3px;font-size:11px' class='badge badge-pill bg-blue float-right'>" + value.Fecha + "</span><i class='fa fa-calendar'></i> Fecha</li></ul><div style='margin-top:5px' class='footer'><span class='float-left text-info'><b style='font-size: 15px'>/" + value.IdMensajesNotificacion + "/</b></span><span class='tags float-right'><button type='button' onclick='UsuarioVistoNoti(" + value.IdMensajesNotificacion + ")' data-toggle='tooltip' data-placement='top' title='Persona que vieron la notificación' style='margin-right:3px' class='btn btn-outline-primary btn-sm'><i class='fa fa-eye'></i></button><button type='button' onclick='ModalModificarNotificacion(" + value.IdMensajesNotificacion + ")' style='margin-right:3px' class='btn btn-outline-primary btn-sm'><i class='fa fa-pencil'></i></button><button type='button' onclick='EliminarNotificaion(" + value.IdMensajesNotificacion + ")' class='btn btn-outline-danger btn-sm'><i class='fa fa-bitbucket'></i></button></span></div></div></div>";
+                });
+                $('#AllMensagesGrupoHtml').append(Html);
+            });
+        }*@
+        function AllNotificaiones(pageIndex, is) {
+            $('#Inicio').hide();
+            $('#AllMensagesGrupoHtml').show();
+            $('#AllMensagesGrupoHtml').empty();
+            $.getJSON('@Url.Action("AllNotificaiones", "NotificacionesAdmEnvio")', { IdGrupo: $('#IdGrupo').val(), PageIndex: pageIndex }, function (O) {
+                var Html = "";
+                O.Lst.forEach(value => {
+                    Html += "<div class='col-xl-3 col-sm-6 col-lg-4 col-12'><div class='cardCarCustom card border-primary mb-3' style='border-radius:2px'><div class='card-body' style='padding:0px'><h4 class='card-title' style='text-align:center;margin-bottom: 4px;color:#007bff'>" + value.TituloNotificacion + "</h4></div><ul class='list-group list-group-flush'><li class='list-group-item' style='padding:0.2rem;font-size:12px'><span style='padding:3px;font-size:11px' class='badge badge-pill bg-blue float-right'>#" + value.IdMensajesNotificacion + "</span><i class='fa fa-bell'></i> Nº Notificaión</li></ul><label class='text-center' style='margin:0 0 0 0'>Mensaje:</label><textarea style='height:70px;margin:0px 0 5px 0;padding:0 0 0 0' disabled class='form-control alert-primary'>" + value.Mensaje + "</textarea><ul class='list-group list-group-flush'><li class='list-group-item' style='padding:0.2rem;font-size:12px'><span style='padding:3px;font-size:11px' class='badge badge-pill bg-blue float-right'>" + value.NombreUsuarioEnviaMsg + "</span><i class='fa fa-user'></i> Usuario</li><li class='list-group-item' style='padding:0.2rem;font-size:12px'><span style='padding:3px;font-size:11px' class='badge badge-pill bg-blue float-right'>" + value.Fecha + "</span><i class='fa fa-calendar'></i> Fecha</li></ul><div style='margin-top:5px' class='footer'><span class='float-left text-info'><b style='font-size: 15px'>/" + value.IdMensajesNotificacion + "/</b></span><span class='tags float-right'><button type='button' onclick='UsuarioVistoNoti(" + value.IdMensajesNotificacion + ")' data-toggle='tooltip' data-placement='top' title='Persona que vieron la notificación' style='margin-right:3px' class='btn btn-outline-primary btn-sm'><i class='fa fa-eye'></i></button><button type='button' onclick='ModalModificarNotificacion(" + value.IdMensajesNotificacion + ")' style='margin-right:3px' class='btn btn-outline-primary btn-sm'><i class='fa fa-pencil'></i></button><button type='button' onclick='EliminarNotificaion(" + value.IdMensajesNotificacion + ")' class='btn btn-outline-danger btn-sm'><i class='fa fa-bitbucket'></i></button></span></div></div></div>";
+                });
+                $('#AllMensagesGrupoHtml').append(Html);
+
+                var TotalPages = parseInt(O.TotalPages);
+                var rangeMin = 4;
+                var rangeMax = parseInt(TotalPages) == 1 ? 1 : rangeMin && parseInt(TotalPages) < rangeMin ? parseInt(TotalPages) : rangeMin;
+
+                const paging = { range: rangeMax, pages: TotalPages };
+                var PageArray = doPaging(pageIndex, paging);
+                var sTatusPrev = (pageIndex <= 1) ? true : false;
+                var sTatuslast = (pageIndex >= paging.pages) ? true : false;
+                var html = "<li class='page-item first " + (sTatusPrev ? "disabled" : "") + "'><a href='#' class='page-link' onclick='AllNotificaiones(1, " + TotalPages + ")'>First</a></li><li class='page-item prev  " + (sTatusPrev ? "disabled" : "") + "'><a href='#' class='page-link' onclick='AllNotificaiones(" + parseInt(pageIndex - 1) + ", " + TotalPages + ")'>Prev</a></li>";
+                PageArray.forEach((value, i) => {
+                    html += value.Status
+                        ?
+                        "<li class='page-item active'><a class='page-link' href='#' onclick='AllNotificaiones(" + value.Page + ", " + TotalPages + ")'>" + value.Page + "</a></li>"
+                        :
+                        "<li class='page-item'><a class='page-link' href='#' onclick='AllNotificaiones(" + value.Page + ", " + TotalPages + ")'>" + value.Page + "</a></li>";
+                });
+                html += "<li class='page-item next " + (sTatuslast ? "disabled" : "") + "'><a href='#' class='page-link' onclick='AllNotificaiones(" + parseInt(pageIndex + 1) + ", " + TotalPages + ")'>Next</a></li><li class='page-item last " + (sTatuslast ? "disabled" : "") + "'><a href='#' class='page-link' onclick='AllNotificaiones(" + paging.pages + ", " + TotalPages + ")'>Last</a></li>";
+                $('#PageNotificaciones').html(html);
+            });
+        }
+        function doPaging(current, { range, pages, start = 1 }) {
+            const paging = [];
+            var i = Math.min(pages + start - range, Math.max(start, current - (range / 2 | 0)));
+            const end = i + range;
+            while (i < end) {
+                var infStatus = i === current ? true : false;
+                paging.push({ Page: i++, Status: infStatus });
+            };
+            return paging;
+        };
+
+        function UsuarioVistoNoti(IdMensajesNotificacion) {
+            $('#Modal_PersonaVieronNotificacion').modal('show');
+            $.getJSON('@Url.Action("PersonaVieronNotificacion", "NotificacionesAdmEnvio")', { IdMensajesNotificacion }, function (O) {
+                var html = "";
+                $('#PersonaTableHtml').empty();
+                O.forEach((value, i) => {
+                    html += "<tr><td>" + (i + 1) + "</td><td>" + value.Nombres + "</td><td>" + value.ApPaterno + "</td><td>" + value.ApMaterno + "</td><td>" + value.Ci + "</td><td><i class='" + ((value.EstadoVisto == "si") ? "fa fa-check" : "fa fa-times") + "' style='color:#17a2b8'></i></td></tr>";
+                });
+                $('#PersonaTableHtml').append(html);
+            });
+        }
+        function ModalModificarNotificacion(IdMensajesNotificacion) {
+            $('#IdMensajesNotificacion').val(IdMensajesNotificacion);
+            $.getJSON('@Url.Action("DatosMensaje", "NotificacionesAdmEnvio")', { IdMensajesNotificacion }, function (O) {
+                $('#TituloNotificacion').val(O.TituloNotificacion);
+                $('#Mensaje').val(O.Mensaje);
+            });
+            $('#Modal_Mensaje').modal('show');
+        }
+        function EliminarNotificaion(IdMensajesNotificacion) {
+            $.getJSON('@Url.Action("EliminarNotificacion", "NotificacionesAdmEnvio")', { IdMensajesNotificacion }, function (O) {
+                if (O) {
+                    toastr.success('Notificación Eliminada');
+                    AllNotificaiones(1,1);
+                } else {
+                    toastr.error('Error')
+                }
+            });
+        }
+        function NuevoMensajeNotificaion() {
+            if ($('#IdGrupo').val() != 0) {
+                $('#IdMensajesNotificacion').val(0);
+                $('#TituloNotificacion').val("");
+                $('#Mensaje').val("");
+                $('#Modal_Mensaje').modal('show');
+            } else {
+                toastr.warning("debe seleccionar un grupo para enviar notificaiones")
+            }
+        }
+        function GuardarNotificacion() {
+            var Obj = {
+                IdMensajesNotificacion: $('#IdMensajesNotificacion').val(),
+                TituloNotificacion: $('#TituloNotificacion').val(),
+                Mensaje: $('#Mensaje').val(),
+                IdGrupoNotificacion: $('#IdGrupo').val()
+            }
+            $.getJSON('@Url.Action("GuardarNotificacion", "NotificacionesAdmEnvio")', Obj, function (O) {
+                //respoce, IdMensajesNotificacion
+                if (O.responce) {
+                    $('#Modal_Mensaje').modal('hide');
+                    notificacion.server.sendNewNotification(O.IdMensajesNotificacion);
+                    EnvioCorreo();
+                    AllNotificaiones(1,1);
+                    LimpiarDatos();
+                };
+                MostarInfSave(O.StatusSave);
+            });
+        }
+        function LimpiarDatos() {
+            $('#IdMensajesNotificacion').val(0);
+            $('#TituloNotificacion').val("");
+            $('#Mensaje').val("");           
+        }
+        function EnvioCorreo() {            
+            $.getJSON('@Url.Action("EnvioCorreo","NotificacionesAdmEnvio")', { Titulo: $('#TituloNotificacion').val(),Mensaje: $('#Mensaje').val(), IdGrupo: $('#IdGrupo').val() }, function (O) {
+                if (O) {
+                    $('#Mensage').val("");
+                    toastr.success('Correos enviano exitosamente')
+                } else {
+                    toastr.error('Error al enviar los correos intente nuevamente')
+                }
+            });
+        }
+        @*$('#btnSendMessage').click(function () {
+            var IdGrupo = $('#IdGrupo').val();
+            var message = $('#Mensaje').val();
+            notificacion.server.send(IdGrupo, message);
+
+        });*@
+    </script>
+}

@@ -1,0 +1,313 @@
+﻿
+@{
+    ViewBag.Title = "Inicio";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-2">
+    <h4>Gruposss Notificaciones</h4>
+    <div class="card mb-3 m-1">
+        <div class="row">
+            <div class="col-sm-12 col-lg-6 col-md-12">
+                <div class="col-sm">
+                    <h4 class="form-section"><i class="fa fa-university"></i> Registro</h4>
+                    <input type="hidden" id="IdGrupoNotificacion" value="0" />
+                    <div class="row">
+                        <div class="col-6">
+                            <button type="button" onclick="Nuevo()" class="btn btn-outline-primary btn-block"><i class="fa fa-plus"></i> Registro Manual</button>
+                        </div>
+                        <div class="col-6">
+                            <button type="button" onclick="AllAulasSincronizarNotificacion()" class="btn btn-outline-primary btn-block"><i class="fa fa-repeat"></i> Registro Automatico</button>
+                        </div>
+                    </div>
+                    <label>Nombre</label>
+                    <input type="text" disabled class="form-control" placeholder="Nombre" id="Nombre" />
+                    <h4 class="form-section"><i class="fa fa-graduation-cap"></i> Usuarios Grupo</h4>
+                    <label>Buscar Usuarios</label>
+                    <div class="input-group" style="margin-bottom:10px">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
+                        </div>
+                        <input type="text" disabled class="form-control" id="TxtParametroUsuario" onkeyup="BuscarUsuario()" placeholder="Buscar....">
+                    </div>
+                    <div id="ListarUsuariosASeleccionar" style="position: absolute; z-index: 10; width: 95%" class="list-group"></div>
+
+                    <div>
+                        <table class='table table-hover table-sm' style='font-size:12px;'>
+                            <thead>
+                                <tr style="background-color:#17a2b8;border-color:#17a2b8;color:white">
+                                    <th width='1px'>Nº</th>
+                                    <th>Nombres</th>
+                                    <th>A. Paterno</th>
+                                    <th>A. Materno</th>
+                                    <th>Ci</th>
+                                    <th width='1px'></th>
+                                </tr>
+                            </thead>
+                            <tbody id="TableUsuariosNotiHtml"></tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <button type="button" class="btn btn-secondary btn-block" style="margin-bottom:10px" onclick="Cancelar()">Cancelar</button>
+                        </div>
+                        <div class="col-6">
+                            <button type="button" disabled id="Guardar" class="btn btn-success btn-block" style="margin-bottom:10px" onclick="Guardar()">Guardar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-lg-6 col-md-12">
+                <div class="col-sm">
+                    <h4 class="form-section"><i class="fa fa-university"></i> Lista Grupos</h4>
+                    <div class="containerCustom table-responsive">
+                        <table class='table table-hover table-sm' style='font-size:12px;'>
+                            <thead>
+                                <tr style="background-color:#17a2b8;border-color:#17a2b8;color:white">
+                                    <th width='1px'>Nº</th>
+                                    <th>Nombre</th>
+                                    <th>Cantidad Miembros</th>
+                                    <th width='1px'></th>
+                                    <th width='1px'></th>
+                                    <th width='1px'></th>
+                                </tr>
+                            </thead>
+                            <tbody id="TableGruposAgregadosHtml"></tbody>
+                        </table>
+                    </div>
+                    <div class="text-center">
+                        <ul class='pagination justify-content-end' id="PageGrupos"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Modal_Sincronizar" tabindex="-1" data-backdrop="static" data-keyboard="false" role="dialog" style="overflow-y:scroll">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Sincronizar...</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="AulasSincronizar">
+                </div>
+                <div id="SincronizandoAula" style="width:100%;padding:19% 0 19% 0">
+                    <h1 class="text-muted text-center"> SINCRONIZANDO...</h1>
+                </div>
+            </div>
+            @*<div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-outline-primary" >Agregar</button>
+                </div>*@
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        //$('#AulasSincronizar').hide();
+        $('#SincronizandoAula').hide();
+        var ArrayUsuarios = [];
+        var EstadoModificar = false;
+        var EstadoModificarGrupo = false;
+        $(document).ready(function () {
+            ListarGruposAgregados(1,0);
+        });
+
+        function Nuevo() {
+            EstadoModificar = true;
+            disabledHtml();
+            LimpiarDatos();
+        }
+        function disabledHtml() {
+            $("#Nombre").prop("disabled", !EstadoModificar);
+            $("#TxtParametroUsuario").prop("disabled", !EstadoModificar);
+            $("#Guardar").prop("disabled", !EstadoModificar);
+        }
+        function LimpiarDatos() {
+            $('#IdGrupoNotificacion').val(0);
+            $('#Nombre').val("");
+            $('#TxtParametroUsuario').val("");
+            ArrayUsuarios.length = 0;
+            ListarUsuarios();
+            EstadoModificarGrupo = false;
+        }
+        function Cancelar() {
+            EstadoModificar = false;
+            disabledHtml();
+            LimpiarDatos();
+        }
+
+        function AllAulasSincronizarNotificacion() {
+            $('#Modal_Sincronizar').modal('show');
+            $('#AulasSincronizar').empty();
+            $.getJSON('@Url.Action("AllAulasSincronizarNotificacion", "NotificaionesAdmGrupos")', null, function (O) {
+                //console.log(O)
+                O.forEach((value, i) => {
+                    $('#AulasSincronizar').append("<button type='button' onclick='SincronizarGrupoPorAulas(" + value.IdDetApertura + ")' class='btn btn-block btn-outline-primary'>Aula: " + value.Ambiente + " (" + value.Turno + ") Gestion: " + value.Gestion + "</button>");
+                });
+            });
+        }
+        function SincronizarGrupoPorAulas(IdDetApertura) {
+            $('#AulasSincronizar').hide();
+            $('#SincronizandoAula').show();
+            $.getJSON('@Url.Action("SincronizarGrupoPorAulas", "NotificaionesAdmGrupos")', { IdDetApertura: IdDetApertura }, function (O) {
+                //if (O.responce) {
+                //    LimpiarDatos();
+                //    Cancelar();
+                //    ListarGruposAgregados(1, 0);
+                //}
+                ListarGruposAgregados(1,0);
+                MostarInfSave(O.StatusSave);
+                $('#AulasSincronizar').show();
+                $('#SincronizandoAula').hide();
+            });
+        }
+
+        function BuscarUsuario() {            
+            var Obj = { TxtParametro: $('#TxtParametroUsuario').val() };
+            $('#ListarUsuariosASeleccionar').empty();
+            $.getJSON('@Url.Action("BuscarUsuario", "NotificaionesAdmGrupos")', Obj, function (O) {
+                if (O != null) {
+                    O.forEach(value => {
+                        $('#ListarUsuariosASeleccionar').append("<a style='text-decoration: none;background-color:' onclick='AddUsuario(" + value.IdPersona + ",\"" + value.Nombres + "\",\"" + value.ApPaterno + "\",\"" + value.ApMaterno + "\",\"" + value.Ci + "\")' class='list-group-item' ><div style='display: inline-block'><i class='fa fa-user-o' style='margin-right: 5px'></i>" + value.Nombres + " " + value.ApPaterno + " " + value.ApMaterno + " " + value.Ci + "</div></a>");
+                    });
+                }
+            });
+        }
+        function AddUsuario(IdUsuario, Nombres, ApPaterno, ApMaterno, Ci) {
+            var Obj = {
+                IdGrupoNotiPersona: 0,
+                IdUsuario: IdUsuario,
+                Nombres: Nombres,
+                ApPaterno: ApPaterno,
+                ApMaterno: ApMaterno,
+                Ci: Ci,
+                Estado: true
+            };
+            if (!VerificarSiExisteObjUsuario(Obj.IdUsuario)) {
+                ArrayUsuarios.push(Obj);
+                $('#TxtParametroUsuario').val("")
+                $('#ListarUsuariosASeleccionar').empty();
+                ListarUsuarios();
+            } else {
+                toastr.warning('El usuario ya fue seleccionado');
+            }
+        }
+        function ListarUsuarios() {
+            $('#TableUsuariosNotiHtml').empty();
+            ArrayUsuarios.forEach((value, i) => {
+                if (value.Estado)
+                    $('#TableUsuariosNotiHtml').append("<tr><td>" + (i+1) + "</td><td>" + value.Nombres + "</td><td>" + value.ApPaterno + "</td><td>" + value.ApMaterno + "</td><td>" + value.Ci + "</td><td>" + (EstadoModificar ? "<button class='btn btn-outline-danger btn-sm' onclick='EliminarUsuario(" + i + ")'><i class='fa fa-close'></i></button>" : "") + "</td></tr>");
+            });
+        }
+        function EliminarUsuario(i) {
+            var o = ArrayUsuarios[i].Id;
+            if (o == 0) {
+                ArrayUsuarios.splice(i, 1);
+            } else {
+                ArrayUsuarios[i].Estado = false;
+            }
+            ListarUsuarios();
+        }
+        function VerificarSiExisteObjUsuario(IdUsuario) {
+            var Estado = false;
+            for (var i = 0; i < ArrayUsuarios.length; i++) {
+                if (ArrayUsuarios[i].IdUsuario == IdUsuario && ArrayUsuarios[i].Estado == true) {
+                    Estado = true;
+                    break;
+                }
+            }
+            return Estado;
+        }
+
+        function ListarGruposAgregados(pageIndex, is) {
+            $.getJSON('@Url.Action("ListarGrupos","NotificaionesAdmGrupos")', { PageIndex: pageIndex }, function (O) {
+                var html = "";
+                $('#TableGruposAgregadosHtml').empty();
+                O.Lst.forEach((value, i) => {
+                    html += "<tr><td>" + (i + 1) + "</td><td>" + value.Nombre + "</td><td>" + value.Cantidad + "</td><td><button class='btn btn-outline-info btn-sm' onclick='VerDetalleGrupo(" + value.IdGrupoNotificacion + ",false)'><i class='fa fa-eye'></i></button></td><td><button class='btn btn-outline-secondary btn-sm' onclick='VerDetalleGrupo(" + value.IdGrupoNotificacion + ",true)'><i class='fa fa-pencil'></i></button></td><td><button class='btn btn-outline-danger btn-sm' onclick='EliminarGrupo(" + value.IdGrupoNotificacion + ")'><i class='fa fa-bitbucket'></i></button></td></tr>";
+                });
+                $('#TableGruposAgregadosHtml').append(html);
+                var TotalPages = parseInt(O.TotalPages);
+                var rangeMin = 4;
+                var rangeMax = parseInt(TotalPages) == 1 ? 1 : rangeMin && parseInt(TotalPages) < rangeMin ? parseInt(TotalPages) : rangeMin;
+
+                const paging = { range: rangeMax, pages: TotalPages };
+                var PageArray = doPaging(pageIndex, paging);
+                var sTatusPrev = (pageIndex <= 1) ? true : false;
+                var sTatuslast = (pageIndex >= paging.pages) ? true : false;
+                var html = "<li class='page-item first " + (sTatusPrev ? "disabled" : "") + "'><a href='#' class='page-link' onclick='ListarGruposAgregados(1, " + TotalPages + ")'>First</a></li><li class='page-item prev  " + (sTatusPrev ? "disabled" : "") + "'><a href='#' class='page-link' onclick='ListarGruposAgregados(" + parseInt(pageIndex - 1) + ", " + TotalPages + ")'>Prev</a></li>";
+                PageArray.forEach((value, i) => {
+                    html += value.Status
+                        ?
+                        "<li class='page-item active'><a class='page-link' href='#' onclick='ListarGruposAgregados(" + value.Page + ", " + TotalPages + ")'>" + value.Page + "</a></li>"
+                        :
+                        "<li class='page-item'><a class='page-link' href='#' onclick='ListarGruposAgregados(" + value.Page + ", " + TotalPages + ")'>" + value.Page + "</a></li>";
+                });
+                html += "<li class='page-item next " + (sTatuslast ? "disabled" : "") + "'><a href='#' class='page-link' onclick='ListarGruposAgregados(" + parseInt(pageIndex + 1) + ", " + TotalPages + ")'>Next</a></li><li class='page-item last " + (sTatuslast ? "disabled" : "") + "'><a href='#' class='page-link' onclick='ListarGruposAgregados(" + paging.pages + ", " + TotalPages + ")'>Last</a></li>";
+                $('#PageGrupos').html(html);
+            });
+        }
+        function doPaging(current, { range, pages, start = 1 }) {
+            const paging = [];
+            var i = Math.min(pages + start - range, Math.max(start, current - (range / 2 | 0)));
+            const end = i + range;
+            while (i < end) {
+                var infStatus = i === current ? true : false;
+                paging.push({ Page: i++, Status: infStatus });
+            };
+            return paging;
+        };
+        function VerDetalleGrupo(IdGrupoNotificacion, _EstadoModificar) {
+            EstadoModificar = _EstadoModificar;
+            disabledHtml();
+            $.getJSON('@Url.Action("GetDetalleGrupo","NotificaionesAdmGrupos")', { IdGrupoNotificacion: IdGrupoNotificacion }, function (O) {
+                //console.log(O);
+                $('#IdGrupoNotificacion').val(O._oGrupo.IdGrupoNotificacion);
+                $('#Nombre').val(O._oGrupo.Nombre);
+                ArrayUsuarios = O.LstUsuarioGrupo;
+                ListarUsuarios();
+            });
+        }
+        function EliminarGrupo(Id) {
+            //console.log(Id)
+            $.getJSON('@Url.Action("Eliminar","NotificaionesAdmGrupos")', { Id: Id }, function (O) {
+                if (O) {
+                    toastr.success("El registro fue eliminado");
+                    ListarGruposAgregados(1,0);
+                } else {
+                    toastr.error("Error no puedo eliminar el registro");
+                }
+            });
+        }
+        function Guardar() {
+            var Obj = {
+                IdGrupoNotificacion: $('#IdGrupoNotificacion').val(),
+                Nombre: $('#Nombre').val(),
+                LstGrupoPersonaNoti: ArrayUsuarios
+            };            
+            $.ajax({
+                url: '@Url.Action("Guardar","NotificaionesAdmGrupos")',
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify(Obj),
+                success: function (O) {
+                    if (O.responce) {
+                        LimpiarDatos();
+                        Cancelar();
+                        ListarGruposAgregados(1,0);
+                    }
+                    MostarInfSave(O.StatusSave);
+                }
+            });
+        }
+    </script>
+}
+

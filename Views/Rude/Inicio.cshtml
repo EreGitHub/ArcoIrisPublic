@@ -1,0 +1,2257 @@
+﻿
+@{
+    ViewBag.Title = "Inicio";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-2">
+    <h4>Módulo Rude Estudiantil<span style="font-size:12px;color:#808080"> Arco iris Tarija</span></h4>
+    <div class="card mb-3 m-1">
+        <div class="col-sm">
+            <h4 class="form-section"><i class="fa fa-graduation-cap"></i> Inscripción Rude</h4>
+            <button type="button" onclick="Nuevo()" style="margin-right:3px" class="btn mb-1 btn-block btn-outline-primary"><i class="fa fa-plus"></i> Nuevo Registro</button>
+            <div class="row" style="margin-bottom:5px">
+                <div class="col-lg-10 col-md-10 col-sm-10">
+                    <div class="input-group" style="margin-bottom:5px">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
+                        </div>
+                        <input type="text" class="form-control" id="TxtParametroInscritos" placeholder="Buscar por Ci..." aria-label="Recipient's username" aria-describedby="basic-addon2">
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2">
+                    <button type="button" onclick='AllEstudianteRude(1)' style="margin-right:3px" class="btn mb-1 btn-block btn-outline-primary"><i class="fa fa-search"></i> </button>
+                </div>
+            </div>
+            <h4 class="form-section"><i class="fa fa-graduation-cap"></i> Lista Estudiantes</h4>
+            <div class="row" id="EstudiantesRudeHtml"></div>
+            <div class="text-center">
+                <ul class='pagination justify-content-end' id="PageEstudianteRude"></ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Modal_Rude" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" style="overflow-y:scroll">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><span id="TituloModalRude">.</span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="IdPersonaEstudiante" value="0" />
+                <div class="accordion" id="accordionExample">
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    II. DATOS DE LA O EL ESTUDIANTE
+                                </button>
+                            </h2>
+                        </div>
+
+                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                            <div class="card-body">
+                                <div id="BuscardorEstudiante">
+                                    <div class="input-group" style="margin-bottom:5px">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" id="TxtParametroEstudiante" onkeyup="BuscarEstudiantes()" placeholder="Buscar....">
+                                    </div>
+                                    <div id="ListarEstudiantes" style="position: absolute; z-index: 10; width: 95%" class="list-group"></div>
+                                </div>
+                                <h6 class="form-section"><i class="fa fa-tasks"></i> 2.1 APELLIDO(S) Y NOMBRE(S)</h6>
+                                <div class="row">
+                                    <div class="col-sm-6 col-lg-6 col-md-6">
+                                        <div class="form-group">
+                                            <label>Nombres</label>
+                                            <input type="text" disabled class="form-control" placeholder="Nombres" id="Nombres_Estudiante" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-lg-6 col-md-6">
+                                        <div class="form-group">
+                                            <label>Apellido Paterno</label>
+                                            <input type="text" disabled class="form-control" placeholder="Apellido Paterno" id="Ap_Estudiante" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-lg-6 col-md-6">
+                                        <div class="form-group">
+                                            <label>Apellido Materno</label>
+                                            <input type="text" disabled class="form-control" placeholder="Apellido Paterno" id="Am_Estudiante" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-lg-6 col-md-6">
+                                        <div class="form-group">
+                                            <label>Carnet de Identidad</label>
+                                            <input type="text" disabled class="form-control" placeholder="Carnet de Identidad" id="Ci_Estudiante" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-lg-6 col-md-6">
+                                        <div class="form-group">
+                                            <label>Fecha Nacimiento</label>
+                                            <input type="text" disabled class="form-control" placeholder="Fecha Nacimiento" id="FechaNacimiento_Estudiante" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-lg-6 col-md-6">
+                                        <div class="form-group">
+                                            <label>Sexo</label>
+                                            <select disabled class="form-control" id="Sexo_Estudiante">
+                                                <option value="0">Sexo</option>
+                                                <option value="M">Masculino</option>
+                                                <option value="F">Femenino</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-lg-6 col-md-6">
+                                        <div class="form-group">
+                                            <label>Celular de contacto</label>
+                                            <input type="text" disabled class="form-control" placeholder="Celular de contacto" id="Celular_Estudiante" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-lg-6 col-md-6">
+                                        <div class="form-group">
+                                            <label>Teléfono fijo</label>
+                                            <input type="text" disabled class="form-control" placeholder="Teléfono fijo" id="Telefonofijo_Estudiante" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <h6 class="form-section">
+                                    <i class="fa fa-tasks"></i> (**)2.3 CERTIFICADO DE NACIMIENTO
+                                </h6>
+                                <div class="row">
+                                    <div class="col-sm-6 col-lg-6 col-md-6">
+                                        <div class="form-group">
+                                            <label>Oficialia Nº</label>
+                                            <input type="text" disabled class="form-control" placeholder="Oficialia Nº" id="CertificadoNacimiento_Noficialia" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-lg-6 col-md-6">
+                                        <div class="form-group">
+                                            <label>Libro Nº</label>
+                                            <input type="text" disabled class="form-control" placeholder="Libro Nº" id="CertificadoNacimiento_NoLibro" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-lg-6 col-md-6">
+                                        <div class="form-group">
+                                            <label>Partida Nº</label>
+                                            <input type="text" disabled class="form-control" placeholder="Partida Nº" id="CertificadoNacimiento_NoPartida" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-lg-6 col-md-6">
+                                        <div class="form-group">
+                                            <label>Folio Nº</label>
+                                            <input type="text" disabled class="form-control" placeholder="Folio Nº" id="CertificadoNacimiento_NoFolio" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <h6 class="form-section">
+                                    <i class="fa fa-tasks"></i> 2.2 LUGAR DE NACIMIENTO
+                                </h6>
+                                <div class="row">
+                                    <div class="col-sm-12 col-lg-12 col-md-12">
+                                        <label>Pais</label>
+                                        <input type="hidden" value="0" id="IdLugarNacimeinto" />
+                                        <select class="form-control" onchange="ListarDepartamentoLugarNacimiento()" id="IdPais_LugarNacimientoEstudiante"></select>
+                                    </div>
+                                    <div class="col-sm-12 col-lg-6 col-md-12">
+                                        <label>Departamento</label>
+                                        <select class="form-control" onchange="ListarProvinciaLugarNacimiento()" id="IdDepartamento_LugarNacimientoEstudiante"></select>
+                                        <label>Provincia</label>
+                                        <select class="form-control" onchange="ListarMunicipioLugarNacimiento()" id="IdProvincia_LugarNacimientoEstudiante"></select>
+                                    </div>
+                                    <div class="col-sm-12 col-lg-6 col-md-12">
+                                        <label>Seccion/Municipio</label>
+                                        <select class="form-control" onchange="ListarLocalidadComunidadLugarNacimiento()" id="IdMunicipio_LugarNacimientoEstudiante"></select>
+                                        <label>Localidad</label>
+                                        <select class="form-control" id="IdLocalidad_LugarNacimientoEstudiante"></select>
+                                    </div>
+                                </div>
+                                <h6 class="form-section">
+                                    <i class="fa fa-tasks"></i> (*)2.6 CÓDIGO RUDE (Código generado por el Sistema)
+                                </h6>
+                                <div class="form-group">
+                                    <label>Codigo rude</label>
+                                    <input type="text" class="form-control" placeholder="Codigo rude" id="Codigo_Rude" />
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6 col-lg-6 col-md-6">
+                                        <h6 class="form-section">
+                                            <i class="fa fa-tasks"></i> 2.8 ¿EL/LA ESTUDIANTE PRESENTA ALGUNA DISCAPACIDAD?
+                                        </h6>
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" class="custom-control-input" onclick="CheckDiscapacidad()" id="Rb_Discapacidad_Si" name="NameDiscapacidad" value="true">
+                                            <label class="custom-control-label" for="Rb_Discapacidad_Si">Si (Pase a 2.9)</label>
+                                        </div>
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" class="custom-control-input" checked onclick="CheckDiscapacidad()" id="Rb_Discapacidad_No" name="NameDiscapacidad" value="false">
+                                            <label class="custom-control-label" for="Rb_Discapacidad_No">No (Pase a III)</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-lg-6 col-md-6">
+                                        <h6 class="form-section">
+                                            <i class="fa fa-tasks"></i> (**)2.9 Nº DE REGISTRO DE DISCAPACIDAD O IBC:
+                                        </h6>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" disabled placeholder="IBC" id="ResgistroDiscapacidadIBC" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 col-lg-6 col-md-12">
+                                        <h6 class="form-section">
+                                            <i class="fa fa-tasks"></i> 2.10 TIPO DE DISCAPACIDAD (Marque solo una opción)
+                                        </h6>
+                                        <div class="row">
+                                            <div class="col-sm-6 col-lg-6 col-md-6">
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" class="custom-control-input" disabled onclick="SeleccionarTipoDiscapacidad(1)" id="Rb_TipoDiscapacidad_Psíquica" name="NameTipoDiscapacidad" value="Psíquica">
+                                                    <label class="custom-control-label" for="Rb_TipoDiscapacidad_Psíquica">Psíquica</label>
+                                                </div>
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" class="custom-control-input" disabled onclick="SeleccionarTipoDiscapacidad(1)" id="Rb_TipoDiscapacidad_Autismo" name="NameTipoDiscapacidad" value="Autismo">
+                                                    <label class="custom-control-label" for="Rb_TipoDiscapacidad_Autismo">Autismo</label>
+                                                </div>
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" class="custom-control-input" disabled onclick="SeleccionarTipoDiscapacidad(1)" id="Rb_TipoDiscapacidad_SíndromeDeDown" name="NameTipoDiscapacidad" value="SíndromeDeDown">
+                                                    <label class="custom-control-label" for="Rb_TipoDiscapacidad_SíndromeDeDown">Síndrome de Down</label>
+                                                </div>
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" class="custom-control-input" disabled onclick="SeleccionarTipoDiscapacidad(1)" id="Rb_TipoDiscapacidad_Intelectual" name="NameTipoDiscapacidad" value="Intelectual">
+                                                    <label class="custom-control-label" for="Rb_TipoDiscapacidad_Intelectual">Intelectual</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6 col-lg-6 col-md-6">
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" class="custom-control-input" disabled onclick="SeleccionarTipoDiscapacidad(1)" id="Rb_TipoDiscapacidad_Auditiva" name="NameTipoDiscapacidad" value="Auditiva">
+                                                    <label class="custom-control-label" for="Rb_TipoDiscapacidad_Auditiva">Auditiva</label>
+                                                </div>
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" class="custom-control-input" disabled onclick="SeleccionarTipoDiscapacidad(1)" id="Rb_TipoDiscapacidad_FísicaMotora" name="NameTipoDiscapacidad" value="FísicaMotora">
+                                                    <label class="custom-control-label" for="Rb_TipoDiscapacidad_FísicaMotora">Física-Motora</label>
+                                                </div>
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" class="custom-control-input" disabled onclick="SeleccionarTipoDiscapacidad(1)" id="Rb_TipoDiscapacidad_Sordoceguera" name="NameTipoDiscapacidad" value="Sordoceguera">
+                                                    <label class="custom-control-label" for="Rb_TipoDiscapacidad_Sordoceguera">Sordoceguera</label>
+                                                </div>
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" class="custom-control-input" disabled onclick="SeleccionarTipoDiscapacidad(1)" id="Rb_TipoDiscapacidad_Múltiple" name="NameTipoDiscapacidad" value="Múltiple">
+                                                    <label class="custom-control-label" for="Rb_TipoDiscapacidad_Múltiple">Múltiple</label>
+                                                </div>
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" class="custom-control-input" disabled onclick="SeleccionarTipoDiscapacidad(2)" id="Rb_TipoDiscapacidad_Visual" name="NameTipoDiscapacidad" value="Visual">
+                                                    <label class="custom-control-label" for="Rb_TipoDiscapacidad_Visual">Visual</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-lg-6 col-md-12">
+                                        <h6 class="form-section">
+                                            <i class="fa fa-tasks"></i> 2.11 GRADO DE DISCAPACIDAD
+                                        </h6>
+                                        <div id="GradoDiscapacidadHtmls">
+                                        </div>
+
+                                        <div id="GradoDiscapacidadHtmlG1">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_GradoDiscapadidad_Leve" name="NameGradoDiscapadidadG1" value="Leve"><label class="custom-control-label" for="Rb_GradoDiscapadidad_Leve">Leve</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_GradoDiscapadidad_Moderado" name="NameGradoDiscapadidadG1" value="Moderado"><label class="custom-control-label" for="Rb_GradoDiscapadidad_Moderado">Moderado</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_GradoDiscapadidad_Grave" name="NameGradoDiscapadidadG1" value="Grave"><label class="custom-control-label" for="Rb_GradoDiscapadidad_Grave">Grave</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_GradoDiscapadidad_MuyGrave" name="NameGradoDiscapadidadG1" value="MuyGrave"><label class="custom-control-label" for="Rb_GradoDiscapadidad_MuyGrave">Muy Grave</label>
+                                            </div>
+                                        </div>
+                                        <div id="GradoDiscapacidadHtmlG2">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_GradoDiscapadidad_CegueraTotal" name="NameGradoDiscapadidadG2" value="CegueraTotal"><label class="custom-control-label" for="Rb_GradoDiscapadidad_CegueraTotal">Ceguera Total</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_GradoDiscapadidad_BajaVision" name="NameGradoDiscapadidadG2" value="BajaVision"><label class="custom-control-label" for="Rb_GradoDiscapadidad_BajaVision">Baja Vision</label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingTwo">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    III. DIRECCIÓN ACTUAL DE LA O EL ESTUDIANTE (Información para uso exclusivo de la Unidad Educativa)
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                            <div class="card-body">
+                                <input type="hidden" id="IdLugarNRDireccionActual" value="0" />
+                                <div class="row">
+                                    <div class="col-sm-12 col-lg-12 col-md-12">
+                                        <div class="form-group">
+                                            <label>Departamento</label>
+                                            <select class="form-control" onchange="ListarProviciaDireccionActual()" id="DireccionActual_Departamento"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-lg-6 col-md-6">
+                                        <div class="form-group">
+                                            <label>Provincia</label>
+                                            <select class="form-control" onchange="ListarMunicipioDireccionActual()" id="DireccionActual_Provincia"></select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Sección/Municipio</label>
+                                            <select class="form-control" onchange="ListarComunidadDireccionActual()" id="DireccionActual_SecciónMunicipio"></select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Localidad/Comunidad</label>
+                                            <select class="form-control" id="DireccionActual_LocalidadComunidad"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-lg-6 col-md-6">
+                                        <div class="form-group">
+                                            <label>Zona/Villa</label>
+                                            <input type="text" class="form-control" placeholder="Zona/Villa" id="DireccionActual_ZonaVilla" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Avenida/Calle</label>
+                                            <input type="text" class="form-control" placeholder="Avenida/Calle" id="DireccionActual_AvenidaCalle" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Nº vivienda</label>
+                                            <input type="text" class="form-control" placeholder="Nº vivienda" id="DireccionActual_NoVivienda" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingThree">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    IV. ASPECTOS SOCIOECONÓMICOS DE LA O EL ESTUDIANTE
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                            <div class="card-body">
+                                <h6 class="form-section"><i class="fa fa-tasks"></i>4.1 IDIOMA Y PERTENENCIA CULTURAL DE LA O EL ESTUDIANTE</h6>
+                                <div class="bs-callout bs-callout-Secundary" id="callout-alerts-dismiss-plugin">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-lg-6 col-md-12">
+                                            <label>
+                                                4.1.1 ¿Cuál es el idioma en el que aprendió a hablar en su niñez?
+                                            </label>
+                                            <br />
+                                            <button class="btn btn-block btn-outline-secondary" id="BtnHablaNiñes" data-toggle="modal" data-target="#Modal_Habla" type="button" style="margin-bottom:5px"><i class="fa fa-plus"></i> Agregar Habla</button>
+                                            <div class="containerCustom table-responsive">
+                                                <table class='table table-hover table-sm' style='font-size:12px;'>
+                                                    <thead>
+                                                        <tr style="background-color:#17a2b8;border-color:#17a2b8;color:white">
+                                                            <th>Nº</th>
+                                                            <th>Idioma</th>
+                                                            <th width='1px'></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="TableHabla"></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 col-lg-6 col-md-12">
+                                            <label>
+                                                (?) 4.1.2 ¿Qué idioma(s) habla frecuentemente?
+                                            </label>
+                                            <br />                                            
+                                            <button class="btn btn-block btn-outline-secondary" id="BtnHablaFrecuencia" data-toggle="modal" data-target="#Modal_HablaNivelFrecuancia" type="button" style="margin-bottom:5px"><i class="fa fa-plus"></i> Agregar Habla</button>
+                                            <div class="containerCustom table-responsive">
+                                                <table class='table table-hover table-sm' style='font-size:12px;'>
+                                                    <thead>
+                                                        <tr style="background-color:#17a2b8;border-color:#17a2b8;color:white">
+                                                            <th>Nº</th>
+                                                            <th>Idioma</th>
+                                                            <th>Frecuencia</th>
+                                                            <th width='1px'></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="TableHablaNivelFrecuancia"></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <label> (?) 4.1.3 ¿Pertenece a una nación, pueblo indígena originario campesino o afroboliviano? (Marque solo una opción)</label>
+                                    <div class="row">
+                                        <div class="col-sm-6 col-lg-2 col-md-6">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" checked class="custom-control-input" id="Rb_Nacion_5" name="NameNacion" value="0_5">
+                                                <label class="custom-control-label" for="Rb_Nacion_5">Ninguno</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_6" name="NameNacion" value="0_6">
+                                                <label class="custom-control-label" for="Rb_Nacion_6">Alfroboliviano</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_7" name="NameNacion" value="0_7">
+                                                <label class="custom-control-label" for="Rb_Nacion_7">Araona</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_8" name="NameNacion" value="0_8">
+                                                <label class="custom-control-label" for="Rb_Nacion_8">Aymara</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_9" name="NameNacion" value="0_9">
+                                                <label class="custom-control-label" for="Rb_Nacion_9">Ayoreo</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_10" name="NameNacion" value="0_10">
+                                                <label class="custom-control-label" for="Rb_Nacion_10">Baures</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_11" name="NameNacion" value="0_11">
+                                                <label class="custom-control-label" for="Rb_Nacion_11">Canichana</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-lg-2 col-md-6">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_12" name="NameNacion" value="0_12">
+                                                <label class="custom-control-label" for="Rb_Nacion_12">Cabineño</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_13" name="NameNacion" value="0_13">
+                                                <label class="custom-control-label" for="Rb_Nacion_13">Cayubaba</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_14" name="NameNacion" value="0_14">
+                                                <label class="custom-control-label" for="Rb_Nacion_14">Chácobo</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_15" name="NameNacion" value="0_15">
+                                                <label class="custom-control-label" for="Rb_Nacion_15">Chimán</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_16" name="NameNacion" value="0_16">
+                                                <label class="custom-control-label" for="Rb_Nacion_16">Chiquitano(Monkox)</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_17" name="NameNacion" value="0_17">
+                                                <label class="custom-control-label" for="Rb_Nacion_17">Ese ejja</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_18" name="NameNacion" value="0_18">
+                                                <label class="custom-control-label" for="Rb_Nacion_18">Guaraní</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-lg-2 col-md-6">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_19" name="NameNacion" value="0_19">
+                                                <label class="custom-control-label" for="Rb_Nacion_19">Guarasug’we</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_20" name="NameNacion" value="0_20">
+                                                <label class="custom-control-label" for="Rb_Nacion_20">Gwarayu</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_21" name="NameNacion" value="0_21">
+                                                <label class="custom-control-label" for="Rb_Nacion_21">Itonama</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_22" name="NameNacion" value="0_22">
+                                                <label class="custom-control-label" for="Rb_Nacion_22">Leco</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_23" name="NameNacion" value="0_23">
+                                                <label class="custom-control-label" for="Rb_Nacion_23">Kallawaya</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_24" name="NameNacion" value="0_24">
+                                                <label class="custom-control-label" for="Rb_Nacion_24">Machineri</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-lg-2 col-md-6">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_25" name="NameNacion" value="0_25">
+                                                <label class="custom-control-label" for="Rb_Nacion_25">Maropa</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_26" name="NameNacion" value="0_26">
+                                                <label class="custom-control-label" for="Rb_Nacion_26">Mojos-Ignaciano</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_27" name="NameNacion" value="0_27">
+                                                <label class="custom-control-label" for="Rb_Nacion_27">Mojos-Trinitario</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_28" name="NameNacion" value="0_28">
+                                                <label class="custom-control-label" for="Rb_Nacion_28">More</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_29" name="NameNacion" value="0_29">
+                                                <label class="custom-control-label" for="Rb_Nacion_29">Moseten</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_30" name="NameNacion" value="0_30">
+                                                <label class="custom-control-label" for="Rb_Nacion_30">Movima</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-lg-2 col-md-6">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_31" name="NameNacion" value="0_31">
+                                                <label class="custom-control-label" for="Rb_Nacion_31">Pacawara</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_32" name="NameNacion" value="0_32">
+                                                <label class="custom-control-label" for="Rb_Nacion_32">Pukina</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_33" name="NameNacion" value="0_33">
+                                                <label class="custom-control-label" for="Rb_Nacion_33">Quechua</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_34" name="NameNacion" value="0_34">
+                                                <label class="custom-control-label" for="Rb_Nacion_34">Siriono</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_35" name="NameNacion" value="0_35">
+                                                <label class="custom-control-label" for="Rb_Nacion_35">Tacana</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_36" name="NameNacion" value="0_36">
+                                                <label class="custom-control-label" for="Rb_Nacion_36">Tapiete</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-lg-2 col-md-6">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_37" name="NameNacion" value="0_37">
+                                                <label class="custom-control-label" for="Rb_Nacion_37">Toromona</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_38" name="NameNacion" value="0_38">
+                                                <label class="custom-control-label" for="Rb_Nacion_38">Uru Chipaya</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_39" name="NameNacion" value="0_39">
+                                                <label class="custom-control-label" for="Rb_Nacion_39">Weenhayek</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_40" name="NameNacion" value="0_40">
+                                                <label class="custom-control-label" for="Rb_Nacion_40">Yaminahua</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_41" name="NameNacion" value="0_41">
+                                                <label class="custom-control-label" for="Rb_Nacion_41">Yuki</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Nacion_42" name="NameNacion" value="0_42">
+                                                <label class="custom-control-label" for="Rb_Nacion_42">Yuracare</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h6 class="form-section">
+                                    <i class="fa fa-tasks"></i> 4.2 SALUD DE LA O EL ESTUDIANTE
+                                </h6>
+                                <div class="bs-callout bs-callout-Secundary" id="callout-alerts-dismiss-plugin">
+                                    <label>4.2.1 ¿Existe algún Centro de Salud/Posta/Hospital en su comunidad/barrio/zona?</label>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input" id="Rb_CentroSalud_45" name="NameCentroSalud" value="0_45">
+                                        <label class="custom-control-label" for="Rb_CentroSalud_45">Si</label>
+                                    </div>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input" id="Rb_CentroSalud_46" name="NameCentroSalud" value="0_46">
+                                        <label class="custom-control-label" for="Rb_CentroSalud_46">No</label>
+                                    </div>
+                                    <label>4.2.2 El año pasado, por problemas de salud, ¿acudió o se atendió en… (Puede marcar más de una opción)</label>
+                                    <div class="row">
+                                        <div class="col-sm-6 col-lg-6 col-md-6">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="Check_Salud_48" name="NameDondeAcudioProblemaSalud" value="0_48">
+                                                <label class="custom-control-label" for="Check_Salud_48">1.- Caja o seguro de salud</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="Check_Salud_49" name="NameDondeAcudioProblemaSalud" value="0_49">
+                                                <label class="custom-control-label" for="Check_Salud_49">2.- Establecimientos de salud públicos</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="Check_Salud_50" name="NameDondeAcudioProblemaSalud" value="0_50">
+                                                <label class="custom-control-label" for="Check_Salud_50">3.- Establecimientos de salud privados</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-lg-6 col-md-6">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="Check_Salud_51" name="NameDondeAcudioProblemaSalud" value="0_51">
+                                                <label class="custom-control-label" for="Check_Salud_51">4.- En su vivienda</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="Check_Salud_52" name="NameDondeAcudioProblemaSalud" value="0_52">
+                                                <label class="custom-control-label" for="Check_Salud_52">5.- Medicina Tradicional</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="Check_Salud_53" name="NameDondeAcudioProblemaSalud" value="0_53">
+                                                <label class="custom-control-label" for="Check_Salud_53">6.- La farmacia sin receta médica (automedicación)</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <label>Si respondio las opciones 1, 2 y/o 3 de la pregunta 4.2.2</label>
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-sm-6 col-lg-6 col-md-6">
+                                            <label> 4.2.3 El año pasado.¿Cuantas veces fue el centro de salud?</label>
+                                            <div class="row">
+                                                <div class="col-sm-6 col-lg-6 col-md-6">
+                                                    <div class="custom-control custom-radio">
+                                                        <input type="radio" class="custom-control-input" id="Rb_CentroSaludVeces_55" name="NameCuantasVecesFueCentroSalud" value="0_55">
+                                                        <label class="custom-control-label" for="Rb_CentroSaludVeces_55">1 a 2 veces</label>
+                                                    </div>
+                                                    <div class="custom-control custom-radio">
+                                                        <input type="radio" class="custom-control-input" id="Rb_CentroSaludVeces_56" name="NameCuantasVecesFueCentroSalud" value="0_56">
+                                                        <label class="custom-control-label" for="Rb_CentroSaludVeces_56">3 a 5 veces</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6 col-lg-6 col-md-6">
+                                                    <div class="custom-control custom-radio">
+                                                        <input type="radio" class="custom-control-input" id="Rb_CentroSaludVeces_57" name="NameCuantasVecesFueCentroSalud" value="0_57">
+                                                        <label class="custom-control-label" for="Rb_CentroSaludVeces_57">6 o mas</label>
+                                                    </div>
+                                                    <div class="custom-control custom-radio">
+                                                        <input type="radio" class="custom-control-input" id="Rb_CentroSaludVeces_58" name="NameCuantasVecesFueCentroSalud" value="0_58">
+                                                        <label class="custom-control-label" for="Rb_CentroSaludVeces_58">Ninguna</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-lg-6 col-md-6">
+                                            <label>4.2.4 ¿Tiene seguro de salud?</label>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_SeguroSalud_60" name="NameTieneSeguroSalud" value="0_60">
+                                                <label class="custom-control-label" for="Rb_SeguroSalud_60">Si</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_SeguroSalud_61" name="NameTieneSeguroSalud" value="0_61">
+                                                <label class="custom-control-label" for="Rb_SeguroSalud_61">No</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h6 class="form-section">
+                                    <i class="fa fa-tasks"></i> 4.3 ACCESO DE LA O EL ESTUDIANTE A SERVICIOS BÁSICOS
+                                </h6>
+                                <div class="bs-callout bs-callout-Secundary" id="callout-alerts-dismiss-plugin">
+                                    <div class="row">
+                                        <div class="col-sm-6 col-lg-6 col-md-6">
+                                            <label>4.3.1 ¿Tiene acceso a agua por cañería de red?</label>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_AccesoAgua_64" name="NameAccesoAgua" value="0_64">
+                                                <label class="custom-control-label" for="Rb_AccesoAgua_64">Si</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_AccesoAgua_65" name="NameAccesoAgua" value="0_65">
+                                                <label class="custom-control-label" for="Rb_AccesoAgua_65">No</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-lg-6 col-md-6">
+                                            <label>(?)4.3.2 ¿Tiene baño en su vivienda?</label>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Baño_67" name="NameBaño" value="0_67">
+                                                <label class="custom-control-label" for="Rb_Baño_67">Si</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Baño_68" name="NameBaño" value="0_68">
+                                                <label class="custom-control-label" for="Rb_Baño_68">No</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-lg-6 col-md-6">
+                                            <label>4.3.3 ¿Tiene red de alcantarillado?</label>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Alcantarrillado_70" name="NameAlcantarrillado" value="0_70">
+                                                <label class="custom-control-label" for="Rb_Alcantarrillado_70">Si</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Alcantarrillado_71" name="NameAlcantarrillado" value="0_71">
+                                                <label class="custom-control-label" for="Rb_Alcantarrillado_71">No</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-lg-6 col-md-6">
+                                            <label>4.3.4 ¿Usa energía eléctrica para alumbrar su vivienda?</label>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_EnergiaElectrica_73" name="NameEnergiaElectrica" value="0_73">
+                                                <label class="custom-control-label" for="Rb_EnergiaElectrica_73">Si</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_EnergiaElectrica_74" name="NameEnergiaElectrica" value="0_74">
+                                                <label class="custom-control-label" for="Rb_EnergiaElectrica_74">No</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <label>4.3.5 ¿Cuenta con servicio de recojo de basura?</label>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input" id="Rb_RecojoBasura_76" name="NameRecojoBasura" value="0_76">
+                                        <label class="custom-control-label" for="Rb_RecojoBasura_76">Si</label>
+                                    </div>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input" id="Rb_RecojoBasura_77" name="NameRecojoBasura" value="0_77">
+                                        <label class="custom-control-label" for="Rb_RecojoBasura_77">No</label>
+                                    </div>
+                                    <label>4.3.6 La vivienda que ocupa el hogar es: (Marque solo una opción)</label>
+                                    <div class="row">
+                                        <div class="col-sm-6 col-lg-6 col-md-6">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Vivienda_79" name="NameVivienda" value="0_79">
+                                                <label class="custom-control-label" for="Rb_Vivienda_79">Propia</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Vivienda_80" name="NameVivienda" value="0_80">
+                                                <label class="custom-control-label" for="Rb_Vivienda_80">Alquilada</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Vivienda_81" name="NameVivienda" value="0_81">
+                                                <label class="custom-control-label" for="Rb_Vivienda_81">Anticretico</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-lg-6 col-md-6">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Vivienda_82" name="NameVivienda" value="0_82">
+                                                <label class="custom-control-label" for="Rb_Vivienda_82">Cedida por servicio</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Vivienda_83" name="NameVivienda" value="0_83">
+                                                <label class="custom-control-label" for="Rb_Vivienda_83">Prestada por parientes o amigos</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_Vivienda_84" name="NameVivienda" value="0_84">
+                                                <label class="custom-control-label" for="Rb_Vivienda_84">Contrato Mixto (alquiler y anticretico)</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h6 class="form-section"><i class="fa fa-tasks"></i> 4.4 ACCESO A INTERNET DE LA O EL ESTUDIANTE</h6>
+                                <div class="bs-callout bs-callout-Secundary" id="callout-alerts-dismiss-plugin">
+                                    <div class="row">
+                                        <div class="col-sm-6 col-lg-6 col-md-6">
+                                            <label>
+                                                4.4.1 El estudiante accede a internet en: (Puede marcar más de una opción)
+                                            </label>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="Check_Internet_87" name="NameAccesoInternet" value="0_87">
+                                                <label class="custom-control-label" for="Check_Internet_87">Sus vivienda</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="Check_Internet_88" name="NameAccesoInternet" value="0_88">
+                                                <label class="custom-control-label" for="Check_Internet_88">La Unidad Educativa</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="Check_Internet_89" name="NameAccesoInternet" value="0_89">
+                                                <label class="custom-control-label" for="Check_Internet_89">Lugares Públicos</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="Check_Internet_90" name="NameAccesoInternet" value="0_90">
+                                                <label class="custom-control-label" for="Check_Internet_90">Teléfono Celular</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="Check_Internet_91" name="NameAccesoInternet" value="0_91">
+                                                <label class="custom-control-label" for="Check_Internet_91">No accede a Internet (pase a 4.5)</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-lg-6 col-md-6">
+                                            <label>4.4.2 ¿Con qué frecuencia usa internet? (Marque solo una opción)</label>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_FrecuenciaInternet_93" name="NameFrecuenciaInternet" value="0_93">
+                                                <label class="custom-control-label" for="Rb_FrecuenciaInternet_93">Diariamente</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_FrecuenciaInternet_94" name="NameFrecuenciaInternet" value="0_94">
+                                                <label class="custom-control-label" for="Rb_FrecuenciaInternet_94">Una vez A la semana</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_FrecuenciaInternet_95" name="NameFrecuenciaInternet" value="0_95">
+                                                <label class="custom-control-label" for="Rb_FrecuenciaInternet_95">Mas de una vez a la semana</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_FrecuenciaInternet_96" name="NameFrecuenciaInternet" value="0_96">
+                                                <label class="custom-control-label" for="Rb_FrecuenciaInternet_96">Una vez al mes</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h6 class="form-section"><i class="fa fa-tasks"></i> (?)4.5 ACTIVIDAD LABORAL DE LA O EL ESTUDIANTE</h6>
+                                <div class="bs-callout bs-callout-Secundary" id="callout-alerts-dismiss-plugin">
+                                    <label>4.5.1 En la pasada gestion ¿El estudiante trabajo?</label>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input" checked onclick="CheckEnGestionPasadaElEstudianteTrabajo()" id="Rb_trabajo_100" name="NameActividadLaboral" value="0_100">
+                                        <label class="custom-control-label" for="Rb_trabajo_100">No (pase a 4.6)</label>
+                                    </div>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input" onclick="CheckEnGestionPasadaElEstudianteTrabajo()" id="Rb_trabajo_101" name="NameActividadLaboral" value="0_101">
+                                        <label class="custom-control-label" for="Rb_trabajo_101">Ns/Nr (pase a 4.6)</label>
+                                    </div>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input" onclick="CheckEnGestionPasadaElEstudianteTrabajo()" id="Rb_trabajo_99" name="NameActividadLaboral" value="0_99">
+                                        <label class="custom-control-label" for="Rb_trabajo_99">Si (Marque los meses que trabajo)</label>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6 col-lg-4 col-md-6">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" disabled class="custom-control-input" id="Check_Mes_102" name="NameMesTrabajo" value="0_102">
+                                                <label class="custom-control-label" for="Check_Mes_102">Enero</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" disabled class="custom-control-input" id="Check_Mes_103" name="NameMesTrabajo" value="0_103">
+                                                <label class="custom-control-label" for="Check_Mes_103">Febrero</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" disabled class="custom-control-input" id="Check_Mes_104" name="NameMesTrabajo" value="0_104">
+                                                <label class="custom-control-label" for="Check_Mes_104">Marzo</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" disabled class="custom-control-input" id="Check_Mes_105" name="NameMesTrabajo" value="0_105">
+                                                <label class="custom-control-label" for="Check_Mes_105">Abril</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-lg-4 col-md-6">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" disabled class="custom-control-input" id="Check_Mes_106" name="NameMesTrabajo" value="0_106">
+                                                <label class="custom-control-label" for="Check_Mes_106">Mayo</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" disabled class="custom-control-input" id="Check_Mes_107" name="NameMesTrabajo" value="0_107">
+                                                <label class="custom-control-label" for="Check_Mes_107">Junio</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" disabled class="custom-control-input" id="Check_Mes_108" name="NameMesTrabajo" value="0_108">
+                                                <label class="custom-control-label" for="Check_Mes_108">Julio</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" disabled class="custom-control-input" id="Check_Mes_109" name="NameMesTrabajo" value="0_109">
+                                                <label class="custom-control-label" for="Check_Mes_109">Agosto</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-lg-4 col-md-6">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" disabled class="custom-control-input" id="Check_Mes_110" name="NameMesTrabajo" value="0_110">
+                                                <label class="custom-control-label" for="Check_Mes_110">Septiembre</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" disabled class="custom-control-input" id="Check_Mes_111" name="NameMesTrabajo" value="0_111">
+                                                <label class="custom-control-label" for="Check_Mes_111">Octubre</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" disabled class="custom-control-input" id="Check_Mes_112" name="NameMesTrabajo" value="0_112">
+                                                <label class="custom-control-label" for="Check_Mes_112">Noviembre</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" disabled class="custom-control-input" id="Check_Mes_113" name="NameMesTrabajo" value="0_113">
+                                                <label class="custom-control-label" for="Check_Mes_113">Diciembre</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <label>4.5.2 En la pasada gestión ¿En qué actividad trabajó el estudiante?</label>
+                                    <div class="row">
+                                        <div class="col-sm-6 col-lg-6 col-md-6">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="Check_TrabajoGP_115" name="NameEnqueActividadTrabajo" value="0_115">
+                                                <label class="custom-control-label" for="Check_TrabajoGP_115">Agricultura</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="Check_TrabajoGP_116" name="NameEnqueActividadTrabajo" value="0_116">
+                                                <label class="custom-control-label" for="Check_TrabajoGP_116">Ganadería o pesca</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="Check_TrabajoGP_117" name="NameEnqueActividadTrabajo" value="0_117">
+                                                <label class="custom-control-label" for="Check_TrabajoGP_117">Minería</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="Check_TrabajoGP_118" name="NameEnqueActividadTrabajo" value="0_118">
+                                                <label class="custom-control-label" for="Check_TrabajoGP_118">Construcción</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="Check_TrabajoGP_119" name="NameEnqueActividadTrabajo" value="0_119">
+                                                <label class="custom-control-label" for="Check_TrabajoGP_119">Zafra</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="Check_TrabajoGP_120" name="NameEnqueActividadTrabajo" value="0_120">
+                                                <label class="custom-control-label" for="Check_TrabajoGP_120">Vendedor Dependiente</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-lg-6 col-md-6">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="Check_TrabajoGP_121" name="NameEnqueActividadTrabajo" value="0_121">
+                                                <label class="custom-control-label" for="Check_TrabajoGP_121">Vendedor por cuenta propia</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="Check_TrabajoGP_122" name="NameEnqueActividadTrabajo" value="0_122">
+                                                <label class="custom-control-label" for="Check_TrabajoGP_122">Transporte o mecánica</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="Check_TrabajoGP_123" name="NameEnqueActividadTrabajo" value="0_123">
+                                                <label class="custom-control-label" for="Check_TrabajoGP_123">Lustrabotas</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="Check_TrabajoGP_124" name="NameEnqueActividadTrabajo" value="0_124">
+                                                <label class="custom-control-label" for="Check_TrabajoGP_124">Trabajador(a) del hogar o niñero(a)</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="Check_TrabajoGP_125" name="NameEnqueActividadTrabajo" value="0_125">
+                                                <label class="custom-control-label" for="Check_TrabajoGP_125">Ayudante familiar o comunitario en agricultura o ganadería o pesca</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="Check_TrabajoGP_126" name="NameEnqueActividadTrabajo" value="0_126">
+                                                <label class="custom-control-label" for="Check_TrabajoGP_126">Ayudante en el hogar en comercio o venta</label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" onclick="DisableInputEnqueTrabajoEstudiante()" id="Check_TrabajoGP_127" name="NameEnqueActividadTrabajo" value="0_127">
+                                        <label class="custom-control-label" for="Check_TrabajoGP_127">Otro trabajo</label>
+                                    </div>
+                                    <textarea class="form-control" disabled id="TrabajoEstudiante_OtroTrabajo"></textarea>
+                                    <label>4.5.3 ¿En qué turno trabajó el estudiante? (Puedes marcar mas de una opción)</label>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="Check_TurnoTrabajo_129" name="NameTurnoTrabajo" value="0_129">
+                                        <label class="custom-control-label" for="Check_TurnoTrabajo_129">Mañana</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="Check_TurnoTrabajo_130" name="NameTurnoTrabajo" value="0_130">
+                                        <label class="custom-control-label" for="Check_TurnoTrabajo_130">Tarde</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="Check_TurnoTrabajo_131" name="NameTurnoTrabajo" value="0_131">
+                                        <label class="custom-control-label" for="Check_TurnoTrabajo_131">Noche</label>
+                                    </div>
+                                    <label>4.5.4 ¿Con qué frecuencia trabajó?</label>
+                                    <div class="row">
+                                        <div class="col-sm-6 col-lg-4 col-md-6">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_FrecuenciaTrabajo_133" name="NameFrecuenciaTrabajo" value="0_133">
+                                                <label class="custom-control-label" for="Rb_FrecuenciaTrabajo_133">Todos los días</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_FrecuenciaTrabajo_134" name="NameFrecuenciaTrabajo" value="0_134">
+                                                <label class="custom-control-label" for="Rb_FrecuenciaTrabajo_134">Días hábiles</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-lg-4 col-md-6">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_FrecuenciaTrabajo_135" name="NameFrecuenciaTrabajo" value="0_135">
+                                                <label class="custom-control-label" for="Rb_FrecuenciaTrabajo_135">Fines de semana</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_FrecuenciaTrabajo_136" name="NameFrecuenciaTrabajo" value="0_136">
+                                                <label class="custom-control-label" for="Rb_FrecuenciaTrabajo_136">Eventual/esporádico</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-lg-4 col-md-6">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_FrecuenciaTrabajo_137" name="NameFrecuenciaTrabajo" value="0_137">
+                                                <label class="custom-control-label" for="Rb_FrecuenciaTrabajo_137">Días festivos</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_FrecuenciaTrabajo_138" name="NameFrecuenciaTrabajo" value="0_138">
+                                                <label class="custom-control-label" for="Rb_FrecuenciaTrabajo_138">En Vacaciones</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <label>4.5.5 ¿Recibió algún pago?</label>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input" checked onclick="CheckRecibioPago()" id="Rb_RecibioPago_141" name="NameRecibioPago" value="0_141">
+                                        <label class="custom-control-label" for="Rb_RecibioPago_141">No</label>
+                                    </div>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input" onclick="CheckRecibioPago()" id="Rb_RecibioPago_142" name="NameRecibioPago" value="0_142">
+                                        <label class="custom-control-label" for="Rb_RecibioPago_142">Ns/Nr</label>
+                                    </div>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input" onclick="CheckRecibioPago()" id="Rb_RecibioPago_140" name="NameRecibioPago" value="0_140">
+                                        <label class="custom-control-label" for="Rb_RecibioPago_140">Si (Seleccione las opciones de abajo)</label>
+                                    </div>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input" disabled id="Rb_RecibioPago_Si_143" name="NameRecibioPago_Si" value="0_143">
+                                        <label class="custom-control-label" for="Rb_RecibioPago_Si_143">En Especie</label>
+                                    </div>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input" disabled id="Rb_RecibioPago_Si_144" name="NameRecibioPago_Si" value="0_144">
+                                        <label class="custom-control-label" for="Rb_RecibioPago_Si_144">Dinero</label>
+                                    </div>
+                                </div>
+
+                                <h6 class="form-section">
+                                    <i class="fa fa-tasks"></i> 4.6 MEDIO DE TRANSPORTE PARA LLEGAR A LA UNIDAD EDUCATIVA
+                                </h6>
+                                <div class="bs-callout bs-callout-Secundary" id="callout-alerts-dismiss-plugin">
+                                    <label>4.6.1 Generalmente, ¿Cómo llega el estudiante a la Unidad Educativa? (Coloque solo una opción) </label>
+                                    <div class="row">
+                                        <div class="col-sm-6 col-lg-6 col-md-6">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" onclick="CheckInputDisableOtraFormaTransporte()" id="Rb_CollegaAlColegio_147" name="NameCollegaAlColegio" value="0_147">
+                                                <label class="custom-control-label" for="Rb_CollegaAlColegio_147">A pie</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" onclick="CheckInputDisableOtraFormaTransporte()" id="Rb_CollegaAlColegio_148" name="NameCollegaAlColegio" value="0_148">
+                                                <label class="custom-control-label" for="Rb_CollegaAlColegio_148">En vehículo de transporte terrestre</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-lg-6 col-md-6">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" onclick="CheckInputDisableOtraFormaTransporte()" id="Rb_CollegaAlColegio_149" name="NameCollegaAlColegio" value="0_149">
+                                                <label class="custom-control-label" for="Rb_CollegaAlColegio_149">Fluvial</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" onclick="CheckInputDisableOtraFormaTransporte()" id="Rb_CollegaAlColegio_150" name="NameCollegaAlColegio" value="0_150">
+                                                <label class="custom-control-label" for="Rb_CollegaAlColegio_150">Otro (especifique)</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <textarea class="form-control" disabled id="CollegaAlColegioOtro"></textarea>
+                                    <label>4.6.2 Según el medio de transporte señalado, ¿Cuál es el tiempo máximo que demora el estudiante desde su vivienda hasta la Unidad Educativa? (Coloque solo una opción)</label>
+                                    <div class="row">
+                                        <div class="col-sm-6 col-lg-6 col-md-6">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_TiempoLLegadaAlColegio_152" name="NameTiempoLLegadaAlColegio" value="0_152">
+                                                <label class="custom-control-label" for="Rb_TiempoLLegadaAlColegio_152">Menos de media hora</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_TiempoLLegadaAlColegio_153" name="NameTiempoLLegadaAlColegio" value="0_153">
+                                                <label class="custom-control-label" for="Rb_TiempoLLegadaAlColegio_153">Entre media hora y una hora</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-lg-6 col-md-6">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_TiempoLLegadaAlColegio_154" name="NameTiempoLLegadaAlColegio" value="0_154">
+                                                <label class="custom-control-label" for="Rb_TiempoLLegadaAlColegio_154">Entre una a dos hora</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Rb_TiempoLLegadaAlColegio_155" name="NameTiempoLLegadaAlColegio" value="0_155">
+                                                <label class="custom-control-label" for="Rb_TiempoLLegadaAlColegio_155">Más de dos horas</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h6 class="form-section"><i class="fa fa-tasks"></i> 4.7 ABANDONO ESCOLAR CORRESPONDIENTE A LA GESTIÓN ANTERIOR</h6>
+                                <div class="bs-callout bs-callout-Secundary" id="callout-alerts-dismiss-plugin">
+                                    <label>4.7.1 ¿El estudiante abandonó la Unidad Educativa el año pasado?</label>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input" onclick="CheckAbandonoUnidadEducativa()" id="Rb_AbandonoEscolar_158" name="NameAbandonoEscolar" value="0_158">
+                                        <label class="custom-control-label" for="Rb_AbandonoEscolar_158">Si</label>
+                                    </div>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input" checked onclick="CheckAbandonoUnidadEducativa()" id="Rb_AbandonoEscolar_159" name="NameAbandonoEscolar" value="0_159">
+                                        <label class="custom-control-label" for="Rb_AbandonoEscolar_159">No (pase a la seccion V)</label>
+                                    </div>
+                                    <label>4.7.2 ¿Cuál o cuáles fueron las razones de abandono escolar?</label>
+                                    <div class="row">
+                                        <div class="col-sm-6 col-lg-6 col-md-6">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" disabled id="Check_RazonesAbandono_161" name="NameRazonesAbandono" value="0_161">
+                                                <label class="custom-control-label" for="Check_RazonesAbandono_161">Tuvo que ayudar a sus padres en su trabajo </label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" disabled id="Check_RazonesAbandono_162" name="NameRazonesAbandono" value="0_162">
+                                                <label class="custom-control-label" for="Check_RazonesAbandono_162">Tuvo trabajo remunerado</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" disabled id="Check_RazonesAbandono_163" name="NameRazonesAbandono" value="0_163">
+                                                <label class="custom-control-label" for="Check_RazonesAbandono_163">Falta de dinero</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" disabled id="Check_RazonesAbandono_164" name="NameRazonesAbandono" value="0_164">
+                                                <label class="custom-control-label" for="Check_RazonesAbandono_164">Edad temprana (precocidad)/edad tardía (rezago)</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" disabled id="Check_RazonesAbandono_165" name="NameRazonesAbandono" value="0_165">
+                                                <label class="custom-control-label" for="Check_RazonesAbandono_165">La unidad educativa era distante</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" disabled id="Check_RazonesAbandono_166" name="NameRazonesAbandono" value="0_166">
+                                                <label class="custom-control-label" for="Check_RazonesAbandono_166">Labores de casa/cuidado de niños(as)</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-lg-6 col-md-6">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" disabled id="Check_RazonesAbandono_167" name="NameRazonesAbandono" value="0_167">
+                                                <label class="custom-control-label" for="Check_RazonesAbandono_167">Embarazo o paternida</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" disabled id="Check_RazonesAbandono_168" name="NameRazonesAbandono" value="0_168">
+                                                <label class="custom-control-label" for="Check_RazonesAbandono_168">Por enfermedad/accidente/discapacida</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" disabled id="Check_RazonesAbandono_169" name="NameRazonesAbandono" value="0_169">
+                                                <label class="custom-control-label" for="Check_RazonesAbandono_169">Viaje o traslado </label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" disabled id="Check_RazonesAbandono_170" name="NameRazonesAbandono" value="0_170">
+                                                <label class="custom-control-label" for="Check_RazonesAbandono_170">Falta de interés</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" disabled id="Check_RazonesAbandono_171" name="NameRazonesAbandono" value="0_171">
+                                                <label class="custom-control-label" for="Check_RazonesAbandono_171">Bullying o discriminación en la Unidad Educativa</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" disabled onclick="CheckInputOtroAbandonoUnidadEducativa()" id="Check_RazonesAbandono_172" name="NameRazonesAbandono" value="0_172">
+                                                <label class="custom-control-label" for="Check_RazonesAbandono_172">Otra (especifique)</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <textarea class="form-control" disabled id="RazonesAbandonoOtro"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header" id="headingCuatro">
+                            <h2 class="mb-0"><button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseCuatro" aria-expanded="false" aria-controls="collapseThree">V. DATOS DEL PADRE, MADRE O TUTOR(A) DE LA O EL ESTUDIANTE</button></h2>
+                        </div>
+                        <div id="collapseCuatro" class="collapse" aria-labelledby="headingCuatro" data-parent="#accordionExample">
+                            <div class="card-body">
+                                <h6 class="form-section"><i class="fa fa-tasks"></i> 5.1 LA O EL ESTUDIANTE VIVE HABITUALMETE CON:</h6>
+                                <div class="containerCustom table-responsive" id="TableConTutor">
+                                    <table class="table table-hover table-sm" style="font-size:12px;">
+                                        <thead>
+                                            <tr style="background-color:#17a2b8;border-color:#17a2b8;color:white">
+                                                <th>Persona</th>
+                                                <th>Ci</th>
+                                                <th>Fecha Nacimiento</th>
+                                                <th>Sexo</th>
+                                                <th>Ocup. Laboral</th>
+                                                <th>Grado Ins.</th>
+                                                <th>Parentesco</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="TutorTableHtml"></tbody>
+                                    </table>
+                                </div>
+                                <div id="SinTutorTitleHtml" style="width:100%;padding:5% 0 5% 0">
+                                    <h1 class="text-muted text-center"><i class="fa fa-frown-o"></i><span id="ViveSolo" style="font-size:29px"> SIN TUTOR</span></h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" id="BtnGuardarRude" class="btn btn-outline-primary" onclick="Guardar()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Modal_Habla" tabindex="-1" role="dialog" style="overflow-y:scroll">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Idioma Habla</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <label>Seleccionar Idioma:</label>
+                <div class="input-group">
+                    <select class="custom-select" id="IdIdiomaHabla"></select>
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-primary" data-toggle="modal" data-target="#Modal_Idioma" type="button"><i class="fa fa-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="AgregarIdioma(1)">Agregar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Modal_HablaNivelFrecuancia" tabindex="-1" role="dialog" style="overflow-y:scroll">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Idioma Frecuencia</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <label>Seleccionar Idioma:</label>
+                <div class="input-group">
+                    <select class="custom-select" id="IdIdiomaHablaFrecuencia"></select>
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-primary" data-toggle="modal" data-target="#Modal_Idioma" type="button"><i class="fa fa-plus"></i></button>
+                    </div>
+                </div>
+                <label>Seleccionar Frecuencia:</label>
+                <div class="input-group">
+                    <select id="IdFrecuencia" class="form-control">
+                        <option value="0">Select Opcion...</option>
+                        <option value="Poco Frecuente">Poco Frecuente</option>
+                        <option value="Frecuente">Frecuente</option>
+                        <option value="Muy Frecuente">Muy Frecuente</option>
+                    </select>
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-history"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="AgregarIdioma(2)">Agregar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Modal_Idioma" tabindex="-1" role="dialog" style="overflow-y:scroll">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Agregar Idioma</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <label>Nombre del idioma</label>
+                <input type="text" class="form-control" id="Idioma_Descripcion" placeholder="Idioma">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="GuardarIdioma()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        var EstadoDisabled = false;
+        var ArrayHabla = [];
+        var Aspectos_Soc = [];
+        var ArrayError = [];
+        var ConQuienViveEstudianteArray = [];
+        $('#GradoDiscapacidadHtmlG1').hide();
+        $('#GradoDiscapacidadHtmlG2').hide();
+        $('#TableConTutor').hide();
+        AllEstudianteRude(1, 1);
+        ListarPaisLugarNacimiento();
+        ListarDepartamentosDireccionActual();
+        ListarIdioma();
+        function Nuevo() {
+            $('#Modal_Rude').modal('show');
+            $('#TituloModalRude').html("Rude");
+            $('#BuscardorEstudiante').show();
+            $('#BtnGuardarRude').show();
+            $('#ViveSolo').html(" SIN TUTOR");
+            LimpiarCampos();
+            CheckRestHtml();
+            EstadoDisabled = true;
+            DisabledHtml();
+        }
+        function LimpiarCampos() {
+            $('#IdPersonaEstudiante').val(0);
+            $('#TxtParametroEstudiante').val("");
+            $('#Nombres_Estudiante').val("");
+            $('#Ap_Estudiante').val("");
+            $('#Am_Estudiante').val("");
+            $('#Ci_Estudiante').val("");
+            $('#FechaNacimiento_Estudiante').val("");
+            $('#Sexo_Estudiante').val("M");
+            $('#Celular_Estudiante').val("");
+            $('#Telefonofijo_Estudiante').val("");
+
+            $('#CertificadoNacimiento_Noficialia').val("");
+            $('#CertificadoNacimiento_NoLibro').val("");
+            $('#CertificadoNacimiento_NoPartida').val("");
+            $('#CertificadoNacimiento_NoFolio').val("");
+
+            $('#IdPais_LugarNacimientoEstudiante').val(0);
+            $('#IdDepartamento_LugarNacimientoEstudiante').empty();
+            $('#IdProvincia_LugarNacimientoEstudiante').empty();
+            $('#IdMunicipio_LugarNacimientoEstudiante').empty();
+            $('#IdLocalidad_LugarNacimientoEstudiante').empty();
+
+            $('#Codigo_Rude').val("");
+
+            $('#IdLugarNRDireccionActual').val(0);
+            $('#DireccionActual_Departamento').val(0);
+            $('#DireccionActual_Provincia').empty();
+            $('#DireccionActual_SecciónMunicipio').empty();
+            $('#DireccionActual_LocalidadComunidad').empty();
+            $('#DireccionActual_ZonaVilla').val("");
+            $('#DireccionActual_AvenidaCalle').val("");
+            $('#DireccionActual_NoVivienda').val("");
+
+            $('#TableConTutor').hide();
+            $('#SinTutorTitleHtml').show();
+            $('#TutorTableHtml').empty();
+
+            ArrayHabla.length = 0;
+            ListarIdiomaHtml();
+            Aspectos_Soc.length = 0;
+            ConQuienViveEstudianteArray.length = 0;
+        }
+        function DisabledHtml() {
+            $('#IdPais_LugarNacimientoEstudiante').prop('disabled', !EstadoDisabled);
+            $('#IdDepartamento_LugarNacimientoEstudiante').prop('disabled', !EstadoDisabled);
+            $('#IdProvincia_LugarNacimientoEstudiante').prop('disabled', !EstadoDisabled);
+            $('#IdMunicipio_LugarNacimientoEstudiante').prop('disabled', !EstadoDisabled);
+            $('#IdLocalidad_LugarNacimientoEstudiante').prop('disabled', !EstadoDisabled);
+
+            $('#Codigo_Rude').prop('disabled', !EstadoDisabled);
+            $('input[name *= NameDiscapacidad]').prop('disabled', !EstadoDisabled);
+            $('input[name *= NameGradoDiscapadidadG1]').prop('disabled', !EstadoDisabled);
+            $('input[name *= NameGradoDiscapadidadG2]').prop('disabled', !EstadoDisabled);
+
+            $('#DireccionActual_Departamento').prop('disabled', !EstadoDisabled);
+            $('#DireccionActual_Provincia').prop('disabled', !EstadoDisabled);
+            $('#DireccionActual_SecciónMunicipio').prop('disabled', !EstadoDisabled);
+            $('#DireccionActual_LocalidadComunidad').prop('disabled', !EstadoDisabled);
+            $('#DireccionActual_ZonaVilla').prop('disabled', !EstadoDisabled);
+            $('#DireccionActual_AvenidaCalle').prop('disabled', !EstadoDisabled);
+            $('#DireccionActual_NoVivienda').prop('disabled', !EstadoDisabled);
+
+            //idiomas
+            $('#BtnHablaNiñes').prop('disabled', !EstadoDisabled);
+            $('#BtnHablaFrecuencia').prop('disabled', !EstadoDisabled);
+
+            $('input[name *= NameNacion]').prop('disabled', !EstadoDisabled);
+            $('input[name *= NameCentroSalud]').prop('disabled', !EstadoDisabled);
+            $('input[name *= NameDondeAcudioProblemaSalud]').prop('disabled', !EstadoDisabled);
+            $('input[name *= NameCuantasVecesFueCentroSalud]').prop('disabled', !EstadoDisabled);
+            $('input[name *= NameTieneSeguroSalud]').prop('disabled', !EstadoDisabled);
+            $('input[name *= NameAccesoAgua]').prop('disabled', !EstadoDisabled);
+            $('input[name *= NameBaño]').prop('disabled', !EstadoDisabled);
+            $('input[name *= NameAlcantarrillado]').prop('disabled', !EstadoDisabled);
+            $('input[name *= NameEnergiaElectrica]').prop('disabled', !EstadoDisabled);
+            $('input[name *= NameRecojoBasura]').prop('disabled', !EstadoDisabled);
+            $('input[name *= NameVivienda]').prop('disabled', !EstadoDisabled);
+            $('input[name *= NameAccesoInternet]').prop('disabled', !EstadoDisabled);
+            $('input[name *= NameFrecuenciaInternet]').prop('disabled', !EstadoDisabled);
+            $('input[name *= NameActividadLaboral]').prop('disabled', !EstadoDisabled);
+            $('input[name *= NameMesTrabajo]').prop('disabled', !EstadoDisabled);
+            $('input[name *= NameEnqueActividadTrabajo]').prop('disabled', !EstadoDisabled);
+            $('input[name *= NameTurnoTrabajo]').prop('disabled', !EstadoDisabled);
+            $('input[name *= NameFrecuenciaTrabajo]').prop('disabled', !EstadoDisabled);
+            $('input[name *= NameRecibioPago]').prop('disabled', !EstadoDisabled);
+            $('input[name *= NameCollegaAlColegio]').prop('disabled', !EstadoDisabled);
+            $('input[name *= NameTiempoLLegadaAlColegio]').prop('disabled', !EstadoDisabled);
+            $('input[name *= NameAbandonoEscolar]').prop('disabled', !EstadoDisabled);;
+            $('input[name *= NameRazonesAbandono]').prop('disabled', !EstadoDisabled);
+        }
+        function CheckRestHtml() {
+            $('input[name *= NameDiscapacidad]').prop('checked', false)
+            $('#Rb_Discapacidad_No').prop('checked', true);
+            setTimeout(function () {
+                CheckDiscapacidad();
+            }, 200);
+            
+            $('input[name *= NameNacion]').prop('checked', false)
+            $('input[name *= NameCentroSalud]').prop('checked', false)
+            $('input[name *= NameDondeAcudioProblemaSalud]').prop('checked', false)
+            $('input[name *= NameCuantasVecesFueCentroSalud]').prop('checked', false)
+            $('input[name *= NameTieneSeguroSalud]').prop('checked', false)
+            $('input[name *= NameAccesoAgua]').prop('checked', false)
+            $('input[name *= NameBaño]').prop('checked', false)
+            $('input[name *= NameAlcantarrillado]').prop('checked', false)
+            $('input[name *= NameEnergiaElectrica]').prop('checked', false)
+            $('input[name *= NameRecojoBasura]').prop('checked', false)
+            $('input[name *= NameVivienda]').prop('checked', false)
+
+            $('input[name *= NameAccesoInternet]').prop('checked', false)
+            $('input[name *= NameFrecuenciaInternet]').prop('checked', false)
+            $('input[name *= NameActividadLaboral]').prop('checked', false)
+            $('#Rb_trabajo_100').prop('checked', true);
+            setTimeout(function () {
+                CheckEnGestionPasadaElEstudianteTrabajo();
+            }, 200);
+            $('input[name *= NameMesTrabajo]').prop('checked', false)
+            $('input[name *= NameEnqueActividadTrabajo]').prop('checked', false);
+            setTimeout(function () {
+                DisableInputEnqueTrabajoEstudiante();
+            }, 200);
+            $('input[name *= NameTurnoTrabajo]').prop('checked', false)
+            $('input[name *= NameFrecuenciaTrabajo]').prop('checked', false)
+            $('input[name *= NameRecibioPago]').prop('checked', false)
+            $('#Rb_RecibioPago_141').prop('checked', true);
+            setTimeout(function () {
+                CheckRecibioPago();
+            }, 200);
+
+            $('input[name *= NameCollegaAlColegio]').prop('checked', false)
+            setTimeout(function () {
+                CheckInputDisableOtraFormaTransporte();
+            }, 200);
+
+            $('input[name *= NameTiempoLLegadaAlColegio]').prop('checked', false)
+            $('input[name *= NameAbandonoEscolar]').prop('checked', false);
+            $('#Rb_AbandonoEscolar_159').prop('checked', true);
+            setTimeout(function () {
+                CheckAbandonoUnidadEducativa();
+            }, 200);
+            setTimeout(function () {
+                CheckInputOtroAbandonoUnidadEducativa();
+            }, 200);
+        }
+
+        function AllEstudianteRude(pageIndex, is) {
+            $("#EstudiantesRudeHtml").empty();
+            $.getJSON('@Url.Action("AllEstudianteRude","Rude")', { SearchValue: $('#TxtParametroInscritos').val(), Gestion: $('#Gestion').val(), PageIndex: pageIndex }, function (O) {
+                var html = "";                
+                O.Lst.forEach((value, i) => {
+                    html += "<div class='col-xl-3 col-sm-6 col-lg-4 col-12'><div class='cardCarCustom card border-primary mb-3'><div class='card-body' style='padding:0.1rem'><h4 class='card-title' style='text-align:center;margin-bottom:5px;color:#007bff'>Datos Estudiante</h4></div><ul class='list-group list-group-flush'><li class='list-group-item' style='padding:0.3rem;font-size:12px'><span style='padding:3px;font-size:11px' class='badge badge-pill bg-blue float-right'>" + value.Nombres + "</span><i class='fa fa-user'></i> Nombre</li><li class='list-group-item' style='padding:0.3rem;font-size:12px'><span style='padding:3px;font-size:11px' class='badge badge-pill bg-blue float-right'>" + value.ApPaterno + "</span><i class='fa fa-user'></i> A. Paterno</li><li class='list-group-item' style='padding:0.3rem;font-size:12px'><span style='padding:3px;font-size:11px' class='badge badge-pill bg-blue float-right'>" + value.ApMaterno + "</span><i class='fa fa-user'></i> A. Materno</li><li class='list-group-item' style='padding:0.3rem;font-size:12px'><span style='padding:3px;font-size:11px' class='badge badge-pill bg-blue float-right'>" + value.Ci + "</span><i class='fa fa-user'></i> Ci</li><li class='list-group-item' style='padding:0.3rem;font-size:12px'><span style='padding:3px;font-size:11px' class='badge badge-pill bg-blue float-right'>" + ((value.Sexo == "M") ? "Masculino" : "Femenino") + "</span><i class='fa fa-user'></i> Sexo</li></ul><div style='margin-top:8px' class='footer'><span class='float-left text-info'><b style='font-size: 15px'>/" + (i + 1) + "/</b></span><span class='tags float-right'><button type='button' onclick='ViewEstudiante(" + value.IdPersona + ",false)' style='margin-right:3px' class='btn mb-1 btn-outline-primary btn-sm'><i class='fa fa-eye'></i></button><button type='button' onclick='ViewEstudiante(" + value.IdPersona + ",true)' class='btn mb-1 btn-outline-secondary btn-sm'><i class='fa fa-pencil'></i></button></span></div></div></div>";
+                });
+                $('#EstudiantesRudeHtml').append(html);
+                var TotalPages = parseInt(O.TotalPages);
+                var rangeMin = 4;
+                var rangeMax = parseInt(TotalPages) == 1 ? 1 : rangeMin && parseInt(TotalPages) < rangeMin ? parseInt(TotalPages) : rangeMin;
+
+                const paging = { range: rangeMax, pages: TotalPages };
+                var PageArray = doPaging(pageIndex, paging);
+                var sTatusPrev = (pageIndex <= 1) ? true : false;
+                var sTatuslast = (pageIndex >= paging.pages) ? true : false;
+                var html = "<li class='page-item first " + (sTatusPrev ? "disabled" : "") + "'><a href='#' class='page-link' onclick='AllEstudianteRude(1, " + TotalPages + ")'>First</a></li><li class='page-item prev  " + (sTatusPrev ? "disabled" : "") + "'><a href='#' class='page-link' onclick='AllEstudianteRude(" + parseInt(pageIndex - 1) + ", " + TotalPages + ")'>Prev</a></li>";
+                PageArray.forEach((value, i) => {
+                    html += value.Status
+                        ?
+                        "<li class='page-item active'><a class='page-link' href='#' onclick='AllEstudianteRude(" + value.Page + ", " + TotalPages + ")'>" + value.Page + "</a></li>"
+                        :
+                        "<li class='page-item'><a class='page-link' href='#' onclick='AllEstudianteRude(" + value.Page + ", " + TotalPages + ")'>" + value.Page + "</a></li>";
+                });
+                html += "<li class='page-item next " + (sTatuslast ? "disabled" : "") + "'><a href='#' class='page-link' onclick='AllEstudianteRude(" + parseInt(pageIndex + 1) + ", " + TotalPages + ")'>Next</a></li><li class='page-item last " + (sTatuslast ? "disabled" : "") + "'><a href='#' class='page-link' onclick='AllEstudianteRude(" + paging.pages + ", " + TotalPages + ")'>Last</a></li>";
+                $('#PageEstudianteRude').html(html);
+            });
+        }
+        function doPaging(current, { range, pages, start = 1 }) {
+            const paging = [];
+            var i = Math.min(pages + start - range, Math.max(start, current - (range / 2 | 0)));
+            const end = i + range;
+            while (i < end) {
+                var infStatus = i === current ? true : false;
+                paging.push({ Page: i++, Status: infStatus });
+            };
+            return paging;
+        };
+        function ViewEstudiante(IdPersona, _EstadoModificar) {
+            EstadoDisabled = _EstadoModificar;
+            DisabledHtml();
+            if (!_EstadoModificar)
+                $('#BtnGuardarRude').hide();
+            else
+                $('#BtnGuardarRude').show();
+
+            $('#BuscardorEstudiante').hide();
+            $('#Modal_Rude').modal('show');
+            $('#TituloModalRude').html("Rude");
+            $.getJSON('@Url.Action("ViewModificar","Rude")', { IdPersona: IdPersona }, function (O) {
+                //console.log(O)
+
+                $('#IdPersonaEstudiante').val(O.PersonaEstudiante.IdPersona);
+                $('#Nombres_Estudiante').val(O.PersonaEstudiante.Nombres);
+                $('#Ap_Estudiante').val(O.PersonaEstudiante.ApPaterno);
+                $('#Am_Estudiante').val(O.PersonaEstudiante.ApMaterno);
+                $('#Ci_Estudiante').val(O.PersonaEstudiante.Ci);
+                $('#FechaNacimiento_Estudiante').val(O.PersonaEstudiante.FechaNacimiento);
+                $('#Sexo_Estudiante').val(O.PersonaEstudiante.Sexo);
+                $('#Celular_Estudiante').val(O.PersonaEstudiante.Celular);
+                $('#Telefonofijo_Estudiante').val(O.PersonaEstudiante.TelefonoFijo);
+
+                $('#CertificadoNacimiento_Noficialia').val(O.CertificadoNacimientoEstudiante.NumOficialia);
+                $('#CertificadoNacimiento_NoLibro').val(O.CertificadoNacimientoEstudiante.NumLibro);
+                $('#CertificadoNacimiento_NoPartida').val(O.CertificadoNacimientoEstudiante.NumPartida);
+                $('#CertificadoNacimiento_NoFolio').val(O.CertificadoNacimientoEstudiante.NumFolio);
+
+                $('#IdLugarNacimeinto').val(O.IdLugarNacimeinto);
+                O.LugarNacimiento.forEach(value => {
+                    if (value.TipoTerritorio == 'Pais') {
+                        $('#IdPais_LugarNacimientoEstudiante').val(value.IdTerritorio);
+                        ListarDepartamentoLugarNacimiento();
+                    }
+
+                    if (value.TipoTerritorio == 'Departamento') {
+                        setTimeout(function () {
+                            $('#IdDepartamento_LugarNacimientoEstudiante').val(value.IdTerritorio);
+                            ListarProvinciaLugarNacimiento();
+                        }, 100);
+                    }
+
+                    if (value.TipoTerritorio == 'Provincia') {
+                        setTimeout(function () {
+                            $('#IdProvincia_LugarNacimientoEstudiante').val(value.IdTerritorio);
+                            ListarMunicipioLugarNacimiento();
+                        }, 200);
+                    };
+
+                    if (value.TipoTerritorio == 'SeccionMunicipio') {
+                        setTimeout(function () {
+                            $('#IdMunicipio_LugarNacimientoEstudiante').val(value.IdTerritorio);
+                            ListarLocalidadComunidadLugarNacimiento();
+                        }, 300);
+                    }
+
+                    if (value.TipoTerritorio == 'Comunidad') {
+                        setTimeout(function () {
+                            $('#IdLocalidad_LugarNacimientoEstudiante').val(value.IdTerritorio);
+                        }, 500);
+                    }
+                });
+
+                if (O.EstudianteRude.Discapacidad) {
+                    $('#Rb_Discapacidad_Si').prop('checked', true);
+                } else {
+                    $('#Rb_Discapacidad_No').prop('checked', true);
+                }
+                if (EstadoDisabled) {
+                    setTimeout(function () {
+                        CheckDiscapacidad();
+                    }, 200);
+                }
+
+                $('#ResgistroDiscapacidadIBC').val(O.EstudianteRude.IBC)
+
+                $('#Rb_TipoDiscapacidad_' + O.EstudianteRude.TipoDiscapacidad).prop('checked', true);
+                SeleccionarTipoDiscapacidad((O.EstudianteRude.TipoDiscapacidad == 'Visual') ? 2 : 1);
+                $('#Rb_GradoDiscapadidad_' + O.EstudianteRude.GradoDiscapacidad).prop('checked', true);
+
+                ///$('#LugarResidenciaIdLugarNR').val(O.DireccionCallesEstudiantes.IdLugarNR);
+                $('#IdLugarNRDireccionActual').val(O.DireccionActualCallesAvZona.IdLugarNR);
+                $('#DireccionActual_ZonaVilla').val(O.DireccionActualCallesAvZona.Zona_Villa);
+                $('#DireccionActual_AvenidaCalle').val(O.DireccionActualCallesAvZona.Avenida_Calle);
+                $('#DireccionActual_NoVivienda').val(O.DireccionActualCallesAvZona.NumVivienda);
+
+                //dereccion actual
+                O.DireccionActualEstudiante.forEach(value => {
+                    if (value.TipoTerritorio == 'Departamento') {
+                        $('#DireccionActual_Departamento').val(value.IdTerritorio);
+                        ListarProviciaDireccionActual();
+                    }
+
+                    if (value.TipoTerritorio == 'Provincia') {
+                        setTimeout(function () {
+                            $('#DireccionActual_Provincia').val(value.IdTerritorio);
+                            ListarMunicipioDireccionActual();
+                        }, 100);
+                    };
+
+                    if (value.TipoTerritorio == 'SeccionMunicipio') {
+                        setTimeout(function () {
+                            $('#DireccionActual_SecciónMunicipio').val(value.IdTerritorio);
+                            ListarComunidadDireccionActual();
+                        }, 200);
+                    }
+
+                    if (value.TipoTerritorio == 'Comunidad') {
+                        setTimeout(function () {
+                            $('#DireccionActual_LocalidadComunidad').val(value.IdTerritorio);
+                        }, 300);
+                    }
+                });
+
+                ArrayHabla = O.Habla;
+                ListarIdiomaHtml();
+                var estadoCheckTrabajo_127 = true;
+                var estadoCheckTrabajo_150 = true;
+                var estadoCheckRazonesAbandono_172 = true;
+                O.Aspectos_Soc.forEach(value => {
+                    //console.log(value);
+                    $('#Rb_Nacion_' + value.IdSocioEcon).prop('checked', true);
+                    $('#Rb_Nacion_' + value.IdSocioEcon).val((parseInt(value.IdAspSoc) + '_' + value.IdSocioEcon));
+
+                    $('#Rb_CentroSalud_' + value.IdSocioEcon).prop('checked', true);
+                    $('#Rb_CentroSalud_' + value.IdSocioEcon).val((parseInt(value.IdAspSoc) + '_' + value.IdSocioEcon));
+
+                    $('#Check_Salud_' + value.IdSocioEcon).prop('checked', true);
+                    $('#Check_Salud_' + value.IdSocioEcon).val((parseInt(value.IdAspSoc) + '_' + value.IdSocioEcon));
+
+                    $('#Rb_CentroSaludVeces_' + value.IdSocioEcon).prop('checked', true);
+                    $('#Rb_CentroSaludVeces_' + value.IdSocioEcon).val((parseInt(value.IdAspSoc) + '_' + value.IdSocioEcon));
+
+                    $('#Rb_SeguroSalud_' + value.IdSocioEcon).prop('checked', true);
+                    $('#Rb_SeguroSalud_' + value.IdSocioEcon).val((parseInt(value.IdAspSoc) + '_' + value.IdSocioEcon));
+
+                    $('#Rb_AccesoAgua_' + value.IdSocioEcon).prop('checked', true);
+                    $('#Rb_AccesoAgua_' + value.IdSocioEcon).val((parseInt(value.IdAspSoc) + '_' + value.IdSocioEcon));
+
+                    $('#Rb_Baño_' + value.IdSocioEcon).prop('checked', true);
+                    $('#Rb_Baño_' + value.IdSocioEcon).val((parseInt(value.IdAspSoc) + '_' + value.IdSocioEcon));
+
+                    $('#Rb_Alcantarrillado_' + value.IdSocioEcon).prop('checked', true);
+                    $('#Rb_Alcantarrillado_' + value.IdSocioEcon).val((parseInt(value.IdAspSoc) + '_' + value.IdSocioEcon));
+
+                    $('#Rb_EnergiaElectrica_' + value.IdSocioEcon).prop('checked', true);
+                    $('#Rb_EnergiaElectrica_' + value.IdSocioEcon).val((parseInt(value.IdAspSoc) + '_' + value.IdSocioEcon));
+
+                    $('#Rb_RecojoBasura_' + value.IdSocioEcon).prop('checked', true);
+                    $('#Rb_RecojoBasura_' + value.IdSocioEcon).val((parseInt(value.IdAspSoc) + '_' + value.IdSocioEcon));
+
+                    $('#Rb_Vivienda_' + value.IdSocioEcon).prop('checked', true);
+                    $('#Rb_Vivienda_' + value.IdSocioEcon).val((parseInt(value.IdAspSoc) + '_' + value.IdSocioEcon));
+
+                    $('#Check_Internet_' + value.IdSocioEcon).prop('checked', true);
+                    $('#Check_Internet_' + value.IdSocioEcon).val((parseInt(value.IdAspSoc) + '_' + value.IdSocioEcon));
+
+                    $('#Rb_FrecuenciaInternet_' + value.IdSocioEcon).prop('checked', true);
+                    $('#Rb_FrecuenciaInternet_' + value.IdSocioEcon).val((parseInt(value.IdAspSoc) + '_' + value.IdSocioEcon));
+
+                    $('#Rb_trabajo_' + value.IdSocioEcon).prop('checked', true);
+                    $('#Rb_trabajo_' + value.IdSocioEcon).val((parseInt(value.IdAspSoc) + '_' + value.IdSocioEcon));
+                    //console.log('ll ' + $('#Rb_trabajo_99').prop('checked'));
+                    //CheckActividadLaboral();
+
+                    $('#Check_Mes_' + value.IdSocioEcon).prop('checked', true);
+                    $('#Check_Mes_' + value.IdSocioEcon).val((parseInt(value.IdAspSoc) + '_' + value.IdSocioEcon));
+
+                    $('#Check_TrabajoGP_' + value.IdSocioEcon).prop('checked', true);
+                    $('#Check_TrabajoGP_' + value.IdSocioEcon).val((parseInt(value.IdAspSoc) + '_' + value.IdSocioEcon));
+                    //CheckOtroActividadTrabajo();
+
+                    if ($('#Check_TrabajoGP_127').prop('checked') && estadoCheckTrabajo_127) {
+                        $('#TrabajoEstudiante_OtroTrabajo').val(value.DescripcionTxt);
+                        //$('#TrabajoEstudiante_OtroTrabajo' + value.IdSocioEcon).val((parseInt(value.IdAspSoc) + '_' + value.IdSocioEcon));
+                        estadoCheckTrabajo_127 = false;
+                    }
+
+                    $('#Check_TurnoTrabajo_' + value.IdSocioEcon).prop('checked', true);
+                    $('#Check_TurnoTrabajo_' + value.IdSocioEcon).val((parseInt(value.IdAspSoc) + '_' + value.IdSocioEcon));
+
+                    $('#Rb_FrecuenciaTrabajo_' + value.IdSocioEcon).prop('checked', true);
+                    $('#Rb_FrecuenciaTrabajo_' + value.IdSocioEcon).val((parseInt(value.IdAspSoc) + '_' + value.IdSocioEcon));
+
+                    $('#Rb_RecibioPago_' + value.IdSocioEcon).prop('checked', true);
+                    $('#Rb_RecibioPago_' + value.IdSocioEcon).val((parseInt(value.IdAspSoc) + '_' + value.IdSocioEcon));
+                    //CheckRecibioPago();
+
+                    $('#Rb_RecibioPago_Si_' + value.IdSocioEcon).prop('checked', true);
+                    $('#Rb_RecibioPago_Si_' + value.IdSocioEcon).val((parseInt(value.IdAspSoc) + '_' + value.IdSocioEcon));
+
+                    $('#Rb_CollegaAlColegio_' + value.IdSocioEcon).prop('checked', true);
+                    $('#Rb_CollegaAlColegio_' + value.IdSocioEcon).val((parseInt(value.IdAspSoc) + '_' + value.IdSocioEcon));
+                    //CheckTranporteUnidadEducativa();
+                    if ($('#Rb_CollegaAlColegio_150').prop('checked') && estadoCheckTrabajo_150) {
+                        $('#CollegaAlColegioOtro').val(value.DescripcionTxt);
+                        estadoCheckTrabajo_150 = false;
+                    }
+
+                    $('#Rb_TiempoLLegadaAlColegio_' + value.IdSocioEcon).prop('checked', true);
+                    $('#Rb_TiempoLLegadaAlColegio_' + value.IdSocioEcon).val((parseInt(value.IdAspSoc) + '_' + value.IdSocioEcon));
+
+                    $('#Rb_AbandonoEscolar_' + value.IdSocioEcon).prop('checked', true);
+                    $('#Rb_AbandonoEscolar_' + value.IdSocioEcon).val((parseInt(value.IdAspSoc) + '_' + value.IdSocioEcon));
+                    //CheckAbandonoUnidadEducativa();
+
+                    $('#Check_RazonesAbandono_' + value.IdSocioEcon).prop('checked', true);
+                    $('#Check_RazonesAbandono_' + value.IdSocioEcon).val((parseInt(value.IdAspSoc) + '_' + value.IdSocioEcon));
+                    //CheckOtroAbandonoUnidadEducativa();
+                    if ($('#Check_RazonesAbandono_172').prop('checked') && estadoCheckRazonesAbandono_172) {
+                        $('#RazonesAbandonoOtro').val(value.DescripcionTxt);
+                        estadoCheckRazonesAbandono_172 = false;
+                    }
+                });
+
+                ConQuienViveEstudianteArray = O.ConQuienViveEstudiante;
+                ListarConquienViveEstudianteHtml();
+            });
+        }
+        function ListarConquienViveEstudianteHtml() {
+              $("#TutorTableHtml").empty();
+            if (ConQuienViveEstudianteArray.length > 0) {
+                $('#TableConTutor').show();
+                $('#SinTutorTitleHtml').hide();
+                ConQuienViveEstudianteArray.forEach(value => {
+                    $("#TutorTableHtml").append("<tr><td>" + value.Persona + "</td><td>" + value.Ci + "</td><td>" + value.FechaNacimiento + "</td><td>" + ((value.Sexo == "M") ? "Masculino" : "Femenino") + "</td><td>" + ((value.OcupacionLab == null) ? "" : value.OcupacionLab) + "</td><td>" + ((value.GradoInst == null) ? "" : value.GradoInst) + "</td><td>" + value.Parentesco + "</td></tr>");
+                });
+            } else {
+                $('#TableConTutor').hide();
+                $('#SinTutorTitleHtml').show();
+                $('#ViveSolo').html(" Vive Solo....");
+            }
+        }
+
+        function ListarPaisLugarNacimiento() {
+            $('#IdPais_LugarNacimientoEstudiante').empty();
+            $.getJSON('@Url.Action("ListarPais","Territorio")', null, function (O) {
+                $('#IdPais_LugarNacimientoEstudiante').append("<option value='0'>Select Opcion...</option>");
+                O.forEach((value, i) => {
+                    $('#IdPais_LugarNacimientoEstudiante').append("<option value='" + value.IdTerritorio + "'>" + value.Descripcion + "</option>");
+                });
+            });
+        }
+        function ListarDepartamentoLugarNacimiento() {
+            $('#IdDepartamento_LugarNacimientoEstudiante').empty();
+            $.getJSON('@Url.Action("ListarDepartamentos","Territorio")', { IdDependiente: $('#IdPais_LugarNacimientoEstudiante').val() }, function (O) {
+                $('#IdDepartamento_LugarNacimientoEstudiante').append("<option value='0'>Select Opcion...</option>");
+                O.forEach((value, i) => {
+                    $('#IdDepartamento_LugarNacimientoEstudiante').append("<option value='" + value.IdTerritorio + "'>" + value.Descripcion + "</option>");
+                });
+            });
+        }
+        function ListarProvinciaLugarNacimiento() {
+            $('#IdProvincia_LugarNacimientoEstudiante').empty();
+            $.getJSON('@Url.Action("ListarProvincia","Territorio")', { IdDependiente: $('#IdDepartamento_LugarNacimientoEstudiante').val() }, function (O) {
+                $('#IdProvincia_LugarNacimientoEstudiante').append("<option value='0'>Select Opcion...</option>");
+                O.forEach((value, i) => {
+                    $('#IdProvincia_LugarNacimientoEstudiante').append("<option value='" + value.IdTerritorio + "'>" + value.Descripcion + "</option>");
+                });
+            });
+        }
+        function ListarMunicipioLugarNacimiento() {
+            $('#IdMunicipio_LugarNacimientoEstudiante').empty();
+            $.getJSON('@Url.Action("ListarMunicipio","Territorio")', { IdDependiente: $('#IdProvincia_LugarNacimientoEstudiante').val() }, function (O) {
+                $('#IdMunicipio_LugarNacimientoEstudiante').append("<option value='0'>Select Opcion...</option>");
+                O.forEach((value, i) => {
+                    $('#IdMunicipio_LugarNacimientoEstudiante').append("<option value='" + value.IdTerritorio + "'>" + value.Descripcion + "</option>");
+                });
+            });
+        }
+        function ListarLocalidadComunidadLugarNacimiento() {
+            $('#IdLocalidad_LugarNacimientoEstudiante').empty();
+            $.getJSON('@Url.Action("ListarComunidad","Territorio")', { IdDependiente: $('#IdMunicipio_LugarNacimientoEstudiante').val() }, function (O) {
+                $('#IdLocalidad_LugarNacimientoEstudiante').append("<option value='0'>Select Opcion...</option>");
+                O.forEach((value, i) => {
+                    $('#IdLocalidad_LugarNacimientoEstudiante').append("<option value='" + value.IdTerritorio + "'>" + value.Descripcion + "</option>");
+                });
+            });
+        }
+        function BuscarEstudiantes() {
+            var Obj = { TxtParametro: $('#TxtParametroEstudiante').val() };
+            $('#ListarEstudiantes').empty();
+            $.getJSON('@Url.Action("BuscarEstudiante", "Rude")', Obj, function (O) {
+                if (O != null) {
+                    O.forEach(value => {
+                        $('#ListarEstudiantes').append("<a style='text-decoration: none' onclick='SeleccionarEstudiante(" + value.IdPersona + ",\"" + value.Nombres + "\",\"" + value.ApPaterno + "\",\"" + value.ApMaterno + "\",\"" + value.Ci + "\",\"" + value.FecNacimiento + "\",\"" + value.Sexo + "\",\"" + value.Celular + "\",\"" + value.TelefonoFijo + "\")' class='list-group-item'><div style='display: inline-block'><i class='fa fa-user-o' style='margin-right: 5px'></i>" + value.Nombres + " " + value.ApPaterno + " " + value.ApMaterno + " " + value.Ci + "</div></a>");
+                    });
+                }
+            });
+        }
+        function SeleccionarEstudiante(IdPersona, Nombres, ApPaterno, ApMaterno, Ci, FechaNacimiento, Sexo, Celular, TelefonoFijo) {
+            $.getJSON('@Url.Action("VerificarSiEstaRegistradoEstudianteRude", "Rude")', { IdPersona: IdPersona }, function (O) {
+                if (!O) {
+                    $('#ListarEstudiantes').empty();
+                    $('#TxtParametroEstudiante').val("");
+                    $('#IdPersonaEstudiante').val(IdPersona);
+                    $('#Nombres_Estudiante').val(Nombres);
+                    $('#Ap_Estudiante').val(ApPaterno);
+                    $('#Am_Estudiante').val(ApMaterno);
+                    $('#Ci_Estudiante').val(Ci);
+                    $('#FechaNacimiento_Estudiante').val(FechaNacimiento);
+                    $('#Sexo_Estudiante').val(Sexo);
+                    $('#Celular_Estudiante').val(Celular);
+                    $('#Telefonofijo_Estudiante').val(TelefonoFijo);
+                    $.getJSON('@Url.Action("GetDatosExtrasEstudiante", "Rude")', { IdPersona: IdPersona }, function (O) {
+                        $("#TutorTableHtml").empty();
+                        $('#CertificadoNacimiento_Noficialia').val(O.CertiNacimiento.NumOficialia);
+                        $('#CertificadoNacimiento_NoLibro').val(O.CertiNacimiento.NumLibro);
+                        $('#CertificadoNacimiento_NoPartida').val(O.CertiNacimiento.NumPartida);
+                        $('#CertificadoNacimiento_NoFolio').val(O.CertiNacimiento.NumFolio);
+
+                        ConQuienViveEstudianteArray = O.DatosApoderado;
+                        ListarConquienViveEstudianteHtml();
+                    });
+                } else {
+                    toastr.warning('El Estudiante se encuentra registrado');
+                }
+            });
+        }
+
+        function ListarDepartamentosDireccionActual() {
+            $('#DireccionActual_Departamento').empty();
+            $.getJSON('@Url.Action("ListarDepartamentos","Territorio")', { IdDependiente: 0 }, function (O) {
+                $('#DireccionActual_Departamento').append("<option value='0'>Select Opcion...</option>");
+                O.forEach((value, i) => {
+                    $('#DireccionActual_Departamento').append("<option value='" + value.IdTerritorio + "'>" + value.Descripcion + "</option>");
+                });
+            });
+        }
+        function ListarProviciaDireccionActual() {
+            $('#DireccionActual_Provincia').empty();
+            $.getJSON('@Url.Action("ListarProvincia","Territorio")', { IdDependiente: $('#DireccionActual_Departamento').val() }, function (O) {
+                $('#DireccionActual_Provincia').append("<option value='0'>Select Opcion...</option>");
+                O.forEach((value, i) => {
+                    $('#DireccionActual_Provincia').append("<option value='" + value.IdTerritorio + "'>" + value.Descripcion + "</option>");
+                });
+            });
+        }
+        function ListarMunicipioDireccionActual() {
+            $('#DireccionActual_SecciónMunicipio').empty();
+            $.getJSON('@Url.Action("ListarMunicipio","Territorio")', { IdDependiente: $('#DireccionActual_Provincia').val() }, function (O) {
+                $('#DireccionActual_SecciónMunicipio').append("<option value='0'>Select Opcion...</option>");
+                O.forEach((value, i) => {
+                    $('#DireccionActual_SecciónMunicipio').append("<option value='" + value.IdTerritorio + "'>" + value.Descripcion + "</option>");
+                });
+            });
+        }
+        function ListarComunidadDireccionActual() {
+            $('#DireccionActual_LocalidadComunidad').empty();
+            $.getJSON('@Url.Action("ListarComunidad","Territorio")', { IdDependiente: $('#DireccionActual_SecciónMunicipio').val() }, function (O) {
+                $('#DireccionActual_LocalidadComunidad').append("<option value='0'>Select Opcion...</option>");
+                O.forEach((value, i) => {
+                    $('#DireccionActual_LocalidadComunidad').append("<option value='" + value.IdTerritorio + "'>" + value.Descripcion + "</option>");
+                });
+            });
+        }
+
+        function GuardarIdioma() {
+            var Obj = { Descripcion: $('#Idioma_Descripcion').val() };
+            $.getJSON('@Url.Action("Agregar","Idioma")', Obj, function (O) {
+                if (O.responce) {
+                    $('#Idioma_Descripcion').val("");
+                    ListarIdioma();
+                };
+                MostarInfSave(O.StatusSave);
+            });
+        }
+        function ListarIdioma() {
+            $('#IdIdiomaHablaFrecuencia').empty();
+            $('#IdIdiomaHabla').empty();
+            $.getJSON('@Url.Action("Listar","Idioma")', null, function (O) {
+                $('#IdIdiomaHablaFrecuencia').append("<option value='0'>Select Opcion...</option>");
+                $('#IdIdiomaHabla').append("<option value='0'>Select Opcion...</option>");
+                O.forEach((value, i) => {
+                    $('#IdIdiomaHablaFrecuencia').append("<option value='" + value.Descripcion + "_" + value.IdIdioma + "'>" + value.Descripcion + "</option>");
+                    $('#IdIdiomaHabla').append("<option value='" + value.Descripcion + "_" + value.IdIdioma + "'>" + value.Descripcion + "</option>");
+                });
+            });
+        }
+        function AgregarIdioma(tipo) {
+            var IdiomaNiñes = $('#IdIdiomaHabla').val().split('_');
+            var IdiomaFrecuancia = $('#IdIdiomaHablaFrecuencia').val().split('_');
+            if (tipo == 1) {
+                var ObjIdioma = {
+                    IdHabla: 0,
+                    IdIdioma: IdiomaNiñes[1],
+                    IdiomaNativo_Frecuencia: 'niñes',
+                    IdiomaNiñes: true,
+                    Descripcion: IdiomaNiñes[0],
+                    Estado: true
+                };
+            } else {
+                var ObjIdioma = {
+                    IdHabla: 0,
+                    IdIdioma: IdiomaFrecuancia[1],
+                    IdiomaNativo_Frecuencia: $('#IdFrecuencia').val(),
+                    IdiomaNiñes: false,
+                    Descripcion: IdiomaFrecuancia[0],
+                    Estado: true
+                };
+            }
+            ArrayHabla.push(ObjIdioma);
+            ListarIdiomaHtml();
+        }
+        function ListarIdiomaHtml() {
+            $('#TableHabla').empty();
+            $('#TableHablaNivelFrecuancia').empty();
+            ArrayHabla.forEach((value, i) => {
+                if (value.IdiomaNiñes) {
+                    if (value.Estado)
+                        $('#TableHabla').append("<tr><td>" + (i + 1) + "</td><td>" + value.Descripcion + "</td><td><button class='btn btn-outline-danger btn-sm' " + ((!EstadoDisabled) ? "Disabled" : "") + " onclick='Eliminarhabla(" + i + "," + value.IdHabla + ")'><i class='fa fa-close'></i></button></td></tr>");
+                }
+                else {
+                    if (value.Estado)
+                        $('#TableHablaNivelFrecuancia').append("<tr><td>" + (i + 1) + "</td><td>" + value.Descripcion + "</td><td>" + value.IdiomaNativo_Frecuencia + "</td><td><button class='btn btn-outline-danger btn-sm' " + ((!EstadoDisabled) ? "Disabled" : "") + " onclick='Eliminarhabla(" + i + "," + value.IdHabla + ")'><i class='fa fa-close'></i></button></td></tr>");
+                }
+            });
+        }
+
+        function CheckDiscapacidad() {
+            if ($('#Rb_Discapacidad_Si').prop('checked')) {
+                $('#ResgistroDiscapacidadIBC').prop('disabled', false);
+                $('input[name *= NameTipoDiscapacidad]').prop('disabled', false)
+                $('input[name *= NameGradoDiscapadidadG1]').prop('disabled', false)
+                $('input[name *= NameGradoDiscapadidadG2]').prop('disabled', false)
+            } else {
+                $('#ResgistroDiscapacidadIBC').prop('disabled', true)
+                $('#ResgistroDiscapacidadIBC').val("")
+                $('input[name *= NameTipoDiscapacidad]').prop('disabled', true)
+                $('input[name *= NameGradoDiscapadidadG1]').prop('disabled', true)
+                $('input[name *= NameGradoDiscapadidadG2]').prop('disabled', true)
+                $('input[name *= NameTipoDiscapacidad]').prop('checked', false)
+                $('input[name *= NameGradoDiscapadidadG1]').prop('checked', false)
+                $('input[name *= NameGradoDiscapadidadG2]').prop('checked', false)
+                $('#GradoDiscapacidadHtmlG1').hide();
+                $('#GradoDiscapacidadHtmlG2').hide();
+            }
+        }
+        function SeleccionarTipoDiscapacidad(Tipo) {
+            $('#GradoDiscapacidadHtmlG1').hide();
+            $('#GradoDiscapacidadHtmlG2').hide();
+            $('#GradoDiscapacidadHtmlG1').hide();
+            $('#GradoDiscapacidadHtmlG2').hide();
+            if (Tipo == 1) {
+                $('#GradoDiscapacidadHtmlG1').show();
+                $('input[name *= NameGradoDiscapadidadG2]').prop('checked', false)
+            }
+            else {
+                $('#GradoDiscapacidadHtmlG2').show();
+                $('input[name *= NameGradoDiscapadidadG1]').prop('checked', false)
+            }
+        }
+        function CheckEnGestionPasadaElEstudianteTrabajo() {
+            if ($('#Rb_trabajo_99').prop('checked')) {
+                $('input[name *= NameMesTrabajo]').prop('disabled', false)
+            } else {
+                $('input[name *= NameMesTrabajo]').prop('disabled', true)
+                $('input[name *= NameMesTrabajo]').prop('checked', false)
+            }
+        }
+        function DisableInputEnqueTrabajoEstudiante() {
+            if ($('#Check_TrabajoGP_127').prop('checked')) {
+                $('#TrabajoEstudiante_OtroTrabajo').prop('disabled', false);
+            } else {
+                $('#TrabajoEstudiante_OtroTrabajo').val("");
+                $('#TrabajoEstudiante_OtroTrabajo').prop('disabled', true);
+            }
+        }
+        function CheckRecibioPago() {
+            if ($('#Rb_RecibioPago_140').prop('checked')) {
+                $('input[name *= NameRecibioPago_Si]').prop('disabled', false);
+            } else {
+                $('input[name *= NameRecibioPago_Si]').prop('disabled', true);
+                $('input[name *= NameRecibioPago_Si]').prop('checked', false);
+            }
+        }
+        function CheckInputDisableOtraFormaTransporte() {
+            if ($('#Rb_CollegaAlColegio_150').prop('checked')) {
+                $('#CollegaAlColegioOtro').prop('disabled', false);
+            } else {
+                $('#CollegaAlColegioOtro').val("");
+                $('#CollegaAlColegioOtro').prop('disabled', true);
+            }
+        }
+        function CheckAbandonoUnidadEducativa() {
+            if ($('#Rb_AbandonoEscolar_159').prop('checked')) {
+                $('input[name *= NameRazonesAbandono]').prop('disabled', true);
+                $('input[name *= NameRazonesAbandono]').prop('checked', false);
+                $('#RazonesAbandonoOtro').val("");
+            } else {
+                $('input[name *= NameRazonesAbandono]').prop('disabled', false);
+            }
+        }
+        function CheckInputOtroAbandonoUnidadEducativa() {
+            if ($('#Check_RazonesAbandono_172').prop('checked')) {
+                $('#RazonesAbandonoOtro').prop('disabled', false);
+            } else {
+                $('#RazonesAbandonoOtro').val("");
+                $('#RazonesAbandonoOtro').prop('disabled', true);
+            }
+        }
+        function Guardar() {
+            var DiscapacidadEstudiante;
+            var TipoDiscapacidadEstudiante;
+            var GradoDiscapacidadEstudiante;
+
+            DiscapacidadEstudiante = JSON.parse($('input:radio[name=NameDiscapacidad]:checked').val());
+            if (DiscapacidadEstudiante) {
+                if ($('input[name="NameTipoDiscapacidad"]').is(':checked')) {
+                    TipoDiscapacidadEstudiante = $('input:radio[name=NameTipoDiscapacidad]:checked').val();
+                    if ($('input[name="NameGradoDiscapadidadG1"]').is(':checked') || $('input[name="NameGradoDiscapadidadG2"]').is(':checked')) {
+                        if ($('input[name="NameGradoDiscapadidadG1"]').is(':checked')) {
+                            GradoDiscapacidadEstudiante = $('input:radio[name=NameGradoDiscapadidadG1]:checked').val();
+                        } else {
+                            GradoDiscapacidadEstudiante = $('input:radio[name=NameGradoDiscapadidadG2]:checked').val();
+                        }
+                    } else {
+                        ArrayError.push({ Msg: 'Es obligatorio seleccionar Grado de Discapacidad' });
+                    }
+                //$("input[name=NameTipoDiscapacidad]:checked").each(function () {
+                //    TipoDiscapacidadEstudiante = $(this).val();
+                //});
+                } else {
+                    ArrayError.push({ Msg: 'Es obligatorio seleccionar un tipo de discapacidad' });
+                //$("input[name=NameDiscapacidad]:checked").each(function () {
+                //    if (JSON.parse($(this).val())) {
+                //        ArrayError.push({ Msg: 'Es obligatorio seleccionar un tipo de discapacidad' });
+                //    }
+                //});
+                }
+            }
+
+            if ($('input[name="NameNacion"]').is(':checked')) {
+                var dato = $('input:radio[name=NameNacion]:checked').val().split('_');
+                Aspectos_Soc.push({ IdAspSoc: dato[0], IdSocioEcon: dato[1] });
+
+                //$("input[name=NameNacion]:checked").each(function () {
+                //    var dato = $(this).val().split('_');
+                //    Aspectos_Soc.push({ IdAspSoc: dato[0], IdSocioEcon: dato[1] });
+                //});
+            } else {
+                ArrayError.push({ Msg: 'El punto 4.1.3 no fue seleccionado' });
+            }
+            if ($('input[name="NameCentroSalud"]').is(':checked')) {
+                var dato = $('input:radio[name=NameCentroSalud]:checked').val().split('_');
+                Aspectos_Soc.push({ IdAspSoc: dato[0], IdSocioEcon: dato[1] });
+
+                //$("input[name=NameCentroSalud]:checked").each(function () {
+                //    var dato = $(this).val().split('_');
+                //    Aspectos_Soc.push({ IdAspSoc: dato[0], IdSocioEcon: dato[1] });
+                //});
+            } else {
+                ArrayError.push({ Msg: 'El punto 4.2.1 no fue seleccionado' });
+            }
+            if ($('input[name="NameDondeAcudioProblemaSalud"]').is(':checked')) {
+                $("input[name=NameDondeAcudioProblemaSalud]:checked").each(function () {
+                    var dato = $(this).val().split('_');
+                    Aspectos_Soc.push({ IdAspSoc: dato[0], IdSocioEcon: dato[1] });
+                });
+            } else {
+                ArrayError.push({ Msg: 'El punto 4.2.2 no fue seleccionado' });
+            }
+            if ($('input[name="NameCuantasVecesFueCentroSalud"]').is(':checked')) {
+                var dato = $('input:radio[name=NameCuantasVecesFueCentroSalud]:checked').val().split('_');
+                Aspectos_Soc.push({ IdAspSoc: dato[0], IdSocioEcon: dato[1] });
+                //$("input[name=NameCuantasVecesFueCentroSalud]:checked").each(function () {
+                //    var dato = $(this).val().split('_');
+                //    Aspectos_Soc.push({ IdAspSoc: dato[0], IdSocioEcon: dato[1] });
+                //});
+            } else {
+                ArrayError.push({ Msg: 'El punto 4.2.3 no fue seleccionado' });
+            }
+            if ($('input[name="NameTieneSeguroSalud"]').is(':checked')) {
+                var dato = $('input:radio[name=NameTieneSeguroSalud]:checked').val().split('_');
+                Aspectos_Soc.push({ IdAspSoc: dato[0], IdSocioEcon: dato[1] });
+
+                //$("input[name=NameTieneSeguroSalud]:checked").each(function () {
+                //    var dato = $(this).val().split('_');
+                //    Aspectos_Soc.push({ IdAspSoc: dato[0], IdSocioEcon: dato[1] });
+                //});
+            } else {
+                ArrayError.push({ Msg: 'El punto 4.2.4 no fue seleccionado' });
+            }
+            if ($('input[name="NameAccesoAgua"]').is(':checked')) {
+                var dato = $('input:radio[name=NameAccesoAgua]:checked').val().split('_');
+                Aspectos_Soc.push({ IdAspSoc: dato[0], IdSocioEcon: dato[1] });
+                //$("input[name=NameAccesoAgua]:checked").each(function () {
+                //    var dato = $(this).val().split('_');
+                //    Aspectos_Soc.push({ IdAspSoc: dato[0], IdSocioEcon: dato[1] });
+                //});
+            } else {
+                ArrayError.push({ Msg: 'El punto 4.3.1 no fue seleccionado' });
+            }
+            if ($('input[name="NameBaño"]').is(':checked')) {
+                var dato = $('input:radio[name=NameBaño]:checked').val().split('_');
+                Aspectos_Soc.push({ IdAspSoc: dato[0], IdSocioEcon: dato[1] });
+
+                //$("input[name=NameBaño]:checked").each(function () {
+                //    var dato = $(this).val().split('_');
+                //    Aspectos_Soc.push({ IdAspSoc: dato[0], IdSocioEcon: dato[1] });
+                //});
+            } else {
+                ArrayError.push({ Msg: 'El punto 4.3.2 no fue seleccionado' });
+            }
+            if ($('input[name="NameAlcantarrillado"]').is(':checked')) {
+                var dato = $('input:radio[name=NameAlcantarrillado]:checked').val().split('_');
+                Aspectos_Soc.push({ IdAspSoc: dato[0], IdSocioEcon: dato[1] });
+
+                //$("input[name=NameAlcantarrillado]:checked").each(function () {
+                //    var dato = $(this).val().split('_');
+                //    Aspectos_Soc.push({ IdAspSoc: dato[0], IdSocioEcon: dato[1] });
+                //});
+            } else {
+                ArrayError.push({ Msg: 'El punto 4.3.3 no fue seleccionado' });
+            }
+            if ($('input[name="NameEnergiaElectrica"]').is(':checked')) {
+                var dato = $('input:radio[name=NameEnergiaElectrica]:checked').val().split('_');
+                Aspectos_Soc.push({ IdAspSoc: dato[0], IdSocioEcon: dato[1] });
+
+                //$("input[name=NameEnergiaElectrica]:checked").each(function () {
+                //    var dato = $(this).val().split('_');
+                //    Aspectos_Soc.push({ IdAspSoc: dato[0], IdSocioEcon: dato[1] });
+                //});
+            } else {
+                ArrayError.push({ 'Msg': 'El punto 4.3.4 no fue seleccionado' });
+            }
+            if ($('input[name="NameRecojoBasura"]').is(':checked')) {
+                var dato = $('input:radio[name=NameRecojoBasura]:checked').val().split('_');
+                Aspectos_Soc.push({ IdAspSoc: dato[0], IdSocioEcon: dato[1] });
+
+               //$("input[name=NameRecojoBasura]:checked").each(function () {
+               //    var dato = $(this).val().split('_');
+               //     Aspectos_Soc.push({ IdAspSoc: dato[0], IdSocioEcon: dato[1] });
+               //});
+            } else {
+                ArrayError.push({ Msg: 'El punto 4.3.5 no fue seleccionado' });
+            }
+            if ($('input[name="NameVivienda"]').is(':checked')) {
+                var dato = $('input:radio[name=NameVivienda]:checked').val().split('_');
+                Aspectos_Soc.push({ IdAspSoc: dato[0], IdSocioEcon: dato[1] });
+
+                //$("input[name=NameVivienda]:checked").each(function () {
+                //    var dato = $(this).val().split('_');
+                //    Aspectos_Soc.push({ IdAspSoc: dato[0], IdSocioEcon: dato[1] });
+                //});
+            } else {
+                ArrayError.push({ Msg: 'El punto 4.3.6 no fue seleccionado' });
+            }
+            if ($('input[name="NameAccesoInternet"]').is(':checked')) {
+                $("input[name=NameAccesoInternet]:checked").each(function () {
+                    var dato = $(this).val().split('_');
+                    Aspectos_Soc.push({ IdAspSoc: dato[0], IdSocioEcon: dato[1] });
+                });
+            } else {
+                ArrayError.push({ Msg: 'El punto 4.4.1 no fue seleccionado' });
+            }
+            if ($('input[name="NameFrecuenciaInternet"]').is(':checked')) {
+                var dato = $('input:radio[name=NameFrecuenciaInternet]:checked').val().split('_');
+                Aspectos_Soc.push({ IdAspSoc: dato[0], IdSocioEcon: dato[1] });
+
+                //$("input[name=NameFrecuenciaInternet]:checked").each(function () {
+                //    var dato = $(this).val().split('_');
+                //    Aspectos_Soc.push({ IdAspSoc: dato[0], IdSocioEcon: dato[1] });
+                //});
+            } else {
+                ArrayError.push({ Msg: 'El punto 4.4.2 no fue seleccionado' });
+            }
+            if ($('input[name="NameActividadLaboral"]').is(':checked')) {
+                var datoP = $('input:radio[name=NameActividadLaboral]:checked').val().split('_');
+                Aspectos_Soc.push({ IdAspSoc: datoP[0], IdSocioEcon: datoP[1] });
+                if (datoP[1] == '99') {
+                    if ($('input[name="NameMesTrabajo"]').is(':checked')) {
+                        $("input[name=NameMesTrabajo]:checked").each(function () {
+                            var dato = $(this).val().split('_');
+                            Aspectos_Soc.push({ IdAspSoc: dato[0], IdSocioEcon: dato[1] });
+                        });
+                    } else {
+                        ArrayError.push({ Msg: 'El punto 4.5.1 no fueron seleccionados los meses' });
+                    }
+                }
+            } else {
+                ArrayError.push({ Msg: 'El punto 4.5.1 no fue seleccionado' });
+            }
+            if ($('input[name="NameEnqueActividadTrabajo"]').is(':checked')) {
+                $("input[name=NameEnqueActividadTrabajo]:checked").each(function () {
+                    var d = $(this).val().split('_');
+                    if ($('#Check_TrabajoGP_127').prop('checked') && d[1] == '127') {
+                        var dato = $(this).val().split('_');
+                        Aspectos_Soc.push({
+                            IdAspSoc: dato[0],
+                            IdSocioEcon: dato[1],
+                            DescripcionTxt: $('#TrabajoEstudiante_OtroTrabajo ').val()
+                        });
+                    } else {
+                        var dato = $(this).val().split('_');
+                        Aspectos_Soc.push({ IdAspSoc: dato[0], IdSocioEcon: dato[1] });
+                    }
+                });
+            } else {
+                ArrayError.push({ Msg: 'El punto 4.5.2 no fue seleccionado' });
+            }
+            if ($('input[name="NameTurnoTrabajo"]').is(':checked')) {
+                $("input[name=NameTurnoTrabajo]:checked").each(function () {
+                    var dato = $(this).val().split('_');
+                    Aspectos_Soc.push({ IdAspSoc: dato[0], IdSocioEcon: dato[1] });
+                });
+            } else {
+                ArrayError.push({ 'Msg': 'El punto 4.5.3 no fue seleccionado' });
+            }
+            if ($('input[name="NameFrecuenciaTrabajo"]').is(':checked')) {
+                $("input[name=NameFrecuenciaTrabajo]:checked").each(function () {
+                    var dato = $(this).val().split('_');
+                    Aspectos_Soc.push({ IdAspSoc: dato[0], IdSocioEcon: dato[1] });
+                });
+            } else {
+                ArrayError.push({ Msg: 'El punto 4.5.4 no fue seleccionado' });
+            }
+            if ($('input[name="NameRecibioPago"]').is(':checked')) {
+                var dato = $('input:radio[name=NameRecibioPago]:checked').val().split('_');
+                Aspectos_Soc.push({ IdAspSoc: dato[0], IdSocioEcon: dato[1] });
+                if (dato[1] == '140') {
+                    if ($('input[name="NameRecibioPago_Si"]').is(':checked')) {
+                        var datoR = $('input:radio[name=NameRecibioPago_Si]:checked').val().split('_');
+                        Aspectos_Soc.push({ IdAspSoc: datoR[0], IdSocioEcon: datoR[1] });
+                    } else {
+                        ArrayError.push({ Msg: 'El punto 4.5.5 no fue seleccionado' });
+                    }
+                }
+            } else {
+                ArrayError.push({ Msg: 'El punto 4.5.5 no fue seleccionado' });
+            }
+            if ($('input[name="NameCollegaAlColegio"]').is(':checked')) {
+                var dato = $('input:radio[name=NameCollegaAlColegio]:checked').val().split('_');
+                if ($('#Rb_CollegaAlColegio_150').prop('checked')) {
+                    Aspectos_Soc.push({ IdAspSoc: dato[0], IdSocioEcon: dato[1], DescripcionTxt: $('#CollegaAlColegioOtro').val() });
+                } else {
+                    Aspectos_Soc.push({ IdAspSoc: dato[0], IdSocioEcon: dato[1] });
+                }
+            } else {
+                ArrayError.push({ Msg: 'El punto 4.6.1 no fue seleccionado' });
+            }
+            if ($('input[name="NameTiempoLLegadaAlColegio"]').is(':checked')) {
+                var dato = $('input:radio[name=NameTiempoLLegadaAlColegio]:checked').val().split('_');
+                Aspectos_Soc.push({ IdAspSoc: dato[0], IdSocioEcon: dato[1] });
+            } else {
+                ArrayError.push({ Msg: 'El punto 4.6.2 no fue seleccionado' });
+            }
+            if ($('input[name="NameAbandonoEscolar"]').is(':checked')) {
+                var dato = $('input:radio[name=NameAbandonoEscolar]:checked').val().split('_');
+                Aspectos_Soc.push({ IdAspSoc: dato[0], IdSocioEcon: dato[1] });
+                if (dato[1] == '158') {
+                    if ($('input[name="NameRazonesAbandono"]').is(':checked')) {
+                        $("input[name=NameRazonesAbandono]:checked").each(function () {
+                            var d = $(this).val().split('_');
+                            if ($('#Check_RazonesAbandono_172').prop('checked') && d[1] == '172') {
+                                Aspectos_Soc.push({ IdAspSoc: d[0], IdSocioEcon: d[1], DescripcionTxt: $('#RazonesAbandonoOtro').val() });
+                            } else {
+                                var d1 = $(this).val().split('_');
+                                Aspectos_Soc.push({ IdAspSoc: d1[0], IdSocioEcon: d1[1] });
+                            }
+                        });
+                    } else {
+                        ArrayError.push({ Msg: 'El punto 4.7.2 no fue seleccionado' });
+                    }
+                }
+            } else {
+                ArrayError.push({ Msg: 'El punto 4.7.1 no fue seleccionado' });
+            }
+            if (ArrayError.length == 0) {
+                var Obj = {
+                    //Estudiante
+                    IdPersona: $('#IdPersonaEstudiante').val(),
+                    TipoDiscapacidad: TipoDiscapacidadEstudiante,
+                    GradoDiscapacidad: GradoDiscapacidadEstudiante,
+                    Discapacidad: DiscapacidadEstudiante,
+                    IBC: $('#ResgistroDiscapacidadIBC').val(),
+
+                    //lugar Nacimiento
+                    IdLugarNRNacimiento: $('#IdLugarNacimeinto').val(),
+                    IdLocalidad_LugarNacimientoEstudiante: ($('#IdLocalidad_LugarNacimientoEstudiante').val() == null) ? 0 : $('#IdLocalidad_LugarNacimientoEstudiante').val(),
+
+                    //lugar DireccionActual
+                    IdLugarNR: $('#IdLugarNRDireccionActual').val(),
+                    TipoLNR: 'DireccionActual',
+                    Zona_Villa: $('#DireccionActual_ZonaVilla').val(),
+                    Avenida_Calle: $('#DireccionActual_AvenidaCalle').val(),
+                    NumVivienda: $('#DireccionActual_NoVivienda').val(),
+                    IdTerritorio: $('#DireccionActual_LocalidadComunidad').val(),
+
+                    IdiomaEstudiante: ArrayHabla,
+                    asp: Aspectos_Soc
+                };
+                $.ajax({
+                    url: '@Url.Action("Guardar","Rude")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify(Obj),
+                    success: function (O) {
+                        if (O.responce) {
+                            AllEstudianteRude(1, 1);
+                            LimpiarCampos();
+                            CheckRestHtml();
+                            $('#Modal_Rude').modal('hide')
+                        }
+                        MostarInfSave(O.StatusSave);
+                    }
+                });
+            } else {
+                ArrayError.forEach((value) => {
+                    toastr.warning(value.Msg)
+                });
+            }
+            //LimpiarArray();
+            ArrayError.length = 0;
+        }
+    </script>
+}
+

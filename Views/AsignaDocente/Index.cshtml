@@ -1,0 +1,363 @@
+﻿
+@{
+    ViewBag.Title = "Asigna Docente";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-2">    
+    <h4>Módulo Asignarción Docentes<span style="font-size:12px;color:#808080"> Arco iris Tarija</span></h4>
+    <div class="card  mb-3 m-1">
+        <div class="card-body">
+
+            @*<div class="contendor-Loading">
+                    <div style="width: 3rem; height: 3rem;" class="Loading spinner-grow text-secondary" role="status"></div>
+                </div>*@
+            <select id="Gestion" style="margin-bottom:5px" onchange="AllDocentesAsigandos()" class="form-control"></select>
+            <div class="row">
+                <div class="col-lg-11 col-md-10 col-sm-10">
+                    <div class="input-group" style="margin-bottom:5px">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
+                        </div>
+                        <input type="text" class="form-control" id="TxtBuscarDocentesAsignados" placeholder="Buscar....">
+                    </div>
+                </div>
+                <div class="col-lg-1 col-md-2 col-sm-2">
+                    <button type="button" onclick="AllDocentesAsigandos()" style="margin-right:3px" class="btn mb-1 btn-block btn-outline-primary"><i class="fa fa-search"></i> </button>
+                </div>
+            </div>
+            <h4 class="form-section" style="margin-bottom:10px"><i class="fa fa-user"></i> Lista Docentes</h4>
+            <div id="Inicio" style="width:100%;padding:19% 0 19% 0">
+                <h1 class="text-muted text-center"><i class="fa fa-frown-o"></i> SIN SELECCION GESTIÓN</h1>
+            </div>
+            <div class="row" id="DocentesHtml">
+                <div class="col-xl-3 col-sm-6 col-lg-4 col-12"><div class="cardCarCustom card border-danger mb-3"><div class="card-body" style="padding:0.1rem"><h4 class="card-title" style="text-align:center;margin-bottom: 5px"><i class="fa fa-user-times"></i> (Sin Docente)</h4></div><h5 class="text-primary" style="text-align:left;margin:2px 0 5px 0"><i class="fa fa-chevron-right"></i> Tarde</h5><ul class="list-group list-group-flush"><li class="list-group-item" style="padding:0.3rem;font-size:12px"><span style="padding:3px;font-size:11px" class="badge badge-pill bg-blue float-right">0 </span><i class="fa fa-graduation-cap"></i> Estudiantes</li></ul><div class="row"><div class="col-6"><div style="margin: 5px 0 0px" class="card-subtitle line-on-side text-muted text-center font-small-3 mx-1"><span>Ambiente</span></div><hr style="margin: 0px 0px 3px 0px "><div class="card-subtitle line-on-side text-muted text-center font-small-3 mx-1"><span>Capacidad</span></div></div><div class="col-6"><div style="margin: 5px 0 0px" class="card-subtitle line-on-side text-muted text-center font-small-3 mx-1"><span>B-10</span></div><hr style="margin: 0px 0px 3px 0px "><div class="card-subtitle line-on-side text-muted text-center font-small-3 mx-1"><span>3</span></div></div></div><h5 class="text-primary" style="text-align:left;margin:2px 0 5px 0"><i class="fa fa-chevron-right"></i> ASISTENTE</h5><ul class="list-group list-group-flush"><li class="list-group-item" style="padding:0.3rem;font-size:12px"><i class="fa fa-user-times"></i> (Sin Asistente)</li></ul><div style="margin-top:8px" class="footer"><span class="float-left text-danger"><b style="font-size: 15px">/2/</b></span><span class="tags float-right"><button type="button" onclick="AgregarDocentes(7)" style="margin-right:3px" class="btn mb-1 btn-outline-primary btn-sm"><i class="fa fa-user-plus"></i></button></span></div></div></div>
+                <div class="col-xl-3 col-sm-6 col-lg-4 col-12"><div class="cardCarCustom card border-primary mb-3"><div class="card-body" style="padding:0.1rem"><h4 class="card-title" style="text-align:center;margin-bottom: 5px"><i class="fa fa-user"></i> Arturo Merio Noct</h4></div><h5 class="text-primary" style="text-align:left;margin:2px 0 5px 0"><i class="fa fa-chevron-right"></i> Mañana</h5><ul class="list-group list-group-flush"><li class="list-group-item" style="padding:0.3rem;font-size:12px"><span style="padding:3px;font-size:11px" class="badge badge-pill bg-blue float-right">2 </span><i class="fa fa-graduation-cap"></i> Estudiantes</li></ul><div class="row"><div class="col-6"><div style="margin: 5px 0 0px" class="card-subtitle line-on-side text-muted text-center font-small-3 mx-1"><span>Ambiente</span></div><hr style="margin: 0px 0px 3px 0px "><div class="card-subtitle line-on-side text-muted text-center font-small-3 mx-1"><span>Capacidad</span></div></div><div class="col-6"><div style="margin: 5px 0 0px" class="card-subtitle line-on-side text-muted text-center font-small-3 mx-1"><span>A-10</span></div><hr style="margin: 0px 0px 3px 0px "><div class="card-subtitle line-on-side text-muted text-center font-small-3 mx-1"><span>2</span></div></div></div><h5 class="text-primary" style="text-align:left;margin:2px 0 5px 0"><i class="fa fa-chevron-right"></i> ASISTENTE</h5><ul class="list-group list-group-flush"><li class="list-group-item" style="padding:0.3rem;font-size:12px"><i class="fa fa-user"></i> Oscar Rios Acte</li></ul><div style="margin-top:8px" class="footer"><span class="float-left text-info"><b style="font-size: 15px">/3/</b></span><span class="tags float-right"><button type="button" onclick="ModificarAsignacion(1)" style="margin-right:3px" class="btn mb-1 btn-outline-primary btn-sm"><i class="fa fa-pencil"></i></button><button type="button" onclick="EliminarAsigDocente(1)" class="btn mb-1 btn-outline-danger btn-sm"><i class="fa fa-bitbucket"></i></button></span></div></div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Modal_Asigancion" tabindex="-1" role="dialog" style="overflow-y:scroll">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><span id="TituloModalAsignacion">.</span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <label>Docente</label>
+                <input type="hidden" id="IdDetApertura" value="0" />
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
+                    </div>
+                    <input type="text" class="form-control" id="TxtParametroDocente" onkeyup="BuscarDocente()" placeholder="Buscar....">
+                </div>
+                <div id="ListarDocenteAsig" style="position: absolute; z-index: 10; width: 95%;background-color:transparent" class="list-group"></div>
+
+                <div class="containerCustom table-responsive">
+                    <table class='table table-hover table-sm' style='font-size:12px;margin-top:5px'>
+                        <thead>
+                            <tr style="background-color:#17a2b8;border-color:#17a2b8;color:white">
+                                <th width='1px'>Nº</th>
+                                <th>Nombre</th>
+                                <th>Apellido Paterno</th>
+                                <th>Apellido Materno</th>
+                                <th>Rol</th>
+                                <th width='1px'></th>
+                            </tr>
+                        </thead>
+                        <tbody id="DocentesAasignarTableHtml"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="Guardar()">Guardar</button>                
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Modal_AsignarTipoDocente" tabindex="-1" role="dialog" style="overflow-y:scroll">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detalle Ambiente</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="_IdPerfilUsuario" />
+                <input type="hidden" id="_IdPersona" />
+                <input type="hidden" id="_Nombres" />
+                <input type="hidden" id="_ApPaterno" />
+                <input type="hidden" id="_ApMaterno" />
+                <label>Seleccionar tipo docente:</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-university" aria-hidden="true"></i></span>
+                    </div>
+                    <select id="IdTipoDocente" class="form-control">
+                        <option value="0">Selecciones un valor</option>
+                        <option value="Titular">Titular</option>
+                        <option value="Asistente">Asistente</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="AsignarDocente()">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        EstadoModificar = false;
+        var ArrayDocentes = [];
+        var ArrayDocentesAsignacion = [];
+        ListarGetiones();
+        function ListarGetiones() {
+            $.getJSON('@Url.Action("GetGetiones","AsignaDocente")', null, function (O) {
+                console.log(O)
+                $('#Gestion').empty();
+                $('#Gestion').append("<option value='0'>Select Gestion</option>");
+                O.forEach((value, i) => {
+                    $('#Gestion').append("<option value='" + value + "'>" + value + "</option>");
+                });
+            });
+        }
+        function AllDocentesAsigandos() {            
+            $('#DocentesHtml').empty();
+            if ($('#Gestion').val() != 0) {
+                $('#Inicio').hide();
+                $.getJSON('@Url.Action("AllDocentesAsignados","AsignaDocente")', { Gestion: $('#Gestion').val(), TxtBuscarDocentesAsignados: $('#TxtBuscarDocentesAsignados').val() }, function (O) {
+                    console.log(O)
+                    var Html = "";
+                    ArrayDocentesAsignacion = O.Lst;
+                    O.Padre.forEach((valuePadre, iPadre) => {
+                        Html += "<div class='col-xl-3 col-sm-6 col-lg-4 col-12'><div class='cardCarCustom card border-" + ((valuePadre.DocTipoTitular) ? "primary" : "danger") + " mb-3'><div class='card-body' style='padding:0.1rem'>";
+                        if (valuePadre.DocTipoTitular) {
+                            O.DocTitular.forEach((valueTitular, i) => {
+                                if (valuePadre.IdDetApertura == valueTitular.IdDetApertura) {
+                                    Html += "<h4 class='card-title' style='text-align:center;margin-bottom: 5px'><i class='fa fa-user'></i> " + valueTitular.Nombres + " " + valueTitular.ApPaterno + " " + valueTitular.ApMaterno + "</h4>";
+                                }
+                            });
+                        } else {
+                            Html += "<h4 class='card-title' style='text-align:center;margin-bottom: 5px'><i class='fa fa-user-times'></i> (Sin Docente)</h4>";
+                        }
+                        Html += "</div><h5 class='text-primary' style='text-align:left;margin:2px 0 5px 0'><i class='fa fa-chevron-right'></i> " + valuePadre.Turno + "</h5><ul class='list-group list-group-flush'><li class='list-group-item' style='padding:0.3rem;font-size:12px'><span style='padding:3px;font-size:11px' class='badge badge-pill bg-blue float-right'>" + valuePadre.Estudiantes + " </span><i class='fa fa-graduation-cap'></i> Estudiantes</li></ul><div class='row'><div class='col-6'><div style='margin: 5px 0 0px' class='card-subtitle line-on-side text-muted text-center font-small-3 mx-1'><span>Ambiente</span></div><hr style='margin: 0px 0px 3px 0px '/><div class='card-subtitle line-on-side text-muted text-center font-small-3 mx-1'><span>Capacidad</span></div></div><div class='col-6'><div style='margin: 5px 0 0px' class='card-subtitle line-on-side text-muted text-center font-small-3 mx-1'><span>" + valuePadre.Ambiente + "</span></div><hr style='margin: 0px 0px 3px 0px ' /><div class='card-subtitle line-on-side text-muted text-center font-small-3 mx-1'><span>" + valuePadre.Capacidad + "</span></div></div></div><h5 class='text-primary' style='text-align:left;margin:2px 0 5px 0'><i class='fa fa-chevron-right'></i> ASISTENTE</h5><ul class='list-group list-group-flush'>";
+                        if (valuePadre.DocTipoAsistente) {
+                            O.DocAsistentes.forEach((valueAsistente, i) => {
+                                if (valuePadre.IdDetApertura == valueAsistente.IdDetApertura) {
+                                    //con asistentes
+                                    Html += "<li class='list-group-item' style='padding:0.3rem;font-size:12px'><i class='fa fa-user'></i> " + valueAsistente.Nombres + " " + valueAsistente.ApPaterno + " " + valueAsistente.ApMaterno + "</li>";
+                                }
+                            });
+                        } else {
+                            //sin asistente
+                            Html += "<li class='list-group-item' style='padding:0.3rem;font-size:12px'><i class='fa fa-user-times'></i> (Sin Asistente)</li>";
+                        }
+                        Html += "</ul><div style='margin-top:8px' class='footer'><span class='float-left " + ((valuePadre.DocTipoTitular) ? "text-info" : "text-danger") + "'><b style='font-size: 15px'>/" + (iPadre + 1) + "/</b></span><span class='tags float-right'>" + ((valuePadre.DocTipoTitular) ? "<button type='button' onclick='ModificarAsignacion(" + valuePadre.IdDetApertura + ")' style='margin-right:3px' class='btn mb-1 btn-outline-primary btn-sm'><i class='fa fa-pencil'></i></button><button type='button' onclick='EliminarAsigDocente(" + valuePadre.IdDetApertura + ")' class='btn mb-1 btn-outline-danger btn-sm'><i class='fa fa-bitbucket'></i></button>" : "<button type='button' onclick='AgregarDocentes(" + valuePadre.IdDetApertura + ")' style='margin-right:3px' class='btn mb-1 btn-outline-primary btn-sm'><i class='fa fa-user-plus'></i></button>") + "</span></div></div></div>";
+                    });
+
+                    //ArrayDocentesAsignacion.forEach((value, i) => {
+                    //    Html += "<div class='col-xl-3 col-sm-6 col-lg-4 col-12'><div class='cardCarCustom card border-primary mb-3'><div class='card-body' style='padding:0.1rem'><h4 class='card-title' style='text-align:center;margin-bottom: 5px'><i class='fa fa-user'></i>" + ((value.DocenteTitular == null) ? " Sin Docente" : " " + value.DocenteTitular.Nombres + " " + value.DocenteTitular.ApPaterno + " " + value.DocenteTitular.ApMaterno + "") + "</h4></div><h5 class='text-primary' style='text-align:left;margin:2px 0 5px 0'><i class='fa fa-chevron-right'></i> " + value.Turno + "</h5><ul class='list-group list-group-flush'><li class='list-group-item' style='padding:0.3rem;font-size:12px'><span style='padding:3px;font-size:11px' class='badge badge-pill bg-blue float-right'>" + value.Estudiantes + " </span><i class='fa fa-graduation-cap'></i> Estudiantes</li></ul><div class='row'><div class='col-6'><div style='margin: 5px 0 0px' class='card-subtitle line-on-side text-muted text-center font-small-3 mx-1'><span>Ambiente</span></div><hr style='margin: 0px 0px 3px 0px ' /><div class='card-subtitle line-on-side text-muted text-center font-small-3 mx-1'><span>Capacidad</span></div></div><div class='col-6'><div style='margin: 5px 0 0px' class='card-subtitle line-on-side text-muted text-center font-small-3 mx-1'><span>" + value.Ambiente + "</span></div><hr style='margin: 0px 0px 3px 0px ' /><div class='card-subtitle line-on-side text-muted text-center font-small-3 mx-1'><span>" + value.Capacidad + "</span></div></div></div><h5 class='text-primary' style='text-align:left;margin:2px 0 5px 0'><i class='fa fa-chevron-right'></i> ASISTENTE</h5><ul class='list-group list-group-flush'>";
+                    //    if (value.DocenteAsistente.length != 0) {
+                    //        value.DocenteAsistente.forEach((value, i) => {
+                    //            Html += "<li class='list-group-item' style='padding:0.3rem;font-size:12px'><i class='fa fa-user'></i> " + value.Nombres + " " + value.ApPaterno + " " + value.ApMaterno + "</li>";
+                    //        });
+                    //    } else {
+                    //        Html += "<li class='list-group-item' style='padding:0.3rem;font-size:12px'><i class='fa fa-user'></i> Sin Asistente</li>";
+                    //    }
+                    //    Html += "</ul><div style='margin-top:8px' class='footer'><span class='tags float-right'>" + ((value.DocFueAsigando) ? "<button type='button' onclick='ModificarAsignacion(" + i + ")' style='margin-right:3px' class='btn mb-1 btn-outline-primary btn-sm'><i class='fa fa-pencil'></i></button><button type='button' onclick='EliminarAsigDocente(" + value.IdDetApertura + ")' class='btn mb-1 btn-outline-danger btn-sm'><i class='fa fa-bitbucket'></i></button>" : "<button type='button' onclick='AgregarDocentes(" + value.IdDetApertura + ")' style='margin-right:3px' class='btn mb-1 btn-outline-primary btn-sm'><i class='fa fa-plus'></i></button>") + "</span></div></div></div>";
+                    //});
+                    $('#DocentesHtml').append(Html);
+                });
+            } else {
+                toastr.warning('Debe seleccionar una gestion');
+                $('#Inicio').show();
+            }
+        }
+        function AgregarDocentes(IdDetApertura) {
+            if ($('#Gestion').val() != 0) {
+                LimpiarDatos();
+                $('#IdDetApertura').val(IdDetApertura);
+                $('#TituloModalAsignacion').html("Nueva Asignacion");
+                $('#Modal_Asigancion').modal('show');
+            } else {
+                toastr.warning('Debe seleccionar el campo Apertura')
+            }
+        }
+        function BuscarDocente() {
+            var Obj = { TxtParametro: $('#TxtParametroDocente').val() };
+            $('#ListarDocenteAsig').empty();
+            $.getJSON('@Url.Action("BuscarDocente", "AsignaDocente")', Obj, function (O) {
+                if (O != null) {
+                    O.forEach(value => {
+                        $('#ListarDocenteAsig').append("<a style='text-decoration: none' onclick='SeleccionDocente(" + value.IdPerfilUsuario + "," + value.IdPersona + ",\"" + value.Nombres + "\",\"" + value.ApPaterno + "\",\"" + value.ApMaterno + "\",\"" + value.CI + "\")' class='list-group-item' ><div style='display: inline-block; width: 100%'><i class='fa fa-user-o' style='margin-right: 5px'></i>" + value.Nombres + " " + value.ApPaterno + " " + value.ApMaterno + " " + value.CI + "</div></a>");
+                    });
+                }
+            });
+        }
+        function SeleccionDocente(IdPerfilUsuario, IdPersona, Nombres, ApPaterno, ApMaterno) {
+            var Obj = {
+                IdPersona: IdPersona,
+                IdDetApertura: $('#IdDetApertura').val()
+            };
+            $.getJSON('@Url.Action("VerificarSelecinado","AsignaDocente")', Obj, function (O) {
+                if (!O) {
+                    if (!VerificarSiDocenteAsignado(IdPersona)) {
+                        $('#Modal_AsignarTipoDocente').modal('show');
+                        $('#_IdPerfilUsuario').val(IdPerfilUsuario);
+                        $('#_IdPersona').val(IdPersona);
+                        $('#_Nombres').val(Nombres);
+                        $('#_ApPaterno').val(ApPaterno);
+                        $('#_ApMaterno').val(ApMaterno);
+                        $('#TxtParametroDocente').val("");
+                        $('#ListarDocenteAsig').empty();
+                    } else {
+                        toastr.warning("La persona ya fue seleccionada");
+                    }
+                } else {
+                    toastr.warning("El Docente se encuentra asignado en el mismo turno");
+                }
+            });
+        }
+        function VerificarSiDocenteAsignado(IdPersona) {
+            var Estado = false;
+            for (var i = 0; i < ArrayDocentes.length; i++) {
+                if (ArrayDocentes[i].IdPersona == IdPersona && ArrayDocentes[i].Estado == true) {
+                    Estado = true;
+                    break;
+                }
+            }
+            return Estado;
+        }
+        function AsignarDocente() {
+            if ($('#IdTipoDocente').val() != 0) {
+                if (!VerificarSiHayDocenteAsignadoConElTipoTitular($('#IdTipoDocente').val())) {
+                    ArrayDocentes.push({
+                        IdDocAsis: 0,
+                        Tipo: $('#IdTipoDocente').val(),
+                        IdPerfilUsuario: $('#_IdPerfilUsuario').val(),
+                        IdPersona: $('#_IdPersona').val(),
+                        Nombres: $('#_Nombres').val(),
+                        ApPaterno: $('#_ApPaterno').val(),
+                        ApMaterno: $('#_ApMaterno').val(),
+                        Estado: true
+                    });
+                    $('#IdTipoDocente').val(0);
+                    $('#Modal_AsignarTipoDocente').modal('hide');
+                    ListarDocentesAasignarTableHtml();
+                } else {
+                    toastr.warning('Hay un docente asignado con el rol de Titular')
+                }
+            } else {
+                toastr.warning("Debe seleccionar tipo de Docente")
+            }
+        }
+        function VerificarSiHayDocenteAsignadoConElTipoTitular(TipoDocente) {
+            var Estado = false;
+            var d = (TipoDocente == 'Titular') ? true : false;
+            if (d) {
+                for (var i = 0; i < ArrayDocentes.length; i++) {
+                    if (ArrayDocentes[i].Tipo == TipoDocente && ArrayDocentes[i].Estado == true) {
+                        Estado = true;
+                        break;
+                    }
+                }
+            }
+            return Estado;
+        }
+        function ListarDocentesAasignarTableHtml() {
+            $("#DocentesAasignarTableHtml").empty();
+            ArrayDocentes.forEach((value, i) => {
+                if (value.Estado) {
+                    $("#DocentesAasignarTableHtml").append("<tr><td>" + (i + 1) + "</td><td>" + value.Nombres + "</td><td>" + value.ApPaterno + "</td><td>" + value.ApMaterno + "</td><td>" + value.Tipo + "</td><td><button class='btn btn-outline-danger btn-sm' onclick='EliminarDocenteAasignar(" + i + ")'><i class='fa fa-close'></i></button></td></tr>");
+                }
+            });
+        }
+        function EliminarDocenteAasignar(i) {
+            var o = ArrayDocentes[i].IdDetApertura;
+            if (o == 0) {
+                ArrayDocentes.splice(i, 1);
+            } else {
+                ArrayDocentes[i].Estado = false;
+            }
+            ListarDocentesAasignarTableHtml();
+            console.log(ArrayDocentes)
+        }
+        function LimpiarDatos() {
+            $('#IdDetApertura').val(0)
+            $('#TxtParametroDocente').val("");
+            $('#ListarDocenteAsig').empty();
+
+            $('#_IdPerfilUsuario').val(0);
+            $('#_IdPersona').val(0);
+            $('#_Nombres').val("");
+            $('#_ApPaterno').val("");
+            $('#_ApMaterno').val("");
+            ArrayDocentes.length = 0;
+            ListarDocentesAasignarTableHtml();
+        }
+        function ModificarAsignacion(IdDetApertura) {
+            LimpiarDatos();
+            $('#IdDetApertura').val(IdDetApertura);
+            console.log(IdDetApertura)
+            $('#TituloModalAsignacion').html("Modificar Asignacion");
+            $('#Modal_Asigancion').modal('show');
+            ArrayDocentesAsignacion.forEach((value, i) => {
+                if (IdDetApertura == value.IdDetApertura) {
+                    ArrayDocentes.push({
+                        IdDocAsis: value.IdDocAsis,
+                        Tipo: value.Tipo,
+                        IdPerfilUsuario: 0,
+                        IdPersona: value.IdPersona,
+                        Nombres: value.Nombres,
+                        ApPaterno: value.ApPaterno,
+                        ApMaterno: value.ApMaterno,
+                        Estado: true
+                    });
+                }
+            });
+            ListarDocentesAasignarTableHtml();
+        }
+        function EliminarAsigDocente(IdDetApertura) {
+            $.getJSON('@Url.Action("EliminarAsigDocente","AsignaDocente")', { IdDetApertura: IdDetApertura }, function (O) {
+                if (O) {
+                    toastr.success("El registro se elimino corectamente");
+                    AllDocentesAsigandos();
+                } else {
+                    toastr.error("Ocurio un error al eliminar");
+                }
+            });
+        }
+        function Guardar() {
+            var Obj = {
+                DocentesAsignados: ArrayDocentes,
+                IdDetApertura: $('#IdDetApertura').val()
+            };
+            $.ajax({
+                url: '@Url.Action("Guardar","AsignaDocente")',
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify(Obj),
+                success: function (O) {
+                    if (O.responce) {
+                        AllDocentesAsigandos();
+                        LimpiarDatos();
+                        $('#Modal_Asigancion').modal('hide');
+                    };
+                    MostarInfSave(O.StatusSave);
+                }
+            });
+        }
+    </script>
+}

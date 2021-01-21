@@ -1,0 +1,710 @@
+﻿@{
+    ViewBag.Title = "InicioPersona";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-2">
+    <h4>Módulo Persona<span style="font-size:12px;color:#808080"> Arco iris Tarija</span></h4>
+    <div class="card mb-3 m-1">
+        <div class="row">
+            <div class="col-sm-12 col-lg-6 col-md-12">
+                <div class="col-sm">
+                    <h4 class="form-section"><i class="fa fa-user"></i> Persona</h4>
+                    <button type="button" onclick="Nuevo()" class="btn btn-outline-primary btn-block"><i class="fa fa-plus"></i><span style="margin-left:5px">Nuevo Registro</span> </button>
+                    <label>Rol</label>
+                    <select id="Rol" disabled onchange="RolPersona()" class="form-control"></select>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <input type="hidden" id="IdPersona" value="0" />
+                            <input type="hidden" id="IdPMTH" value="0" />
+                            <label>Nombre</label>
+                            <input type="text" disabled class="form-control" placeholder="Nombre" id="Nombre" />
+                            <label>Apellido Paterno</label>
+                            <input type="text" disabled class="form-control" placeholder="Apellido Paterno" id="APaterno" />
+                            <label>Apellido Materno</label>
+                            <input type="text" disabled class="form-control" placeholder="Apellido Materno" id="Amaterno" />
+                            <label>Ci</label>
+                            <input type="text" disabled class="form-control" placeholder="Ci" id="Ci" />
+
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <label>Fecha Nacimiento</label>
+                            <input type="date" disabled class="form-control" placeholder="Fecha Nacimiento" id="FechaNacimineto" />
+                            <label>Sexo</label>
+                            <select id="Sexo" disabled class="form-control">
+                                <option value="M">Masculino</option>
+                                <option value="F">Femenino</option>
+                            </select>
+                            <label>Telefono</label>
+                            <input type="text" disabled class="form-control" placeholder="Telefono" id="Telefono" />
+                            <label>Celular</label>
+                            <input type="text" disabled class="form-control" placeholder="Celular" id="Celular" />
+                        </div>
+                    </div>
+                    <div id="CorreoHtml">
+                        <label>Correo</label>
+                        <input type="text" disabled class="form-control" placeholder="Correo" id="Correo" />
+                    </div>
+                    <div id="Estudiante">
+                        <label>Etnia</label>
+                        <input type="text" disabled class="form-control" placeholder="Etnia" id="Etnia" />
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6">
+                                <label>Nº Oficialia</label>
+                                <input type="text" disabled class="form-control" placeholder="Nº Oficialia" id="NOficialia" />
+                                <label>Nº Partida</label>
+                                <input type="text" disabled class="form-control" placeholder="Nº Partida" id="NPartida" />
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <label>Nº Libro</label>
+                                <input type="text" disabled class="form-control" placeholder="Nº Libro" id="NLibro" />
+                                <label>Nº Folio</label>
+                                <input type="text" disabled class="form-control" placeholder="Nº Folio" id="NFolio" />
+                            </div>
+                        </div>
+                        <label>¿Conquien Vive?</label>
+                        <select id="ConquiviveEstudiante" disabled onchange="ConQuienViveEstudianteSelect()" class="form-control">
+                            <option value="0">Select Tipo</option>
+                            <option value="Solo">Solo</option>
+                            <option value="PadreMadre">Padre, Madre</option>
+                            <option value="TutorTutora">Tutor, Tutora</option>
+                        </select>
+
+                        @*<select id="Conquivive" onchange="ActivarDesactivarBuscadorApoderado()" disabled class="form-control">
+                                <option value="0">All</option>
+                                <option value="Solo">Solo</option>
+                                <option value="Padre">Padre</option>
+                                <option value="Madre">Madre</option>
+                                <option value="Tutor">Tutor</option>
+                                <option value="Tutora">Tutora</option>
+                            </select>*@
+                    </div>
+                    <div id="ParentescoEstudianteHtml" style="margin-top:5px">
+                        <label>¿Cual es su parentesco con el estudiante?</label>
+                        <textarea id="ParentescoConElEstudiante" class="form-control"></textarea>
+                    </div>
+                    <div id="BuscarApoderado">
+                        <label>Padre, Madre o tutor</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
+                            </div>
+                            <input type="text" class="form-control" id="TxtParametroApoderado" onkeyup="BuscarApoderado()" placeholder="Buscar....">
+                        </div>
+                        <div id="ListarPoderados" style="position: absolute; z-index: 10; width: 95%" class="list-group"></div>
+
+                        <div class="containerCustom table-responsive">
+                            <table class='table table-hover table-sm' style='font-size:12px;margin-top:5px;margin-bottom:0px'>
+                                <thead>
+                                    <tr style="background-color:#17a2b8;border-color:#17a2b8;color:white">
+                                        <th width='1px'>Nº</th>
+                                        <th>Nombre</th>
+                                        <th>Apellido Paterno</th>
+                                        <th>Apellido Materno</th>
+                                        <th>Ci</th>
+                                        <th>Tipo PMT</th>
+                                        <th width='1px'></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="TableApoderado"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="ApoderadoHtml">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6">
+                                <label>Ocupacion Laboral</label>
+                                <input type="text" disabled class="form-control" placeholder="Ocupacion Laboral" id="OcupacionLaboral" />
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <label>Grado Instruccion alcanzado</label>
+                                <input type="text" disabled class="form-control" placeholder="Grado Instruccion alcanzado" id="GradoInst" />
+                            </div>
+                        </div>
+                    </div>
+                    <div id="UsuarioHtml">
+                        <h4 class="form-section"><i class="fa fa-user-circle-o"></i> Usuario</h4>
+                        <div class="row">
+                            <div class="col-6">
+                                <label>Usuario</label>
+                                <input type="text" disabled class="form-control" placeholder="Usuario" id="Usuario" />
+                            </div>
+                            <div class="col-6">
+                                <label>Contraseña</label>
+                                <input type="password" disabled class="form-control" placeholder="Contraseña" id="Contraseña" />
+                                <div id="ActivatePassword">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" onclick="ActiPassword()" class="custom-control-input" id="ActivarPassword">
+                                        <label class="custom-control-label" for="ActivarPassword">Password</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <label class="text-center" style="margin:5px 0 0 0">Rol extra</label>
+                        <text class="form-control" style="height:auto" id="RolExtra">
+                            <div style='width:100%;padding:2px 0 2px 0'>
+                                <h6 class='text-muted text-center'>Seleccione el rol principal</h6>
+                            </div>
+                        </text>
+                    </div>
+                    <hr style="margin-bottom:2px" />
+                    <div class="row" style="margin-top:8px">
+                        <div class="col-6">
+                            <button type="button" class="btn btn-secondary btn-block" style="margin-bottom:10px" onclick="LimpiarDatos()">Cancelar</button>
+                        </div>
+                        <div class="col-6">
+                            <button type="button" disabled id="BtnGuardar" class="btn btn-success btn-block" style="margin-bottom:10px" onclick="Guardar()">Guardar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-lg-6 col-md-12">
+                <div class="col-sm">
+                    <h4 class="form-section"><i class="fa fa-users"></i> Lista Personas</h4>
+                    @*<div class="contendor-Loading">
+                            <div style="width: 3rem; height: 3rem;" class="Loading spinner-grow text-secondary" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>*@
+                    <div class="row" style="margin-bottom:5px">
+
+                        <div class="col-lg-10 col-md-10 col-sm-10">
+                            <div class="input-group" style="margin-bottom:5px">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
+                                </div>
+                                <input type="text" class="form-control" id="TxtParametroPersona" placeholder="Buscar por Ci..." aria-label="Recipient's username" aria-describedby="basic-addon2">
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <button type="button" onclick='ListarPersonas(1,1)' style="margin-right:3px" class="btn mb-1 btn-block btn-outline-primary"><i class="fa fa-search"></i> </button>
+                        </div>
+                    </div>
+                    <div class="containerCustom table-responsive">
+                        <table class='table table-hover table-sm' style='font-size:12px;'>
+                            <thead>
+                                <tr style="background-color:#17a2b8;border-color:#17a2b8;color:white">
+                                    <th width='1px'>Nº</th>
+                                    <th>Nombre</th>
+                                    <th>A. Paterno</th>
+                                    <th>A. Materno</th>
+                                    <th>Ci</th>
+                                    <th width='1px'></th>
+                                    <th width='1px'></th>
+                                </tr>
+                            </thead>
+                            <tbody id="PersonaTableHtml"></tbody>
+                        </table>
+                    </div>
+                    <div class="text-center">
+                        <ul class='pagination justify-content-end' id="PageInscriptos"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        var ArrayApoderado = [];
+        $('#Estudiante').hide();
+        $('#ApoderadoHtml').hide();
+        $('#BuscarApoderado').hide();
+        $('#ActivatePassword').hide();
+        $('#ParentescoEstudianteHtml').hide();
+        var EstadoModificar = false;
+        ListarRol();
+        ListarPersonas(1,1);
+        function ListarRol() {
+            $.getJSON('@Url.Action("AllRol","Persona")', null, function (O) {
+                if (O) {
+                    $('#Rol').empty();
+                    $('#Rol').append("<option value='0'>Select Opcion Rol</option >");
+                    O.forEach(value => {
+                        $('#Rol').append("<option value='" + value.IdRol + "'>" + value.Descripcion + "</option>");
+                    });
+                } else {
+                    toastr.error("Error no puedo eliminar el registro");
+                }
+            });
+        }
+        @*function ListarPersonas() {
+            $.getJSON('@Url.Action("AllPersonas", "Persona")', null, function (O) {
+                if (O) {
+                    $('#PersonaTableHtml').empty();
+                    O.forEach((value, i) => {
+                        $("#PersonaTableHtml").append("<tr><td>" + (i + 1) + "</td><td>" + value.Nombres + "</td><td>" + value.ApPaterno + "</td><td>" + value.ApMaterno + "</td><td>" + value.CI + "</td><td><button class='btn btn-outline-info btn-sm' onclick='ViewPersona(" + value.IdPersona + ",false)'><i class='fa fa-eye'></i></button></td><td><button class='btn btn-outline-secondary btn-sm' onclick='ViewPersona(" + value.IdPersona + ",true)'><i class='fa fa-pencil'></i></button></td></tr>");
+                    });
+                } else {
+                    toastr.error("Error no puedo eliminar el registro");
+                }
+            });
+        }*@
+        function ListarPersonas(pageIndex, is) {
+            //$('#ListaInscriptosHtml').empty();
+            $.getJSON('@Url.Action("AllPersonas","Persona")', { SearchValue: $('#TxtParametroPersona').val(), PageIndex: pageIndex }, function (O) {
+                var html = "";
+                $('#PersonaTableHtml').empty();
+                O.Lst.forEach((value, i) => {
+                    html += "<tr><td>" + (i + 1) + "</td><td>" + value.Nombres + "</td><td>" + value.ApPaterno + "</td><td>" + value.ApMaterno + "</td><td>" + value.Ci + "</td><td><button class='btn btn-outline-info btn-sm' onclick='ViewPersona(" + value.IdPersona + ",false)'><i class='fa fa-eye'></i></button></td><td><button class='btn btn-outline-secondary btn-sm' onclick='ViewPersona(" + value.IdPersona + ",true)'><i class='fa fa-pencil'></i></button></td></tr>";
+                });
+                $('#PersonaTableHtml').append(html);
+                var TotalPages = parseInt(O.TotalPages);
+                var rangeMin = 4;
+                var rangeMax = parseInt(TotalPages) == 1 ? 1 : rangeMin && parseInt(TotalPages) < rangeMin ? parseInt(TotalPages) : rangeMin;
+
+                const paging = { range: rangeMax, pages: TotalPages };
+                var PageArray = doPaging(pageIndex, paging);
+                var sTatusPrev = (pageIndex <= 1) ? true : false;
+                var sTatuslast = (pageIndex >= paging.pages) ? true : false;
+                var html = "<li class='page-item first " + (sTatusPrev ? "disabled" : "") + "'><a href='#' class='page-link' onclick='ListarPersonas(1, " + TotalPages + ")'>First</a></li><li class='page-item prev  " + (sTatusPrev ? "disabled" : "") + "'><a href='#' class='page-link' onclick='ListarPersonas(" + parseInt(pageIndex - 1) + ", " + TotalPages + ")'>Prev</a></li>";
+                PageArray.forEach((value, i) => {
+                    html += value.Status
+                        ?
+                        "<li class='page-item active'><a class='page-link' href='#' onclick='ListarPersonas(" + value.Page + ", " + TotalPages + ")'>" + value.Page + "</a></li>"
+                        :
+                        "<li class='page-item'><a class='page-link' href='#' onclick='ListarPersonas(" + value.Page + ", " + TotalPages + ")'>" + value.Page + "</a></li>";
+                });
+                html += "<li class='page-item next " + (sTatuslast ? "disabled" : "") + "'><a href='#' class='page-link' onclick='ListarPersonas(" + parseInt(pageIndex + 1) + ", " + TotalPages + ")'>Next</a></li><li class='page-item last " + (sTatuslast ? "disabled" : "") + "'><a href='#' class='page-link' onclick='ListarPersonas(" + paging.pages + ", " + TotalPages + ")'>Last</a></li>";
+                $('#PageInscriptos').html(html);
+            });
+        }
+        function doPaging(current, { range, pages, start = 1 }) {
+            const paging = [];
+            var i = Math.min(pages + start - range, Math.max(start, current - (range / 2 | 0)));
+            const end = i + range;
+            while (i < end) {
+                var infStatus = i === current ? true : false;
+                paging.push({ Page: i++, Status: infStatus });
+            };
+            return paging;
+        };
+        function RolPersona() {
+            $('#Contraseña').val("");
+            $("#Contraseña").prop("disabled", false);
+            $("#ActivarPassword").prop("checked", true);
+            $('#ActivatePassword').hide();
+            ActivarOpcionPersona();
+            AllRolExtra();
+        }
+        function AllRolExtra() {
+            $('#RolExtra').empty();
+            $.getJSON('@Url.Action("AllRolExtra", "Persona")', { IdRol: $('#Rol').val(), IdPersona: $('#IdPersona').val() }, function (O) {
+                var Html = "";
+                O.forEach((value, i) => {
+                    Html += "<div class='custom-control custom-checkbox' style='margin-bottom:10px'><input type='checkbox' " + ((value.Estado) ? "checked" : "") + " class='custom-control-input' id='" + value.IdRol + "Check_RolExtra' " + ((EstadoModificar) ? "" :"disabled")+" name='CheckRolExtra' value='" + value.IdRol + "_" + value.IdPerfilUsuario + "'><label class='custom-control-label' for='" + value.IdRol + "Check_RolExtra'>" + value.Descripcion + "</label></div>";
+                });
+                $('#RolExtra').html(Html);
+            });
+        }
+        function ActivarOpcionPersona() {
+            switch (parseInt($('#Rol').val())) {
+                case 4:
+                    $('#ApoderadoHtml').show();
+                    $('#Estudiante').hide();
+                    $('#UsuarioHtml').show();
+                    $('#BuscarApoderado').hide();
+                    $('#CorreoHtml').show();
+                    break;
+                case 5:
+                    $('#ApoderadoHtml').hide();
+                    $('#Estudiante').show();
+                    $('#UsuarioHtml').hide();
+                    $('#BuscarApoderado').show();
+                    $("#ActivarPassword").prop("checked", false);
+                    $("#Usuario").val("")
+                    $('#CorreoHtml').hide();
+                    $('#BuscarApoderado').hide();
+                    break;
+                default:
+                    $('#ApoderadoHtml').hide();
+                    $('#Estudiante').hide();
+                    $('#UsuarioHtml').show();
+                    $('#BuscarApoderado').hide();
+                    $('#CorreoHtml').show();
+                    break;
+            }
+        }
+        function ConQuienViveEstudianteSelect() {
+            ArrayApoderado.length = 0;
+            ListarApoderados();  
+            ConQuienViveEstudianteSelectTemp();
+        }
+        function CargarApoderados() {
+            ConQuienViveEstudianteSelectTemp();
+        }
+        function ConQuienViveEstudianteSelectTemp() {            
+            switch ($('#ConquiviveEstudiante').val()) {
+                case "0":
+                    $('#ParentescoEstudianteHtml').hide();
+                    $('#BuscarApoderado').hide();
+                    break;
+                case "Solo":
+                    $('#BuscarApoderado').hide();
+                    $('#ParentescoEstudianteHtml').hide();
+                    break;
+                case "PadreMadre":
+                    $('#BuscarApoderado').show();
+                    $('#ParentescoEstudianteHtml').hide();
+                    break;
+                case "TutorTutora":
+                    $('#BuscarApoderado').show();
+                    $('#ParentescoEstudianteHtml').show();
+                    break;
+                default:
+            }
+        }
+        //function ActivarDesactivarBuscadorApoderado() {
+        //    //if ($('#Conquivive').val() == 'Tutor') {
+        //    //    $('#ParentescoEstudiante').show();
+        //    //} else {
+        //    //    $('#ParentescoEstudiante').hide();
+        //    //}
+        //    var ValueSelect = $('#ConquiviveR').val();
+        //    //console.log('----Conquien vive')
+        //    //console.log(ValueSelect);
+        //    //otra forma de hacer
+        //    //var SelectValues = [];
+        //    //var item = $("#Conquivive > option").map(function () {
+        //    //    var opt = {};
+        //    //    opt[$(this).val()] = $(this).text();
+        //    //    return opt;
+        //    //}).get();
+        //    //for (var i = 0; i < item.length; i++) {
+        //    //    for (key in item[i]) {
+        //    //        var id = key;
+        //    //        var text = item[i][key];
+        //    //        SelectValues.push({ Id: id });
+        //    //        $('#Conquivive option[value="' + id + '"]').attr("disabled", true);
+        //    //    }
+        //    //}
+
+        //    $('#ConquiviveR option').each(function () {
+        //        //console.log(this.value);
+        //        if (this.value != 0) {
+        //            $(this).attr("disabled", true);
+        //        }
+        //    });
+        //    switch (ValueSelect) {
+        //        case '0':
+        //            $('#ConquiviveR option').each(function () {
+        //                $(this).attr("disabled", false);
+        //            });
+        //            $('#ParentescoEstudiante').hide();
+        //            $('#BuscarApoderado').hide();
+        //            break;
+        //        case 'Solo':
+        //            $('#ConquiviveR option').each(function () {
+        //                if (this.value == ValueSelect) {
+        //                    $(this).attr("disabled", false);
+        //                }
+        //            });
+        //            $('#BuscarApoderado').hide();
+        //            $('#ParentescoEstudiante').hide();
+
+        //            //ArrayApoderado.forEach((value, i) => {
+        //            //    var o = ArrayApoderado[i].IdPMTH;//IdPersona;
+        //            //    if (o == 0) {
+        //            //        ArrayApoderado.splice(i);
+        //            //    } else {
+        //            //        //ArrayApoderado[i].Estado = false;
+        //            //    }
+        //            //});
+        //            //ListarApoderados();
+        //            break;
+        //        case 'Padre':
+        //        case 'Madre':
+        //            $('#BuscarApoderado').show();
+        //            $('#ParentescoEstudiante').hide();
+        //            $('#ConquiviveR option[value="Padre"]').attr("disabled", false);
+        //            $('#ConquiviveR option[value="Madre"]').attr("disabled", false);
+        //            break;
+        //        case 'Tutor':
+        //        case 'Tutora':
+        //            $('#BuscarApoderado').show();
+        //            $('#ParentescoEstudiante').show();
+        //            $('#ConquiviveR option[value="Tutor"]').attr("disabled", false);
+        //            $('#ConquiviveR option[value="Tutora"]').attr("disabled", false);
+        //            break;
+        //        default:
+        //            $('#BuscarApoderado').show();
+        //            break;
+        //    }
+        //}
+        function ViewPersona(IdPersona, _EstadoModificar) {
+            EstadoModificar = _EstadoModificar;
+            disabledHtml();
+            if (_EstadoModificar) {
+                $("#Contraseña").prop("disabled", true);
+                $('#ActivatePassword').show();
+            } else {
+                $('#ActivatePassword').hide();
+            }            
+            $.getJSON('@Url.Action("GetPersonaData", "Persona")', { IdPersona: IdPersona }, function (O) {                
+                var Estado = true;
+                if (O.ConquienVive == "Padre" || O.ConquienVive == "Madre") {
+                    Estado = false;
+                    $('#ConquiviveEstudiante').val("PadreMadre");
+                } else if (O.ConquienVive == "Tutor" || O.ConquienVive == "Tutora") {
+                    Estado = false;
+                    $('#ConquiviveEstudiante').val("TutorTutora");
+                    $('#ParentescoConElEstudiante').val(O.lstApoderados[0].Parentesco);
+                }
+                if (Estado) {
+                    $('#ConquiviveEstudiante').val(O.ConquienVive);
+                }
+                
+                $("#Rol").val(O.IdRol);
+                $("#IdPersona").val(O.person.IdPersona);
+                $("#IdPMTH").val(O.IdPmth);
+                $("#Ci").val(O.person.Ci);
+                $("#APaterno").val(O.person.ApPaterno);
+                $("#Correo").val(O.person.Correo);
+                $("#Sexo").val(O.person.Sexo);
+                $("#Telefono").val(O.person.TelefonoFijo);
+                $("#Nombre").val(O.person.Nombres);
+                $("#Amaterno").val(O.person.ApMaterno);
+                $("#FechaNacimineto").val(O.person.FecNacimiento);
+                $("#Celular").val(O.person.Celular);
+                $("#Etnia").val(O.person.Etnia);
+                $("#NOficialia").val(O._cnacimiento.NumOficialia);
+                $("#NPartida").val(O._cnacimiento.NumPartida);
+                $("#NLibro").val(O._cnacimiento.NumLibro);
+                $("#NFolio").val(O._cnacimiento.NumFolio);
+                $("#OcupacionLaboral").val(O.person.OcupacionLab);
+                $("#GradoInst").val(O.person.GradoInst);
+                $("#Usuario").val(O.u.Login);
+                $("#Contraseña").val(O.u.Contraseña);
+                ArrayApoderado = O.lstApoderados;
+                ListarApoderados();
+                ActivarOpcionPersona();
+                AllRolExtra();
+                CargarApoderados();
+                //ActivarDesactivarBuscadorApoderado();
+            });
+        }
+        function ActiPassword() {
+            $("#Contraseña").prop("disabled", !JSON.parse($('#ActivarPassword').is(':checked')));
+        }
+        function BuscarApoderado() {
+            if ($('#ConquiviveEstudiante').val()!="0") {
+                if ($('#ConquiviveEstudiante').val() != "Solo") {
+                    var Obj = { TxtParametro: $('#TxtParametroApoderado').val() };
+                    $('#ListarPoderados').empty();
+                    $.getJSON('@Url.Action("BuscarApoderado", "Persona")', Obj, function (O) {
+                        if (O != null) {
+                            O.forEach(value => {
+                                $('#ListarPoderados').append("<a style='text-decoration: none;background-color:' onclick='AddApoderado(" + value.IdPersona + ",\"" + value.Nombres + "\",\"" + value.ApPaterno + "\",\"" + value.ApMaterno + "\",\"" + value.Ci + "\",\""+value.Sexo+"\")' class='list-group-item' ><div style='display: inline-block'><i class='fa fa-user-o' style='margin-right: 5px'></i>" + value.Nombres + " " + value.ApPaterno + " " + value.ApMaterno + " " + value.Ci + "</div></a>");
+                            });
+                        }
+                    });
+                } else {
+                    toastr.warning("debe seleccionar un apoderado");
+                }
+            } else {
+                toastr.warning("debe seleccionar Conquien Vive el estudiante");
+            }
+        }
+        function AddApoderado(IdPersona, Nombres, ApPaterno, ApMaterno, Ci, Sexo) {
+
+            var Obj = {
+                IdPMTH: 0,
+                IdPersona: IdPersona,
+                Nombres: Nombres,
+                ApPaterno: ApPaterno,
+                ApMaterno: ApMaterno,
+                Ci: Ci,
+                Tipo_PMT: ($('#ConquiviveEstudiante').val() == "PadreMadre") ? ((Sexo == "F") ? "Madre" : "Padre") : (($('#ConquiviveEstudiante').val() == "TutorTutora") ? ((Sexo == "F") ? "Tutora" : "Tutor"):""),
+                Estado: true
+            };
+            if (!VerificarSiExisteObjApoderado(Obj.IdPersona, Obj.Tipo_PMT)) {
+                ArrayApoderado.push(Obj);
+                $('#TxtParametroApoderado').val("")
+                $('#ListarPoderados').empty();
+                ListarApoderados();
+            } else {
+                toastr.warning('Existe un registro con el mismo nombre ó ya tiene un apoderado con las mismas caracteristicas');
+            }
+        }
+        function ListarApoderados() {
+            $('#TableApoderado').empty();
+            var Coun = 0;
+            ArrayApoderado.forEach((value, i) => {                
+                if (value.Estado) {
+                    Coun = Coun + 1;
+                    $('#TableApoderado').append("<tr><td>" + (Coun) + "</td><td>" + value.Nombres + "</td><td>" + value.ApPaterno + "</td><td>" + value.ApMaterno + "</td><td>" + value.Ci + "</td><td>" + value.Tipo_PMT + "</td><td>" + (EstadoModificar ? "<button class='btn btn-outline-danger btn-sm' onclick='EliminarApoderado(" + i + ")'><i class='fa fa-close'></i></button>" : "") + "</td></tr>");
+                }                    
+            });
+        }
+        function EliminarApoderado(i) {
+            var o = ArrayApoderado[i].IdPMTH;
+            if (o == 0) {
+                ArrayApoderado.splice(i, 1);
+            } else {
+                ArrayApoderado[i].Estado = false;
+            }
+            ListarApoderados();
+        }
+        function VerificarSiExisteObjApoderado(IdPersona, Tipo_PMT) {
+            var Estado = false;
+            for (var i = 0; i < ArrayApoderado.length; i++) {
+                if ((ArrayApoderado[i].IdPersona == IdPersona || ArrayApoderado[i].Tipo_PMT == Tipo_PMT) && ArrayApoderado[i].Estado == true) {
+                    Estado = true;
+                    break;
+                }
+            }
+            return Estado;
+        }
+        function disabledHtml() {
+            $("#Rol").prop("disabled", !EstadoModificar);
+            $("#Nombre").prop("disabled", !EstadoModificar);
+            $("#APaterno").prop("disabled", !EstadoModificar);
+            $("#Amaterno").prop("disabled", !EstadoModificar);
+            $("#Ci").prop("disabled", !EstadoModificar);
+            $("#FechaNacimineto").prop("disabled", !EstadoModificar);
+            $("#Domicilio").prop("disabled", !EstadoModificar);
+            $("#Celular").prop("disabled", !EstadoModificar);
+            $("#Telefono").prop("disabled", !EstadoModificar);
+            $("#Sexo").prop("disabled", !EstadoModificar);
+            $("#BtnGuardar").prop("disabled", !EstadoModificar);
+            $("#Correo").prop("disabled", !EstadoModificar);
+
+            $("#Etnia").prop("disabled", !EstadoModificar);
+            $("#NOficialia").prop("disabled", !EstadoModificar);
+            $("#NPartida").prop("disabled", !EstadoModificar);
+            $("#NLibro").prop("disabled", !EstadoModificar);
+            $("#NFolio").prop("disabled", !EstadoModificar);
+            $("#ConquiviveEstudiante").prop("disabled", !EstadoModificar);
+            $("#TxtParametroApoderado").prop("disabled", !EstadoModificar);
+            
+            $("#OcupacionLaboral").prop("disabled", !EstadoModificar);
+            $("#GradoInst").prop("disabled", !EstadoModificar);
+
+            $("#Usuario").prop("disabled", !EstadoModificar);
+            $("#Contraseña").prop("disabled", !EstadoModificar);
+
+            $('#ParentescoConElEstudiante').prop("disabled", !EstadoModificar);
+
+            //$("#Etnia").val("");
+            //$("#NOficialia").val("");
+            //$("#NPartida").val("");
+            //$("#NLibro").val("");
+            //$("#NFolio").val("");
+            ////$('#Conquivive').val("0");
+        }
+        function Nuevo() {
+            EstadoModificar = true;
+            disabledHtml();
+            LimpiarDatos();
+        }
+        @*function EliminarPersona(Id) {
+            $.getJSON('@Url.Action("Eliminar","Persona")', { Id: Id }, function (O) {
+                if (O) {
+                    toastr.success("El registro fue eliminado");
+                    ListarPersonas();
+                } else {
+                    toastr.error("Error no puedo eliminar el registro");
+                }
+            });
+        }*@
+        function LimpiarDatos() {
+            $("#Rol").val(0);
+            $("#IdPersona").val(0);
+            $("#IdPMTH").val(0);
+            $("#Ci").val("");
+            $("#APaterno").val("");
+            $("#Sexo").val("M");
+            $("#Telefono").val("");
+            $("#Nombre").val("");
+            $("#Amaterno").val("");
+            $("#FechaNacimineto").val("");
+            $("#Celular").val("");
+            $("#Etnia").val("");
+            $("#NOficialia").val("");
+            $("#NPartida").val("");
+            $("#NLibro").val("");
+            $("#NFolio").val("");
+            $("#Correo").val("");
+            //$('#Conquivive').val("0");
+            $('#TxtParametroApoderado').val("");
+            $('#ListarPoderados').val("");
+            $("#OcupacionLaboral").val("");
+            $("#GradoInst").val("");
+            $("#Usuario").val("");
+            $("#Contraseña").val("");
+            $("#ConquiviveEstudiante").val("0")
+            $('#ParentescoConElEstudiante').val("");
+            $("#ActivarPassword").prop("checked", false);
+            ActivarOpcionPersona();
+            $('#RolExtra').html("<div style='width:100%;padding:2px 0 2px 0'><h6 class='text-muted text-center'>Seleccione el rol principal</h6></div>")
+            ArrayApoderado.length = 0;
+            ListarApoderados();
+        }       
+        function Guardar() {
+            var ArrayPermisosExtras = [];
+            $("input[name=CheckRolExtra]").each(function () {
+                var dato = $(this).val().split('_');
+                ArrayPermisosExtras.push({ IdRol: dato[0], IdPerfilUsuario: dato[1], Estado: $(this).is(':checked')});
+            });
+            //console.log(ArrayPermisosExtras);
+            var Obj = {
+                IdRol: $("#Rol").val(),
+
+                IdPersona: $("#IdPersona").val(),
+                Ci: $("#Ci").val(),
+                Correo: $("#Correo").val(),
+                ApPaterno: $("#APaterno").val(),
+                Sexo: $("#Sexo").val(),
+                TelefonoFijo: $("#Telefono").val(),
+                Nombres: $("#Nombre").val(),
+                ApMaterno: $("#Amaterno").val(),
+                FechaNacimiento: $("#FechaNacimineto").val(),
+                Celular: $("#Celular").val(),
+                Etnia: $("#Etnia").val(),
+                OcupacionLab: $("#OcupacionLaboral").val(),
+                GradoInst: $("#GradoInst").val(),
+
+                IdPMTH: $('#IdPMTH').val(),
+
+                NumOficialia: $("#NOficialia").val(),
+                NumPartida: $("#NPartida").val(),
+                NumLibro: $("#NLibro").val(),
+                NumFolio: $("#NFolio").val(),
+
+                ArrayApoderado: ArrayApoderado,
+
+                Login: $("#Usuario").val(),
+                Contraseña: $("#Contraseña").val(),
+
+                EstadoPwd: $('#ActivarPassword').is(':checked'),
+                Parentesco: $('#ParentescoConElEstudiante').val(),
+                PermisoExtra: ArrayPermisosExtras
+            };
+            //console.log(Obj)
+            $.ajax({
+                url: '@Url.Action("Guardar","Persona")',
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify(Obj),
+                success: function (O) {
+                    if (O.responce) {
+                        EstadoModificar = false;
+                        disabledHtml();
+                        $('#Estudiante').hide();
+                        $('#ApoderadoHtml').hide();
+                        $('#BuscarApoderado').hide();
+                        $('#ParentescoEstudianteHtml').hide();
+                        $('#UsuarioHtml').show();
+                        LimpiarDatos();
+//                        $('#RolExtra').html("<div style='width:100%;padding:2px 0 2px 0'><h6 class='text-muted text-center'>Seleccione el rol principal</h6></div>")
+                        ListarPersonas(1,1);
+                    }
+                    MostarInfSave(O.StatusSave);
+                }
+            });
+        };
+    </script>
+}

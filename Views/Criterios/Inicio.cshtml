@@ -1,0 +1,329 @@
+﻿
+@{
+    ViewBag.Title = "Inicio";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-2">    
+    <h4>Módulo Criterios de Verificación<span style="font-size:12px;color:#808080"> Arco iris Tarija</span></h4>
+    <div class="card mb-3 m-1">
+        <div id="contenido" class="row">
+            <div class="col-sm-12 col-lg-6 col-md-12">
+                <div class="col-sm">
+                    <h4 class="form-section"><i class="fa fa-tasks"></i> Criterios</h4>
+                    <button type="button" onclick="Nuevo()" class="btn btn-outline-primary btn-block" style="margin-bottom:3px"><i class="fa fa-plus"></i><span style="margin-left:5px">Nuevo Registro</span> </button>
+                    <input type="hidden" id="IdCriterio" value="0" />
+                    <label>Gestion</label>
+                    <select id="Gestion" onchange="AllNivelGrado()" class="form-control" disabled>
+                    </select>
+                    <label>Nivel de Grado</label>
+                    <select class="form-control" disabled id="IdNivelGrado">
+                        <option value="0">Nivel Grado</option>
+                    </select>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Nombre Criterio</label>
+                                <input type="text" disabled class="form-control" id="DescripcionPadre" placeholder="Nombre Criterio" />
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Ponderación</label>
+                                <input type="number" disabled class="form-control" value="0" id="Ponderacion" placeholder="Ponderación" />
+                            </div>
+                        </div>
+                    </div>
+                    <h4 class="form-section"><i class="fa fa-tasks"></i> Actividades</h4>
+                    <button type="button" id="BtnActividad" disabled class="btn btn-primary btn-block" style="margin-bottom:10px" onclick="AgregarNuevaActividad()"> Agregar Actividades</button>
+                    <div>
+                        <table class='table table-hover table-sm' style='font-size:12px;'>
+                            <thead>
+                                <tr style="background-color:#17a2b8;border-color:#17a2b8;color:white">
+                                    <th>Nombre Actividad</th>
+                                    <th>Calificación</th>
+                                    <th width='1px'></th>
+                                    <th width='1px'></th>
+                                </tr>
+                            </thead>
+                            <tbody id="TableCriterioHtml"></tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <button type="button" class="btn btn-secondary btn-block" style="margin-bottom:10px" onclick="Cancelar()">Cancelar</button>
+                        </div>
+                        <div class="col-6">
+                            <button type="button" id="BtnGuardar" disabled class="btn btn-success btn-block" style="margin-bottom:10px" onclick="Guardar()">Guardar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-lg-6 col-md-12">
+                <div class="col-sm">
+                    <h4 class="form-section"><i class="fa fa-tasks"></i> Lista</h4>
+                    <label>Gestion</label>
+                    <select id="GestionLst" style="margin-bottom:8px" onchange="ListarCriterios()" class="form-control">
+                    </select>
+                    <div class="containerCustom table-responsive">
+                        <table class='table table-hover table-sm' style='font-size:12px;'>
+                            <thead>
+                                <tr style="background-color:#17a2b8;border-color:#17a2b8;color:white">
+                                    <th width='1px'>Nº</th>
+                                    <th>Nombre Criterio</th>
+                                    <th>Ponderación</th>
+                                    <th width='1px'></th>
+                                    <th width='1px'></th>
+                                    <th width='1px'></th>
+                                </tr>
+                            </thead>
+                            <tbody id="TableCriterios"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Modal_Actividades" tabindex="-1" role="dialog" style="overflow-y:scroll">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Actividad</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="IdActividad" value="0" hidden="hidden">
+                <input type="text" id="i" value="0" hidden="hidden">
+                <div class="form-group">
+                    <label>Descripcion</label>
+                    <input type="text" class="form-control" id="DescripcionHijo" placeholder="Descripción">
+                </div>
+                <div class="form-group">
+                    <label>Calificación</label>
+                    <input type="number" disabled class="form-control" id="Calificacion" value="0" placeholder="Calificación" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="AgregarActividades()">Agregar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        var ArrayActividades = [];
+        var EstadoModificar = false;
+        var EstadoModificarActividad = false;
+        $(document).ready(function () {
+            //AllAperturaModuloLista();
+            AllGesstionAperturadas();
+            setTimeout(function () {
+                ListarCriterios();
+            }, 1000);
+            //AllNivelGrado
+        });
+        function AllGesstionAperturadas() {
+            //$('#Gestion').empty();
+            //$('#GestionLst').empty();
+            //$('#Gestion').append("<option value='0'>Select Opcion</option>");
+            //$('#GestionLst').append("<option value='0'>Select Opcion</option>");
+            $.getJSON('@Url.Action("AllGestionAperturadas", "Criterios")', null, function (O) {                
+                O.forEach((value, i) => {
+                    $('#Gestion').html("<option value='" + value + "'>" + value + "</option>");
+                    $('#GestionLst').html("<option value='" + value + "'>" + value + "</option>");
+                });
+            });
+        }
+        @*function AllAperturaModuloLista() {
+            $('#GestionLst').empty();
+            //$('#GestionLst').append("<option value='0'>Select Opcion</option>");
+            $.getJSON('@Url.Action("AllGestionAperturadas", "Criterios")', null, function (O) {
+                console.log(O)
+                O.forEach((value, i) => {
+                    $('#GestionLst').append("<option value='" + value.Gestion + "'>" + value.Gestion + "</option>");
+                });
+            });
+        }*@
+        function AllNivelGrado() {
+            if ($('#Gestion').val() != 0) {
+                $('#IdNivelGrado').empty();
+                $('#IdNivelGrado').append("<option value='0'>Select Opcion</option>");
+                $.getJSON('@Url.Action("AllNivelGrado", "Criterios")', { Gestion: $('#Gestion').val() }, function (O) {
+                    O.forEach((value, i) => {
+                        $('#IdNivelGrado').append("<option value='" + value.IdNivelGrado + "'>" + value.Descripcion + "</option>");
+                    });
+                });
+            } else {
+                toastr.warning("Debe seleccionar una gestion válida");
+            }
+        }
+        function ListarCriterios() {
+            $("#TableCriterios").empty();
+            $.getJSON('@Url.Action("AllCriterioVerificacion","Criterios")', { Modulo: $('#GestionLst').val() }, function (O) {
+                O.forEach((value, i) => {
+                    $("#TableCriterios").append("<tr><td>" + (i + 1) + "</td><td>" + value.Descripcion + "</td><td>" + value.Ponderacion + "</td><td><button class='btn btn-outline-info btn-sm' onclick='VerDetalle(" + value.IdCriterio + ",false)'><i class='fa fa-eye'></i></button></td><td><button class='btn btn-outline-secondary btn-sm' onclick='VerDetalle(" + value.IdCriterio + ",true)'><i class='fa fa-pencil'></i></button></td><td><button class='btn btn-outline-danger btn-sm' onclick='EliminarCriterio(" + value.IdCriterio + ")'><i class='fa fa-bitbucket'></i></button></td></tr>");
+                });
+            });
+        };
+        function VerDetalle(IdCriterio, _EstadoModificar) {
+            EstadoModificar = _EstadoModificar;
+            disabledHtml();
+            $.getJSON('@Url.Action("GetDetalle","Criterios")', { IdCriterio: IdCriterio }, function (O) {
+                //console.log(O);
+                console.log(O.oCriterioVerificacion.IdNivelGrado)
+                $('#Gestion').val(O.Gestion);
+                AllNivelGrado();                
+                setTimeout(function () {
+                    $('#IdNivelGrado').val(O.oCriterioVerificacion.IdNivelGrado);
+                }, 1000);
+
+                $('#IdCriterio').val(O.oCriterioVerificacion.IdCriterio);
+                $('#DescripcionPadre').val(O.oCriterioVerificacion.Descripcion);
+                $('#Ponderacion').val(O.oCriterioVerificacion.Ponderacion);
+                ArrayActividades = O.lActividades;
+                ListarActividad();
+            });
+        }
+        function Nuevo() {
+            EstadoModificar = true;
+            disabledHtml();
+            LimpiarDatos();
+        }
+        function Cancelar() {
+            EstadoModificar = false;
+            disabledHtml();
+            LimpiarDatos();
+        }
+        function disabledHtml() {
+            $("#IdNivelGrado").prop("disabled", !EstadoModificar);
+            $("#DescripcionPadre").prop("disabled", !EstadoModificar);
+            $("#Ponderacion").prop("disabled", !EstadoModificar);
+            $("#BtnActividad").prop("disabled", !EstadoModificar);
+            $("#DescripcionHijo").prop("disabled", !EstadoModificar);
+            $("#Calificacion").prop("disabled", !EstadoModificar);
+            $('#Gestion').prop("disabled", !EstadoModificar);
+            $("#BtnGuardar").prop("disabled", !EstadoModificar);
+        }
+        function LimpiarDatos() {
+            //$('#Gestion').val(0);
+            $('#IdNivelGrado').html("<option value='0'>Select Opcion</option>");
+            $('#IdCriterio').val(0);
+            $('#DescripcionPadre').val("");
+            $('#Ponderacion').val(0);
+            LimpiarActividades();
+            ArrayActividades.length = 0;
+            ListarActividad();
+        }
+        function LimpiarActividades() {
+            $('#IdActividad').val(0);
+            $('#i').val(0);
+            $('#DescripcionHijo').val("");
+            $('#Calificacion').val(0);
+            EstadoModificarActividad = false;
+        }
+        function AgregarNuevaActividad() {
+            $('#Modal_Actividades').modal('show');
+            LimpiarActividades();
+        }
+        function AgregarActividades() {
+            if ($('#DescripcionHijo').val() != "") {
+                if (!EstadoModificarActividad) {
+                    var Obj = { IdActividad: 0, Descripcion: $('#DescripcionHijo').val(), Calificacion: $('#Calificacion').val(), Estado: true };
+                    if (!VerificarSiExisteObjActividad(Obj.Descripcion)) {
+                        ArrayActividades.push(Obj);
+                    } else {
+                        toastr.warning('Existe un registro con el mismo nombre');
+                    }
+                } else {
+                    ArrayActividades[$('#i').val()].Descripcion = $('#DescripcionHijo').val();
+                    ArrayActividades[$('#i').val()].Calificacion = $('#Calificacion').val();
+                }
+                ListarActividad();
+                $('#Modal_Actividades').modal('hide');
+                LimpiarActividades();
+            } else {
+                toastr.warning("El campo Descripcion no debe estar vacio");
+            }
+        }
+        function VerificarSiExisteObjActividad(Descripcion) {
+            var Estado = false;
+            for (var i = 0; i < ArrayActividades.length; i++) {
+                if (ArrayActividades[i].Descripcion == Descripcion && ArrayActividades[i].Estado == true) {
+                    Estado = true;
+                    break;
+                }
+            }
+            return Estado;
+        }
+        function ViewModificarActividad(i, IdActividad, Descripcion, Calificacion) {
+            $('#Modal_Actividades').modal('show');
+            $('#IdActividad').val(IdActividad);
+            $('#DescripcionHijo').val(Descripcion);
+            $("#Calificacion").val(Calificacion)
+            $('#i').val(i);
+            EstadoModificarActividad = true;
+        }
+        function EliminarActividad(i) {
+            if (ArrayActividades[i].IdActividad == 0) {
+                ArrayActividades.splice(i, 1);
+            } else {
+                ArrayActividades[i].Estado = false;
+            }
+            ListarActividad();
+        }
+        function ListarActividad() {
+            $('#TableCriterioHtml').empty();
+            ArrayActividades.forEach((value, I) => {
+                if (value.Estado)
+                    $('#TableCriterioHtml').append("<tr><td>" + value.Descripcion + "</td><td>" + value.Calificacion + "</td><td>" + (EstadoModificar ? "<button class='btn btn-outline-primary btn-sm' onclick='ViewModificarActividad(" + I + "," + value.IdActividad + ",\"" + value.Descripcion + "\"," + value.Calificacion + ")' data-toggle='modal' data-target='#Modal_Actividades'><i class='fa fa-pencil'></i></button>" : "") + "</td><td>" + (EstadoModificar ? "<button class='btn btn-outline-danger btn-sm' onclick='EliminarActividad(" + I + ")'><i class='fa fa-close'></i></button>" : "") + "</td></tr>");
+            });
+        }
+        function EliminarCriterio(IdCriterio) {
+            $.getJSON('@Url.Action("EliminarCriterio","Criterios")', { IdCriterio: IdCriterio }, function (O) {
+                if (O) {
+                    toastr.success("El registro fue eliminado");
+                    Cancelar();
+                    ListarCriterios();
+                } else {
+                    toastr.error("Error no puedo eliminar el registro");
+                }
+            });
+        }
+        function Guardar() {
+            if ($('#IdNivelGrado').val() != 0) {
+                var Obj = {
+                    IdCriterio: $('#IdCriterio').val(),
+                    Descripcion: $('#DescripcionPadre').val(),
+                    Ponderacion: $('#Ponderacion').val(),
+                    IdNivelGrado: $('#IdNivelGrado').val(),
+
+                    LstActividades: ArrayActividades
+                };
+                console.log(Obj);
+                $.ajax({
+                    url: '@Url.Action("Guardar","Criterios")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify(Obj),
+                    success: function (O) {
+                        if (O.responce) {
+                            Cancelar();
+                            ListarCriterios();
+                        }
+                        MostarInfSave(O.StatusSave);
+                    }
+                });
+            }
+            else {
+                toastr.warning("Debe seleccionar nivel de grado")
+            }
+        }
+    </script>
+}

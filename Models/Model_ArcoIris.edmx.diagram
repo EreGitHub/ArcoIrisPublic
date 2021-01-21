@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="bb786c152b3144f3a52035bdd801373f" Name="Diagram1">
+        <EntityTypeShape EntityType="ArcoIrisModel.Actividades" Width="1.5" PointX="6" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ArcoIrisModel.ActividadesPeriodo" Width="1.5" PointX="8.25" PointY="2.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ArcoIrisModel.ActividadInscripcion" Width="1.5" PointX="7.5" PointY="11.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ArcoIrisModel.Ambiente" Width="1.5" PointX="0.75" PointY="6.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ArcoIrisModel.Apertura" Width="1.5" PointX="0.75" PointY="9.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ArcoIrisModel.Asistencia" Width="1.5" PointX="7.5" PointY="20.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ArcoIrisModel.AspectosAsoc" Width="1.5" PointX="5.25" PointY="16.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ArcoIrisModel.Avatar" Width="1.5" PointX="3" PointY="35.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ArcoIrisModel.CertificadoNacimiento" Width="1.5" PointX="3" PointY="13.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ArcoIrisModel.CriterioVerificacion" Width="1.5" PointX="3.75" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ArcoIrisModel.DetalleApertura" Width="1.5" PointX="3" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ArcoIrisModel.DocenteAsistente" Width="1.5" PointX="10.5" PointY="27.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ArcoIrisModel.EstadoVistoMsg" Width="1.5" PointX="10.5" PointY="24.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ArcoIrisModel.EstudianteRude" Width="1.5" PointX="3" PointY="16.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ArcoIrisModel.Evaluacion" Width="1.5" PointX="10.5" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ArcoIrisModel.GrupoNotificacion" Width="1.5" PointX="6" PointY="29" IsExpanded="true" />
+        <EntityTypeShape EntityType="ArcoIrisModel.GrupoNotiPersona" Width="1.5" PointX="5.25" PointY="25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ArcoIrisModel.GuardadoEvaluacionHistorial" Width="1.5" PointX="10.5" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="ArcoIrisModel.Habla" Width="1.5" PointX="8.25" PointY="16.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ArcoIrisModel.Idioma" Width="1.5" PointX="6" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ArcoIrisModel.Inscripcion" Width="1.5" PointX="5.25" PointY="12.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ArcoIrisModel.LugarNr" Width="1.5" PointX="5.25" PointY="20.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ArcoIrisModel.MensajesNotificacion" Width="1.5" PointX="8.25" PointY="23.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ArcoIrisModel.NivelGrado" Width="1.5" PointX="1.5" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ArcoIrisModel.PerfilUsuario" Width="1.5" PointX="8.25" PointY="27.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ArcoIrisModel.Periodo" Width="1.5" PointX="6" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ArcoIrisModel.Persona" Width="1.5" PointX="0.75" PointY="17.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ArcoIrisModel.Pmth" Width="1.5" PointX="3" PointY="20.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ArcoIrisModel.Rol" Width="1.5" PointX="6" PointY="32.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ArcoIrisModel.SocioEconomicos" Width="1.5" PointX="3" PointY="27.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ArcoIrisModel.Territorio" Width="1.5" PointX="3" PointY="32" IsExpanded="true" />
+        <EntityTypeShape EntityType="ArcoIrisModel.Usuario" Width="1.5" PointX="3" PointY="23.875" IsExpanded="true" />
+        <AssociationConnector Association="ArcoIrisModel.fk_Actividades_ActividadesPeriodo" ManuallyRouted="false" />
+        <AssociationConnector Association="ArcoIrisModel.fk_CriterioVerificacion_Actividades" ManuallyRouted="false" />
+        <AssociationConnector Association="ArcoIrisModel.fk_Actividades_Evaluacion" ManuallyRouted="false" />
+        <AssociationConnector Association="ArcoIrisModel.fk_Evaluacion_GuardadoEvaluacion" ManuallyRouted="false" />
+        <AssociationConnector Association="ArcoIrisModel.fk_Periodo_ActividadesPeriodo" ManuallyRouted="false" />
+        <AssociationConnector Association="ArcoIrisModel.fk_Inscripcion_ActividadInscripcion" ManuallyRouted="false" />
+        <AssociationConnector Association="ArcoIrisModel.fk_Ambiente_Avatar" ManuallyRouted="false" />
+        <AssociationConnector Association="ArcoIrisModel.fk_Ambiente_DetalleApertura" ManuallyRouted="false" />
+        <AssociationConnector Association="ArcoIrisModel.fk_Apertura_DetalleApertura" ManuallyRouted="false" />
+        <AssociationConnector Association="ArcoIrisModel.fk_NivelGrado_Apertura" ManuallyRouted="false" />
+        <AssociationConnector Association="ArcoIrisModel.fk_EstudianteRude_Asistencia" ManuallyRouted="false" />
+        <AssociationConnector Association="ArcoIrisModel.fk_EstudianteRude_AspectosAsoc" ManuallyRouted="false" />
+        <AssociationConnector Association="ArcoIrisModel.fk_SocioEconomicos_AspectosAsoc" ManuallyRouted="false" />
+        <AssociationConnector Association="ArcoIrisModel.fk_Persona_CertificadoNacimiento" ManuallyRouted="false" />
+        <AssociationConnector Association="ArcoIrisModel.fk_NivelGrado_CriterioVerificacion" ManuallyRouted="false" />
+        <AssociationConnector Association="ArcoIrisModel.fk_DetalleApertura_DocenteAsistente" ManuallyRouted="false" />
+        <AssociationConnector Association="ArcoIrisModel.fk_DetalleApertura_Inscripcion" ManuallyRouted="false" />
+        <AssociationConnector Association="ArcoIrisModel.fk_PerfilUsuario_DocenteAsistente" ManuallyRouted="false" />
+        <AssociationConnector Association="ArcoIrisModel.fk_MensajesNotificacion_EstadoVistoMsg" ManuallyRouted="false" />
+        <AssociationConnector Association="ArcoIrisModel.fk_EstudianteRude_Habla" ManuallyRouted="false" />
+        <AssociationConnector Association="ArcoIrisModel.fk_EstudianteRude_Inscripcion" ManuallyRouted="false" />
+        <AssociationConnector Association="ArcoIrisModel.fk_EstudianteRude_LugarNr" ManuallyRouted="false" />
+        <AssociationConnector Association="ArcoIrisModel.fk_Persona_EstudianteRude" ManuallyRouted="false" />
+        <AssociationConnector Association="ArcoIrisModel.fk_EstudianteRude_Evaluacion" ManuallyRouted="false" />
+        <AssociationConnector Association="ArcoIrisModel.fk_GrupoNotificacion_GrupoNotiPersona" ManuallyRouted="false" />
+        <AssociationConnector Association="ArcoIrisModel.fk_GrupoNotificacion_MensajesNotificacion" ManuallyRouted="false" />
+        <AssociationConnector Association="ArcoIrisModel.fk_Usuario_GrupoNotiPersona" ManuallyRouted="false" />
+        <AssociationConnector Association="ArcoIrisModel.fk_Idioma_Habla" ManuallyRouted="false" />
+        <AssociationConnector Association="ArcoIrisModel.fk_Territorio_LugarNr" ManuallyRouted="false" />
+        <AssociationConnector Association="ArcoIrisModel.fk_Usuario_MensajesNotificacion" ManuallyRouted="false" />
+        <AssociationConnector Association="ArcoIrisModel.fk_Rol_PerfilUsuario" ManuallyRouted="false" />
+        <AssociationConnector Association="ArcoIrisModel.fk_Usuario_PerfilUsuario" ManuallyRouted="false" />
+        <AssociationConnector Association="ArcoIrisModel.fk_Persona_Pmth" ManuallyRouted="false" />
+        <AssociationConnector Association="ArcoIrisModel.fk_Persona_Usuario" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

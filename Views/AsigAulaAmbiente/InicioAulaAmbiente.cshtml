@@ -1,0 +1,151 @@
+﻿
+@{
+    ViewBag.Title = "InicioAulaAmbiente";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-2">
+    <h4>Módulo Apertura-Ambiente<span style="font-size:12px;color:#808080"> Arco iris Tarija</span></h4>
+    <div class="card mb-3 m-1">
+        <div class="row">
+            <div class="col-sm-12 col-lg-6 col-md-12">
+                <div class="col-sm">
+                    <h4 class="form-section"><i class="fa fa-university"></i> Asignacion Apertura y Aula</h4>
+                    <button type="button" onclick="Nuevo()" class="btn btn-outline-primary btn-block" style="margin-bottom:10px"><i class="fa fa-plus"></i><span style="margin-left:5px">Nuevo Registro</span> </button>
+                    <input type="hidden" id="IdDetApertura" value="0" />
+                    <div class="row">
+                        <div class="col-6">
+                            <label>Apertura</label>
+                            <select id="IdApertura" disabled class="form-control"></select>
+                        </div>
+                        <div class="col-6">
+                            <label>Ambiente</label>
+                            <select id="IdAmbiente" disabled class="form-control"></select>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:15px">
+                        <div class="col-6">
+                            <button type="button" class="btn btn-secondary btn-block" style="margin-bottom:10px" onclick="Cancelar()">Cancelar</button>
+                        </div>
+                        <div class="col-6">
+                            <button type="button" disabled id="BtnGuardar" class="btn btn-success btn-block" style="margin-bottom:10px" onclick="Guardar()">Guardar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-lg-6 col-md-12">
+                <div class="col-sm">
+                    <h4 class="form-section"><i class="fa fa-university"></i> Ambientes Agregados</h4>
+                    @*<div class="contendor-Loading">
+                            <div style="width: 3rem; height: 3rem;" class="Loading spinner-grow text-secondary" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>*@
+
+                    <div class="containerCustom table-responsive">
+                        <table class='table table-hover table-sm' style='font-size:12px;'>
+                            <thead>
+                                <tr style="background-color:#17a2b8;border-color:#17a2b8;color:white">
+                                    <th width='1px'>Nº</th>
+                                    <th>Apertura</th>
+                                    <th>Turno</th>
+                                    <th>Ambiente</th>
+                                    <th>Capacidad</th>
+                                    <th width='1px'></th>
+                                    <th width='1px'></th>
+                                    <th width='1px'></th>
+                                </tr>
+                            </thead>
+                            <tbody id="TableAperturaAmbiente"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        var EstadoModificar = false;
+        ListarGetiones();
+        ListarAmbiente();
+        AllAperturaAmbiente();
+        function ListarGetiones() {
+            $.getJSON('@Url.Action("GetGetiones", "AsigAulaAmbiente")', null, function (O) {
+                $('#IdApertura').empty();
+                $('#IdApertura').append("<option value='0'>Select Apertura</option>");
+                O.forEach((value, i) => {
+                    $('#IdApertura').append("<option value='" + value.IdApertura + "'>Gestion: " + value.Gestion + " - Turno: " + value.Turno + "</option>");
+                });
+            });
+        }
+        function Nuevo() {
+            EstadoModificar = true;
+            disabledHtml();
+            LimpiarDatos();
+        }
+        function Cancelar() {
+            EstadoModificar = false;
+            disabledHtml();
+            LimpiarDatos();
+        }
+        function LimpiarDatos() {
+            $('#IdApertura').val(0);
+            $("#IdAmbiente").val(0);
+        }
+        function disabledHtml() {
+            $('#IdApertura').prop("disabled", !EstadoModificar);
+            $("#IdAmbiente").prop("disabled", !EstadoModificar);
+            $("#BtnGuardar").prop("disabled", !EstadoModificar);
+        }   
+        function ListarAmbiente() {
+            $.getJSON('@Url.Action("ListarAmbientes", "Ambiente")', null, function (O) {
+                $("#IdAmbiente").empty();
+                $("#IdAmbiente").append('<option value="0">SELECCIONAR</option>');
+                O.forEach((value, i) => {
+                    $("#IdAmbiente").append('<option value="' + value.IdAmbiente + '">' + value.Nombre + '</option>');
+                });
+            });
+        }
+        function AllAperturaAmbiente() {
+            $.getJSON('@Url.Action("All", "AsigAulaAmbiente")', null, function (O) {
+                $("#TableAperturaAmbiente").empty();                
+                O.forEach((value, i) => {
+                    $("#TableAperturaAmbiente").append("<tr><td>" + (i + 1) + "</td><td>" + value.Gestion + "</td><td>" + value.Turno + "</td><td>" + value.Ambiente + "</td><td>" + value.Capacidad + "</td><td><button class='btn btn-outline-info btn-sm' onclick='ViewAperturaAula(0," + value.IdApertura + "," + value.IdAmbiente + ",false)'><i class='fa fa-eye'></i></button></td><td><button class='btn btn-outline-secondary btn-sm' onclick='ViewAperturaAula(" + value.IdDetApertura +"," + value.IdApertura + "," + value.IdAmbiente + ",true)'><i class='fa fa-pencil'></i></button></td><td><button class='btn btn-outline-danger btn-sm' onclick='Eliminar(" + value.IdDetApertura + ")'><i class='fa fa-bitbucket'></i></button></td></tr>");                    
+                });
+            });
+        }
+        function ViewAperturaAula(IdDetApertura, IdApertura, IdAmbiente, _EstadoModificar) {            
+            EstadoModificar = _EstadoModificar;
+            disabledHtml();
+            $('#IdDetApertura').val(IdDetApertura);
+            $('#IdApertura').val(IdApertura);
+            $("#IdAmbiente").val(IdAmbiente);
+        }        
+        function Eliminar(IdDetApertura) {            
+            $.getJSON('@Url.Action("Eliminar", "AsigAulaAmbiente")', { id: IdDetApertura }, function (O) {                
+                if (O) {
+                    toastr.success("El registro se elimino corectamente");
+                    AllAperturaAmbiente();
+                } else {
+                    toastr.error("Ocurio un error al eliminar");
+                }
+            });
+        }
+        function Guardar() {
+            var Obj = {
+                IdDetApertura: $('#IdDetApertura').val(),
+                IdApertura: $('#IdApertura').val(),
+                IdAmbiente: $('#IdAmbiente').val()
+            };
+            $.getJSON('@Url.Action("Guardar", "AsigAulaAmbiente")', Obj, function (O) {
+                if (O.responce) {
+                    Cancelar();
+                    AllAperturaAmbiente();
+                };
+                MostarInfSave(O.StatusSave);
+            });       
+        }
+    </script>
+}

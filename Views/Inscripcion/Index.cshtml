@@ -1,0 +1,419 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container mt-2">    
+    <h4>Módulo Incripción Estudiantil<span style="font-size:12px;color:#808080"> Arco iris Tarija</span></h4>
+    <div class="card mb-3 m-1">
+        <div class="col-sm">
+            <h4 class="form-section"><i class="fa fa-graduation-cap"></i> Inscripción</h4>
+            <div class="row" style="margin-bottom:0px">
+                <div class="col-lg-10 col-md-10 col-sm-10">
+                    <select id="Gestion" style="margin-bottom:5px" onchange="AllEstudiantesIncritos(1,3)" class="form-control"></select>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2">
+                    <button type="button" onclick="Nuevo()" style="margin-right:3px" class="btn mb-1 btn-block btn-outline-primary"><i class="fa fa-plus"></i> </button>
+                </div>
+            </div>
+            <h4 class="form-section"><i class="fa fa-graduation-cap"></i> Lista Estudiantes Inscritos</h4>
+            <div id="ListaEstudianteOpcionesHtml">
+                <div class="row" style="margin-bottom:5px">
+                    <div class="col-lg-10 col-md-10 col-sm-10">
+                        <div class="input-group" style="margin-bottom:5px">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
+                            </div>
+                            <input type="text" class="form-control" id="TxtParametroInscritos" placeholder="Buscar por Ci..." aria-label="Recipient's username" aria-describedby="basic-addon2">
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-2">
+                        <button type="button" onclick='AllEstudiantesIncritos(1)' style="margin-right:3px" class="btn mb-1 btn-block btn-outline-primary"><i class="fa fa-search"></i> </button>
+                    </div>
+                </div>
+                <div class="row" id="ListaInscriptosHtml">
+                </div>
+            </div>
+
+            <div id="Inicio" style="width:100%;padding:18% 0 18% 0">
+                <h1 class="text-muted text-center"><i class="fa fa-frown-o"></i> SIN SELECCION GESTIÓN</h1>
+            </div>
+
+            <div class="text-center">
+                <ul class='pagination justify-content-end' id="PageInscriptos"></ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Modal_AulasDisponiblesInscripcion" tabindex="-1" role="dialog" style="overflow-y:scroll">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><span id="TituloModalAulasDisponiblesInscripcion">.</span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row" id="AulasInscripcionHtml">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="Modal_EstudiantesEnUnAula" tabindex="-1" role="dialog" style="overflow-y:scroll">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Lista Estudiantes</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="containerCustom table-responsive">
+                    <table class='table table-hover table-sm' style='font-size:12px;'>
+                        <thead>
+                            <tr style="background-color:#17a2b8;border-color:#17a2b8;color:white">
+                                <th width='1px'>Nº</th>
+                                <th>Nombres</th>
+                                <th>Ap Paterno</th>
+                                <th>Ap Materno</th>
+                                <th>Ci</th>
+                                <th width='1px'>Sexo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="TableEstudiantesInscAula"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="Modal_PreguntaEliminarEstudiantes" tabindex="-1" role="dialog" style="overflow-y:scroll">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#FE8E75">
+                <h5 class="modal-title" style="color:white">Eliminar...</h5>
+                <button type="button" style="color:white" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h5 class="text-muted" style="width:100%; text-align:center">¿Esta seguro que desea eliminar a todos los estudiantes que se encuentran registrados en este aula?</h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-primary" onclick="EliminarEstudiantesInscritosEnUnAula()">Si</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="Modal_BuscarEstudiante" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" style="overflow-y:scroll">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><span id="TituloModalBuscarEstudiante">.</span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="IdInscripcionEstudiante" value="0" />
+                <input type="hidden" id="IdDetApertura" value="0" />
+                <input type="hidden" id="IdPersonaEstudiante" value="0" />
+
+                <div class="input-group" style="margin-bottom:5px">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
+                    </div>
+                    <input type="text" class="form-control" id="TxtParametroEstudiante" onkeyup="BuscarEstudiantes()" placeholder="Buscar....">
+                </div>
+                <div id="ListarEstudiantes" style="position: absolute; z-index: 10; width: 95%" class="list-group"></div>
+
+                <label>Nombre</label>
+                <input type="text" class="form-control" disabled id="Nombres" placeholder="Nombres" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                <label>Apellido Paterno</label>
+                <input type="text" class="form-control" disabled id="ApPaterno" placeholder="Apellido Paterno" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                <label>Apellido Materno</label>
+                <input type="text" class="form-control" disabled id="ApMaterno" placeholder="Apellido Materno" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                <label>Ci</label>
+                <input type="text" class="form-control" disabled id="Ci" placeholder="Ci" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                <label>Sexo</label>
+                <input type="text" class="form-control" disabled id="Sexo" placeholder="Sexo" aria-label="Recipient's username" aria-describedby="basic-addon2">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"><i class="fa fa-times"></i> Cancelar</button>
+                <button type="button" class="btn btn-outline-primary" onclick="Guardar()"><i class="fa fa-check"></i> Inscribir</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="Modal_PreguntaMotivoEliminarEstudiante" tabindex="-1" role="dialog" style="overflow-y:scroll">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Eliminar...</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h5 class="text-muted" style="width:100%; text-align:center">Motivo a eliminar</h5>
+                <textarea class="form-control" id="TxtMotivoEliminarEstudiante" placeholder="Motivo"></textarea>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-primary" onclick="EliminarEstudianteDeUnaInscripcion()">Si</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $('#ListaEstudianteOpcionesHtml').hide();
+        var ArrayHabla = [];
+        var Aspectos_Soc = [];
+        var ArrayError = [];
+        ListarGetiones();
+        function ListarGetiones() {
+            $.getJSON('@Url.Action("GetGetiones","AsignaDocente")', null, function (O) {
+                $('#Gestion').empty();
+                $('#Gestion').append("<option value='0'>Select Gestion</option>");
+                O.forEach((value, i) => {
+                    $('#Gestion').append("<option value='" + value + "'>" + value + "</option>");
+                });
+            });
+        }
+        function Nuevo() {
+            if ($('#Gestion').val() != 0) {
+                $('#Modal_AulasDisponiblesInscripcion').modal('show')
+                $('#TituloModalAulasDisponiblesInscripcion').html("Seleccione un aula para Inscribir a un Estudiante");
+                AllAulasDisponiblesInscripcion();
+            } else {
+                toastr.warning('Debe seleccionar una Gestión')
+            }
+        }
+        function AllEstudiantesIncritos(pageIndex, is) {
+            if ($('#Gestion').val() != 0) {
+                $("#TableInscripcion").empty();
+                $('#TituloModalBuscarEstudiante').html("Modificar");
+                $('#ListaInscriptosHtml').empty();
+                $.getJSON('@Url.Action("All","Inscripcion")', { SearchValue: $('#TxtParametroInscritos').val(), PageIndex: pageIndex, Gestion: $('#Gestion').val() }, function (O) {
+                    $('#Inicio').hide();
+                    $('#ListaEstudianteOpcionesHtml').show();
+                    var html = "";
+                    O.Lst.forEach((valuePadre, i) => {
+                        html += "<div class='col-xl-6 col-sm-12 col-lg-6 col-12'><div class='cardCarCustom card border-primary mb-3'><div class='card-body' style='padding:0.1rem'><h4 class='card-title' style='text-align:center;margin-bottom: 5px'><i class='fa fa-user'></i> " + valuePadre.Nombres + " " + valuePadre.ApPaterno + " " + valuePadre.ApMaterno + "</h4></div><hr style='margin:0px 0px 2px 0px' /><div class='row'><div class='col-sm-6 col-lg-6 col-md-6'><h5 class='text-primary' style='text-align:left;margin:0px 0 1px 0'><i class='fa fa-signal'></i> Nivel Grado: " + valuePadre.NivelGrdoPadre + "</h5><ul class='list-group list-group-flush'>";
+                        valuePadre.NivelGrdoHijo.forEach(valueNivelGradoHijos => {
+                            html += "<li class='list-group-item' style='padding:0.1rem;font-size:12px'><i class='fa fa-angle-right'></i> " + valueNivelGradoHijos + "</li>";
+                        });
+                        html += "</ul><hr style='margin:0px 0px 2px 0px' /></div><div class='col-sm-6 col-lg-6 col-md-6'><h5 class='text-primary' style='text-align:left;margin:0px 0 1px 0'><i class='fa fa-paperclip'></i> Avatar</h5><ul class='list-group list-group-flush'>";
+                        valuePadre.Avatar.forEach(valueAvatar => {
+                            html += "<li class='list-group-item' style='padding:0.1rem;font-size:12px'><i class='fa fa-github-alt'></i> " + valueAvatar + "</li>";
+                        });
+                        html += "</ul><hr style='margin:0px 0px 2px 0px' /></div></div><div class='row'><div class='col-sm-6 col-lg-6 col-md-6'><h5 class='text-primary' style='text-align:left;margin:10px 0 1px 0'><i class='fa fa-tasks'></i> Apertura</h5><ul class='list-group list-group-flush'><li class='list-group-item' style='padding:0.1rem;font-size:12px'><span style='padding:0px;font-size:11px' class='float-right'> " + valuePadre.Apertura.Turno + "</span><i class='fa fa-sun-o'></i> Turno</li><li class='list-group-item' style='padding:0.1rem;font-size:12px'><span style='padding:0px;font-size:11px' class='float-right'> " + valuePadre.Apertura.Ambiente + "</span><i class='fa fa-home'></i> Aula</li></ul></div><div class='col-sm-6 col-lg-6 col-md-6'><h5 class='text-primary' style='text-align:left;margin:10px 0 1px 0'><i class='fa fa-graduation-cap'></i> DOCENTES</h5><ul class='list-group list-group-flush'>";
+                        valuePadre.Docentes.forEach(valueDocentes => {
+                            html += "<li class='list-group-item' style='padding:0.1rem;font-size:12px'><span style='padding:0px;font-size:11px' class='float-right'> " + valueDocentes.Tipo + "</span><i class='fa fa-user'></i> " + valueDocentes.Nombres + " " + valueDocentes.ApPaterno + " " + valueDocentes.ApMaterno + "</li>";
+                        });
+                        html += "</ul></div></div><hr style='margin:3px 0px 3px 0px' /><div  class='footer'><span class='float-left text-info'><b style='font-size: 15px'>/" + (i + 1) + "/ Estado Inscripcion: " + valuePadre.EstadoInscripcion + "</b></span><span class='tags float-right'><button type='button' onclick='PreguntarMotivoEliminarcionestudiante(" + valuePadre.IdInscripcion + ")' class='btn mb-1 btn-outline-danger btn-sm'><i class='fa fa-bitbucket'></i></button></span></div><hr style='margin:0px 0px 2px 0px' /></div></div>";
+                    });
+                    $('#ListaInscriptosHtml').append(html);
+                    var TotalPages = parseInt(O.TotalPages);
+                    var rangeMin = 4;
+                    var rangeMax = parseInt(TotalPages) == 1 ? 1 : rangeMin && parseInt(TotalPages) < rangeMin ? parseInt(TotalPages) : rangeMin;
+
+                    const paging = { range: rangeMax, pages: TotalPages };
+                    var PageArray = doPaging(pageIndex, paging);
+                    var sTatusPrev = (pageIndex <= 1) ? true : false;
+                    var sTatuslast = (pageIndex >= paging.pages) ? true : false;
+                    var html = "<li class='page-item first " + (sTatusPrev ? "disabled" : "") + "'><a href='#' class='page-link' onclick='AllEstudiantesIncritos(1, " + TotalPages + ")'>First</a></li><li class='page-item prev  " + (sTatusPrev ? "disabled" : "") + "'><a href='#' class='page-link' onclick='AllEstudiantesIncritos(" + parseInt(pageIndex - 1) + ", " + TotalPages + ")'>Prev</a></li>";
+                    PageArray.forEach((value, i) => {
+                        html += value.Status
+                            ?
+                            "<li class='page-item active'><a class='page-link' href='#' onclick='AllEstudiantesIncritos(" + value.Page + ", " + TotalPages + ")'>" + value.Page + "</a></li>"
+                            :
+                            "<li class='page-item'><a class='page-link' href='#' onclick='AllEstudiantesIncritos(" + value.Page + ", " + TotalPages + ")'>" + value.Page + "</a></li>";
+                    });
+                    html += "<li class='page-item next " + (sTatuslast ? "disabled" : "") + "'><a href='#' class='page-link' onclick='AllEstudiantesIncritos(" + parseInt(pageIndex + 1) + ", " + TotalPages + ")'>Next</a></li><li class='page-item last " + (sTatuslast ? "disabled" : "") + "'><a href='#' class='page-link' onclick='AllEstudiantesIncritos(" + paging.pages + ", " + TotalPages + ")'>Last</a></li>";
+                    $('#PageInscriptos').html(html);
+                });
+            } else {
+                $('#Inicio').show();
+                $('#ListaEstudianteOpcionesHtml').hide();
+                toastr.warning('Sebe seleccionar una gestión')
+            }
+        }
+        function doPaging(current, { range, pages, start = 1 }) {
+            const paging = [];
+            var i = Math.min(pages + start - range, Math.max(start, current - (range / 2 | 0)));
+            const end = i + range;
+            while (i < end) {
+                var infStatus = i === current ? true : false;
+                paging.push({ Page: i++, Status: infStatus });
+            };
+            return paging;
+        };
+
+        function AllAulasDisponiblesInscripcion() {
+            $('#AulasInscripcionHtml').empty();
+            $.getJSON('@Url.Action("AllAulasInscripcion", "Inscripcion")', { Gestion: $('#Gestion').val()}, function (O) {
+                var Html = "";
+                O.forEach((value, i) => {
+                    Html += "<div class='col-xl-6 col-sm-12 col-lg-6 col-12'><div class='cardCarCustom card border-primary mb-3'><div class='card-body' style='padding:0.1rem'><h4 class='card-title' style='text-align:center;margin-bottom: 5px'><i class='fa fa-home'></i> " + (value.Ambiente) + " (" + (value.Turno) + ")</h4></div><h5 class='text-primary' style='text-align:left;margin:0px 0 1px 0'><i class='fa fa-paperclip'></i> Avatar</h5><ul class='list-group list-group-flush'>";
+                    value.Avatar.forEach((valueAvatar, i) => {
+                        Html += "<li class='list-group-item' style='padding:0.1rem;font-size:12px'><i class='fa fa-github-alt'></i> " + valueAvatar.Descripcion + "</li>";
+                    });
+                    Html += "</ul><h5 class='text-primary' style='text-align:left;margin:10px 0 1px 0'><i class='fa fa-signal'></i> Nivel Grado: " + value.NivelGradoPadre + "</h5><ul class='list-group list-group-flush'>";
+                    value.NivelGrdoHijos.forEach((valueNivelGradoHijo, i) => {
+                        Html += "<li class='list-group-item' style='padding:0.1rem;font-size:12px'><i class='fa fa-angle-right'></i> " + valueNivelGradoHijo.Descripcion + "</li>";
+                    });
+                    Html += "</ul><h5 class='text-primary' style='text-align:left;margin:10px 0 1px 0'><i class='fa fa-graduation-cap'></i> DOCENTES</h5><ul class='list-group list-group-flush'>";
+                    value.Docentes.forEach((valueDocentesAsig, i) => {
+                        Html += "<li class='list-group-item' style='padding:0.1rem;font-size:12px'><span style='padding:0px;font-size:11px' class='float-right'> " + valueDocentesAsig.Tipo + "</span><i class='fa fa-user'></i> " + valueDocentesAsig.Nombres + " " + valueDocentesAsig.ApPaterno + " " + valueDocentesAsig.ApMaterno + "</li>";
+                    });
+                    Html += "</ul><div style='margin-top:8px' class='footer'><span class='float-left text-info'><b style='font-size: 15px'>Capacidad Disponible: (" + value.CapacidadDisponible + ")</b></span><span class='tags float-right'>" + ((value.PuedeAgregarEstudiantes) ? "<button type='button' onclick='LevantarModalBuscarEstudiante(" + value.IdDetApertura + ")' style='margin-right:3px' class='btn mb-1 btn-outline-info btn-sm'><i class='fa fa-user-plus'></i></button>" : "") + "<button type='button' onclick='EstudiantesInscritosEnUnAula(" + value.IdDetApertura + ")' style='margin-right:3px' class='btn mb-1 btn-outline-primary btn-sm'><i class='fa fa-file-text-o'></i></button><button type='button' onclick='PreguntarSiEliminarTodosEstudiantes(" + value.IdDetApertura + ")' class='btn mb-1 btn-outline-danger btn-sm' data-toggle='tooltip' data-placement='top' title='Eliminar estudiantes inscritos en el aula'><i class='fa fa-bitbucket'></i></button></span></div></div></div>";
+                });
+                $('#AulasInscripcionHtml').append(Html);
+            });
+        }
+        function EstudiantesInscritosEnUnAula(IdDetApertura) {
+            $('#Modal_EstudiantesEnUnAula').modal('show');
+            $("#TableEstudiantesInscAula").empty();
+            $.getJSON('@Url.Action("EstudiantesInscritosAula", "Inscripcion")', { IdDetalleApertura: IdDetApertura }, function (O) {
+                if (O != null) {
+                    O.forEach((value, i) => {
+                        $("#TableEstudiantesInscAula").append("<tr><td>" + (i + 1) + "</td><td>" + value.Nombres + "</td><td>" + value.ApPaterno + "</td><td>" + value.ApMaterno + "</td><td>" + value.Ci + "</td><td>" + ((value.Sexo == "M") ? "<i class='fa fa-male'></i>" : "<i class='fa fa-female'></i>") + "</td></tr>");
+                    });
+                }
+            });
+        }
+        function PreguntarSiEliminarTodosEstudiantes(IdDetApertura) {
+            $('#IdDetApertura').val(IdDetApertura)
+            $('#Modal_PreguntaEliminarEstudiantes').modal('show');
+        }
+        function EliminarEstudiantesInscritosEnUnAula() {
+            $.getJSON('@Url.Action("EliminarEstudiantesInscritosEnUnAula","Inscripcion")', { IdDetApertura: $('#IdDetApertura').val() }, function (O) {
+                if (O) {
+                    $('#Modal_PreguntaEliminarEstudiantes').modal('hide');
+                    AllAulasDisponiblesInscripcion();
+                    AllEstudiantesIncritos(1,3)
+                    toastr.success("El registro fue eliminado correctamente");
+                } else {
+                    toastr.error("Error")
+                }
+            });
+        }
+
+        function LevantarModalBuscarEstudiante(IdDetApertura) {
+            LimpiarCampos();
+            $('#IdDetApertura').val(IdDetApertura)
+            $('#Modal_BuscarEstudiante').modal('show');
+            $('#TituloModalBuscarEstudiante').html("Nuevo Registros");
+        }
+        function BuscarEstudiantes() {
+            var Obj = { TxtParametro: $('#TxtParametroEstudiante').val() };
+            $('#ListarEstudiantes').empty();
+            $.getJSON('@Url.Action("BuscarEstudiante", "Inscripcion")', Obj, function (O) {
+                if (O != null) {
+                    O.forEach(value => {
+                        $('#ListarEstudiantes').append("<a style='text-decoration: none' onclick='SeleccionarEstudiante(" + value.IdPersona + ",\"" + value.Nombres + "\",\"" + value.ApPaterno + "\",\"" + value.ApMaterno + "\",\"" + value.Ci + "\",\"" + value.Sexo + "\",\"" + value.IsRegisInTableEstuanteRude + "\")' class='list-group-item'><div style='display: inline-block'><i class='fa fa-user-o' style='margin-right: 5px'></i>" + value.Nombres + " " + value.ApPaterno + " " + value.ApMaterno + " " + value.Ci + "</div></a>");
+                    });
+                }
+            });
+        }
+        function SeleccionarEstudiante(IdPersona, Nombres, ApPaterno, ApMaterno, Ci, Sexo, IsRegisInTableEstuanteRude) {
+            if (JSON.parse(IsRegisInTableEstuanteRude)) {
+                $.getJSON('@Url.Action("VerificarInscripcionEstudiante", "Inscripcion")', { Gestion: $('#Gestion').val(), IdPersona: IdPersona }, function (O) {
+                     if (O.EstadoCulminadoGestionActual) {
+                        toastr.warning('El Estudiante culmino sus estudios en la gestión actual');
+                    }
+                    if (O.EstadoCursandoGestionActual) {
+                        toastr.warning('El Estudiante ya fue inscrito en la gestion Actual');
+                    }
+                    if (O.EstadoAbandonoGestionActual) {
+                        toastr.warning('El estudiante Abandono sus estudios en la gestion actual');
+                    }
+                    if (!O.EstadoCursandoGestionActual && !O.EstadoCulminadoGestionActual && !O.EstadoAbandonoGestionActual) {
+                        $('#ListarEstudiantes').empty();
+                        $('#TxtParametroEstudiante').val("");
+                        $('#IdPersonaEstudiante').val(IdPersona);
+                        $('#Nombres').val(Nombres);
+                        $('#ApPaterno').val(ApPaterno);
+                        $('#ApMaterno').val(ApMaterno);
+                        $('#Ci').val(Ci);
+                        $('#Sexo').val(Sexo);
+                    }
+                });
+            } else {
+                toastr.warning('El Estudiante no se encuentra registrado en el formulario RUDE');
+            }
+        }
+
+        function PreguntarMotivoEliminarcionestudiante(IdInscripcion) {
+            $('#IdInscripcionEstudiante').val(IdInscripcion)
+            $('#Modal_PreguntaMotivoEliminarEstudiante').modal('show');
+        }
+        function EliminarEstudianteDeUnaInscripcion() {
+            var Obj = {
+                IdInscripcion: $('#IdInscripcionEstudiante').val(),
+                Motivo: $('#TxtMotivoEliminarEstudiante').val()
+            };
+            $.getJSON('@Url.Action("EliminarEstudianteDeUnaInscripcion","Inscripcion")', Obj, function (O) {
+                if (O) {
+                    $('#Modal_PreguntaMotivoEliminarEstudiante').modal('hide');
+                    AllEstudiantesIncritos(1, 3);
+                    toastr.success("El registro fue eliminado correctamente");
+                } else {
+                    toastr.error("Error")
+                }
+            });
+        }
+
+        function LimpiarCampos() {
+            $('#IdPersonaEstudiante').val(0);
+            $('#ListarEstudiantes').empty();
+            $('#TxtParametroEstudiante').val("");
+            $('#Nombres').val("");
+            $('#ApPaterno').val("");
+            $('#ApMaterno').val("");
+            $('#Ci').val("");
+            $('#Sexo').val("");
+        }
+        function Guardar() {
+            var Obj = {
+                IdInscripcion: $('#IdInscripcionEstudiante').val(),
+                IdDetApertura: $('#IdDetApertura').val(),
+                IdEstudianteRude: $('#IdPersonaEstudiante').val()
+            };
+            $.ajax({
+                url: '@Url.Action("Guardar","Inscripcion")',
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify(Obj),
+                success: function (O) {
+                    if (O.responce) {
+                        AllAulasDisponiblesInscripcion();
+                        AllEstudiantesIncritos(1, 3);
+                        LimpiarCampos();
+                        $('#Modal_BuscarEstudiante').modal('hide')
+                    }
+                    MostarInfSave(O.StatusSave);
+                }
+            });
+        }
+    </script>
+}

@@ -1,0 +1,260 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-2">    
+    <h4>Módulo Ambiente<span style="font-size:12px;color:#808080"> Arco iris Tarija</span></h4>
+    <div class="card mb-3 m-1">
+        <div class="row">
+            <div class="col-sm-12 col-lg-6 col-md-12">
+                <div class="col-sm">
+                    <h4 class="form-section"><i class="fa fa-university"></i> Ambiente</h4>
+                    <button type="button" onclick="Nuevo()" class="btn btn-outline-primary btn-block" style="margin-bottom:10px"><i class="fa fa-plus"></i><span style="margin-left:5px">Nuevo Registro</span> </button>
+                    <input type="hidden" id="IdAmbiente" value="0" />
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Nombre</label>
+                                <input type="text" disabled class="form-control" placeholder="Nombre" id="Nombre" />
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Capacidad</label>
+                                <input type="number" disabled class="form-control" placeholder="Capacidad" id="Capacidad" />
+                            </div>
+                        </div>
+                    </div>
+                    <h4 class="form-section"><i class="fa fa-graduation-cap"></i> Avatar</h4>
+                    <button type="button" id="BtnAddAvatar" disabled class="btn btn-primary btn-block" style="margin-bottom:10px" data-toggle="modal" data-target="#Modal_Avatar"><i class="fa fa-plus" aria-hidden="true"></i> Agregar</button>
+                    <div>
+                        <table class='table table-hover table-sm' style='font-size:12px;'>
+                            <thead>
+                                <tr style="background-color:#17a2b8;border-color:#17a2b8;color:white">
+                                    <th>Descripción</th>
+                                    <th width='1px'></th>
+                                    <th width='1px'></th>
+                                </tr>
+                            </thead>
+                            <tbody id="TableAvatarHtml"></tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <button type="button" class="btn btn-secondary btn-block" style="margin-bottom:10px" onclick="Cancelar()">Cancelar</button>
+                        </div>
+                        <div class="col-6">
+                            <button type="button" disabled id="Guardar" class="btn btn-success btn-block" style="margin-bottom:10px" onclick="Guardar()">Guardar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-lg-6 col-md-12">
+                <div class="col-sm">
+                    <h4 class="form-section"><i class="fa fa-university"></i> Ambientes Agregados</h4>
+                    <div class="contendor-Loading">
+                        <div style="width: 3rem; height: 3rem;" class="Loading spinner-grow text-secondary" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+
+                    <div class="containerCustom table-responsive">
+                        <table class='table table-hover table-sm' style='font-size:12px;'>
+                            <thead>
+                                <tr style="background-color:#17a2b8;border-color:#17a2b8;color:white">
+                                    <th width='1px'>Nº</th>
+                                    <th>Nombre</th>
+                                    <th>Capacidad</th>
+                                    <th width='1px'></th>
+                                    <th width='1px'></th>
+                                    <th width='1px'></th>
+                                </tr>
+                            </thead>
+                            <tbody id="TableAmbientesAgregados"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Modal_Avatar" tabindex="-1" role="dialog" style="overflow-y:scroll">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Avatar</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="IdAvatar" value="0" hidden="hidden">
+                <input type="text" id="i" value="0" hidden="hidden">
+                <div class="form-group">
+                    <label for="TextoSueldo">Descripcion</label>
+                    <input type="text" class="form-control" id="DescripcionAvatar" placeholder="Descripcion">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="AgregarAvatar()">Agregar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        var ArrayAvatar = [];
+        var EstadoModificar = false;
+        var EstadoModificarAvatar = false;
+        $(document).ready(function () {
+            ListarAmbientesAgregados();
+        });
+        function ListarAmbientesAgregados() {
+            $("#TableAmbientesAgregados").empty();
+            $.getJSON('@Url.Action("ListarAmbientes","Ambiente")', null, function (O) {
+                O.forEach((value, i) => {
+                    $("#TableAmbientesAgregados").append("<tr><td>" + (i + 1) + "</td><td>" + value.Nombre + "</td><td>" + value.Capacidad + "</td><td><button class='btn btn-outline-info btn-sm' onclick='VerDetalleAmbientes(" + value.IdAmbiente + ",false)'><i class='fa fa-eye'></i></button></td><td><button class='btn btn-outline-secondary btn-sm' onclick='VerDetalleAmbientes(" + value.IdAmbiente + ",true)'><i class='fa fa-pencil'></i></button></td><td><button class='btn btn-outline-danger btn-sm' onclick='EliminarAmbiente(" + value.IdAmbiente + ")'><i class='fa fa-bitbucket'></i></button></td></tr>");
+                });
+                setTimeout(function () {
+                    $(".Loading").hide();
+                    $(".containerCustom").show();
+                }, 100);
+            });
+        };
+        function VerDetalleAmbientes(IdAmbiente, _EstadoModificar) {
+            EstadoModificar = _EstadoModificar;
+            disabledHtml();
+            $.getJSON('@Url.Action("GetDetalleAmbientes","Ambiente")', { IdAmbiente: IdAmbiente }, function (O) {
+                $('#IdAmbiente').val(O._oAmbiente.IdAmbiente);
+                $('#Nombre').val(O._oAmbiente.Nombre);
+                $('#Capacidad').val(O._oAmbiente.Capacidad);
+                ArrayAvatar = O.ListaAvatar;
+                ListarAvatar();
+            });
+        }
+        function EliminarAmbiente(Id) {
+            $.getJSON('@Url.Action("EliminarAmbiente","Ambiente")', { Id: Id }, function (O) {
+                if (O) {
+                    toastr.success("El registro fue eliminado");
+                    ListarAmbientesAgregados();
+                } else {
+                    toastr.error("Error no puedo eliminar el registro");
+                }
+            });
+        }
+        function AgregarAvatar() {
+            if ($('#DescripcionAvatar').val() != "") {
+                if (!EstadoModificarAvatar) {
+                    var Obj = { IdAvatar: 0, Descripcion: $('#DescripcionAvatar').val(), Estado: true };
+                    if (!VerificarSiExisteAvatar(Obj.Descripcion))
+                        ArrayAvatar.push(Obj);
+                    else
+                        toastr.warning('Existe un registro con el mismo nombre');
+                } else {
+                    ArrayAvatar[$('#i').val()].Descripcion = $('#DescripcionAvatar').val();
+                }
+                ListarAvatar();
+                $('#Modal_Avatar').modal('hide');
+                LimpiarAvatar();
+            } else {
+                toastr.warning("El campo descripcion no debe estar vacio");
+            }
+        }
+        function VerificarSiExisteAvatar(Descripcion) {
+            var Estado = false;
+            for (var i = 0; i < ArrayAvatar.length; i++) {
+                if (ArrayAvatar[i].Descripcion == Descripcion && ArrayAvatar[i].Estado == true) {
+                    Estado = true;
+                    break;
+                }
+            }
+            return Estado;
+        }
+        function ListarAvatar() {
+            $('#TableAvatarHtml').empty();
+            ArrayAvatar.forEach((value, I) => {
+                if (value.Estado) {
+                    $('#TableAvatarHtml').append("<tr><td>" + value.Descripcion + "</td><td>" + (EstadoModificar ? "<button class='btn btn-outline-primary btn-sm' onclick='ModificarAvatar(" + I + ",\"" + value.Descripcion + "\"," + value.IdAvatar + ")' data-toggle='modal' data-target='#Modal_Avatar'><i class='fa fa-pencil'></i></button>" : "") + "</td><td>" + (EstadoModificar ? "<button class='btn btn-outline-danger btn-sm' onclick='DesactivarAvatar(" + I + "," + value.IdAvatar + ")'><i class='fa fa-close'></i></button>" : "") + "</td></tr>");
+                }
+            });
+        }
+        function ModificarAvatar(i,Descripcion, IdAvatar) {
+            $('#i').val(i)
+            EstadoModificarAvatar = true;
+            $('#Modal_Avatar').modal('show');
+            $('#IdAvatar').val(IdAvatar);
+            $('#DescripcionAvatar').val(Descripcion);
+        }
+        function DesactivarAvatar(i, id) {
+            if (id == 0) {
+                ArrayAvatar.splice(i, 1);
+            } else {
+                ArrayAvatar.forEach((value, I) => {
+                    if (I == i) { ArrayAvatar[I].Estado = false; }
+                });
+            }
+            ListarAvatar();
+        }
+        function Nuevo() {
+            EstadoModificar = true;
+            disabledHtml();
+            LimpiarDatos();
+        }
+        function disabledHtml() {
+            $("#Nombre").prop("disabled", !EstadoModificar);
+            $("#Capacidad").prop("disabled", !EstadoModificar);
+            $("#BtnAddAvatar").prop("disabled", !EstadoModificar);
+            $("#Guardar").prop("disabled", !EstadoModificar);
+        }
+        function LimpiarAvatar() {
+            $('#DescripcionAvatar').val("");
+            $('#IdAvatar').val(0);
+            $('#i').val(0);
+        }
+        function LimpiarDatos() {
+            $('#IdAmbiente').val(0);
+            $('#Nombre').val("");
+            $('#Capacidad').val("");
+            $('#IdAvatar').val(0);
+            $('#i').val(0);
+            $('#DescripcionAvatar').val("");
+            ArrayAvatar.length = 0;
+            ListarAvatar();
+            EstadoModificarAvatar = false;
+        }
+        function Cancelar() {
+            EstadoModificar = false;
+            disabledHtml();
+            LimpiarDatos();
+        }
+        function Guardar() {
+            var Obj = {
+                ItemAvatar: ArrayAvatar,
+
+                IdAmbiente: $('#IdAmbiente').val(),
+                Capacidad: $('#Capacidad').val(),
+                Nombre: $('#Nombre').val()
+            };
+            $.ajax({
+                url: '@Url.Action("Guardar","Ambiente")',
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify(Obj),
+                success: function (O) {
+                    if (O.responce) {
+                        Cancelar();
+                        ListarAmbientesAgregados();
+                    }
+                    MostarInfSave(O.StatusSave);
+                }
+            });
+        }
+    </script>
+}
+
