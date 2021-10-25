@@ -30,7 +30,7 @@
                         <div class="col-6">
                             <div class="form-group">
                                 <label>Ponderación</label>
-                                <input type="number" disabled class="form-control" value="0" id="Ponderacion" placeholder="Ponderación" />
+                                <input type="number" disabled class="form-control" value="100" id="Ponderacion" placeholder="Ponderación" />
                             </div>
                         </div>
                     </div>
@@ -126,17 +126,17 @@
             setTimeout(function () {
                 ListarCriterios();
             }, 1000);
-            //AllNivelGrado
+            AllNivelGrado();
         });
         function AllGesstionAperturadas() {
-            //$('#Gestion').empty();
+            $('#Gestion').empty();
             //$('#GestionLst').empty();
-            //$('#Gestion').append("<option value='0'>Select Opcion</option>");
+            $('#Gestion').append("<option value='0'>Select Opcion</option>");
             //$('#GestionLst').append("<option value='0'>Select Opcion</option>");
             $.getJSON('@Url.Action("AllGestionAperturadas", "Criterios")', null, function (O) {                
                 O.forEach((value, i) => {
-                    $('#Gestion').html("<option value='" + value + "'>" + value + "</option>");
-                    $('#GestionLst').html("<option value='" + value + "'>" + value + "</option>");
+                    $('#Gestion').append("<option value='" + value + "'>" + value + "</option>");
+                    $('#GestionLst').append("<option value='" + value + "'>" + value + "</option>");
                 });
             });
         }
@@ -203,7 +203,7 @@
         function disabledHtml() {
             $("#IdNivelGrado").prop("disabled", !EstadoModificar);
             $("#DescripcionPadre").prop("disabled", !EstadoModificar);
-            $("#Ponderacion").prop("disabled", !EstadoModificar);
+            //$("#Ponderacion").prop("disabled", !EstadoModificar);
             $("#BtnActividad").prop("disabled", !EstadoModificar);
             $("#DescripcionHijo").prop("disabled", !EstadoModificar);
             $("#Calificacion").prop("disabled", !EstadoModificar);
@@ -211,11 +211,11 @@
             $("#BtnGuardar").prop("disabled", !EstadoModificar);
         }
         function LimpiarDatos() {
-            //$('#Gestion').val(0);
+            $('#Gestion').val(0);
             $('#IdNivelGrado').html("<option value='0'>Select Opcion</option>");
             $('#IdCriterio').val(0);
             $('#DescripcionPadre').val("");
-            $('#Ponderacion').val(0);
+            //$('#Ponderacion').val(0);
             LimpiarActividades();
             ArrayActividades.length = 0;
             ListarActividad();
